@@ -12,23 +12,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template, eCommerce dashboard, analytic dashboard">
 	<meta name="author" content="ThemeSelect">
 	<title>DataTable | Materialize - Material Design Admin Template</title>
-	<link rel="apple-touch-icon" href="app-assets/images/favicon/apple-touch-icon-152x152.png">
-	<link rel="shortcut icon" type="image/x-icon" href="app-assets/images/favicon/favicon-32x32.png">
+	<link rel="apple-touch-icon" href="<?=base_url()?>app-assets/images/favicon/apple-touch-icon-152x152.png">
+	<link rel="shortcut icon" type="image/x-icon" href="<?=base_url()?>app-assets/images/favicon/favicon-32x32.png">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!-- BEGIN: VENDOR CSS-->
-	<link rel="stylesheet" type="text/css" href="app-assets/vendors/vendors.min.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/vendors/flag-icon/css/flag-icon.min.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/vendors/data-tables/css/jquery.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/vendors/data-tables/extensions/responsive/css/responsive.dataTables.min.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/vendors/data-tables/css/select.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/vendors/vendors.min.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/vendors/flag-icon/css/flag-icon.min.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/vendors/data-tables/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/vendors/data-tables/extensions/responsive/css/responsive.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/vendors/data-tables/css/select.dataTables.min.css">
 	<!-- END: VENDOR CSS-->
 	<!-- BEGIN: Page Level CSS-->
-	<link rel="stylesheet" type="text/css" href="app-assets/css/themes/vertical-dark-menu-template/materialize.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/css/themes/vertical-dark-menu-template/style.css">
-	<link rel="stylesheet" type="text/css" href="app-assets/css/pages/data-tables.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/css/themes/vertical-dark-menu-template/materialize.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/css/themes/vertical-dark-menu-template/style.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/css/pages/data-tables.css">
 	<!-- END: Page Level CSS-->
 	<!-- BEGIN: Custom CSS-->
-	<link rel="stylesheet" type="text/css" href="app-assets/css/custom/custom.css">
+	<link rel="stylesheet" type="text/css" href="<?=base_url()?>app-assets/css/custom/custom.css">
 	<!-- END: Custom CSS-->
 </head>
 <!-- END: Head-->
@@ -42,12 +42,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<div class="header-search-wrapper hide-on-med-and-down"><i class="material-icons">search</i>
 					<input class="header-search-input z-depth-2" type="text" name="Search" placeholder="Explore Materialize">
 				</div>
+				<?=base_url()?>
 				<ul class="navbar-list right">
 					<li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light translation-button" href="javascript:void(0);" data-target="translation-dropdown"><span class="flag-icon flag-icon-gb"></span></a></li>
 					<li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light toggle-fullscreen" href="javascript:void(0);"><i class="material-icons">settings_overscan</i></a></li>
 					<li class="hide-on-large-only"><a class="waves-effect waves-block waves-light search-button" href="javascript:void(0);"><i class="material-icons">search</i></a></li>
 					<li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">5</small></i></a></li>
-					<li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="app-assets/images/avatar/avatar-7.png" alt="avatar"><i></i></span></a></li>
+					<li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar"><i></i></span></a></li>
 					<li><a class="waves-effect waves-block waves-light sidenav-trigger" href="#" data-target="slide-out-right"><i class="material-icons">format_indent_increase</i></a></li>
 				</ul>
 				<!-- translation-button-->
@@ -109,7 +110,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!-- BEGIN: SideNav-->
 <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
 	<div class="brand-sidebar">
-		<h1 class="logo-wrapper"><a class="brand-logo darken-1" href="index.html"><img src="http://localhost/inventory/app-assets/images/logo/materialize-logo.png" alt="materialize logo"/><span class="logo-text hide-on-med-and-down">Materialize</span></a><a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a></h1>
+		<h1 class="logo-wrapper"><a class="brand-logo darken-1" href="index.html"><img src="<?=base_url()?>app-assets/images/logo/materializelogo.png" alt="materialize logo"/><span class="logo-text hide-on-med-and-down">Materialize</span></a><a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a></h1>
 	</div>
 	<ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
 		<li class="bold"><a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">settings_input_svideo</i><span class="menu-title" data-i18n="">Dashboard</span><span class="badge badge pill orange float-right mr-10">3</span></a>
@@ -422,7 +423,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!-- BEGIN: Page Main-->
 <div id="main">
 	<div class="row">
-		<div id="breadcrumbs-wrapper" data-image="app-assets/images/gallery/breadcrumb-bg.jpg">
+		<div id="breadcrumbs-wrapper" data-image="<?=base_url()?>app-assets/images/gallery/breadcrumb-bg.jpg">
 			<!-- Search for small screen-->
 			<div class="container">
 				<div class="row">
@@ -4515,7 +4516,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										<ul class="collection p-0">
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4526,7 +4527,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-1.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-1.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4537,7 +4538,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-2.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-2.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4548,7 +4549,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-3.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-3.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4559,7 +4560,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-4.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-4.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4570,7 +4571,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-5.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-5.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4581,7 +4582,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-6.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-6.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4592,7 +4593,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4603,7 +4604,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-8.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-8.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4614,7 +4615,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-1.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-1.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4625,7 +4626,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-9.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-9.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4636,7 +4637,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-10.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-10.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4647,7 +4648,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-off avatar-50"
-						><img src="app-assets/images/avatar/avatar-11.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-11.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4658,7 +4659,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 											</li>
 											<li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                         <span class="avatar-status avatar-online avatar-50"
-						><img src="app-assets/images/avatar/avatar-12.png" alt="avatar" />
+						><img src="<?=base_url()?>app-assets/images/avatar/avatar-12.png" alt="avatar" />
                            <i></i>
                         </span>
 												<div class="user-content">
@@ -4886,7 +4887,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							<ul class="collection">
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">hello!</p>
@@ -4899,7 +4900,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</li>
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">I am looking for the best admin template.?</p>
@@ -4917,7 +4918,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">Ohh! very nice</p>
@@ -4930,7 +4931,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</li>
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">How can I purchase it?</p>
@@ -4953,7 +4954,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</li>
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">Ohh! Thank you.</p>
@@ -4961,7 +4962,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</li>
 								<li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
                <span class="avatar-status avatar-online avatar-50"
-			   ><img src="app-assets/images/avatar/avatar-7.png" alt="avatar" />
+			   ><img src="<?=base_url()?>app-assets/images/avatar/avatar-7.png" alt="avatar" />
                </span>
 									<div class="user-content speech-bubble">
 										<p class="medium-small">I will purchase it for sure.</p>
@@ -5015,19 +5016,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <!-- END: Footer-->
 <!-- BEGIN VENDOR JS-->
-<script src="app-assets/js/vendors.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/js/vendors.min.js" type="text/javascript"></script>
 <!-- BEGIN VENDOR JS-->
 <!-- BEGIN PAGE VENDOR JS-->
-<script src="app-assets/vendors/data-tables/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
-<script src="app-assets/vendors/data-tables/js/dataTables.select.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/vendors/data-tables/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/vendors/data-tables/js/dataTables.select.min.js" type="text/javascript"></script>
 <!-- END PAGE VENDOR JS-->
 <!-- BEGIN THEME  JS-->
-<script src="app-assets/js/plugins.js" type="text/javascript"></script>
-<script src="app-assets/js/custom/custom-script.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/js/plugins.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/js/custom/custom-script.js" type="text/javascript"></script>
 <!-- END THEME  JS-->
 <!-- BEGIN PAGE LEVEL JS-->
-<script src="app-assets/js/scripts/data-tables.js" type="text/javascript"></script>
+<script src="<?=base_url()?>app-assets/js/scripts/data-tables.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL JS-->
 </body>
 </html>
