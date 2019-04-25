@@ -10,8 +10,18 @@ class MY_Controller extends CI_Controller{
     public function __construct()
     {
         parent::__construct();
+
+        $this->load->helper('site_helper');
+        $this->load->model('Common_model');
+        $this->load->library('datatables');
+        
+        if(!isUserLogin()){
+            return redirect('/login');
+        }
+
     }
-        public function show($viewPath, $data = NULL, $bool = false){
+
+    public function show($viewPath, $data = NULL, $bool = false){
         $this->load->view('configrations/header',$data, $bool);
         $this->load->view('configrations/sidebar',$data, $bool);
         $this->load->view($viewPath, $data, $bool);

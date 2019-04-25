@@ -8,6 +8,8 @@
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">face</i><span class="menu-title" data-i18n="">Users</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
+                    <li><a class="collapsible-body" href="<?=base_url('user')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Users</span></a></li>
+                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add user</span></a></li>
                     <li><a class="collapsible-body" href="<?= base_url()?>users" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Users</span></a></li>
                     <li><a class="collapsible-body" href="<?= base_url()?>users/add" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add user</span></a></li>
                 </ul>
@@ -60,7 +62,7 @@
         </li>
         <li class="bold"><a class="waves-effect waves-cyan " href="#"><i class="material-icons">settings</i><span class="menu-title" data-i18n="">Profile</span></a></li>
 
-        <li class="bold"><a class="waves-effect waves-cyan " href="#"><i class="material-icons">power_settings_new</i><span class="menu-title" data-i18n="">Logout</span></a></li>
+        <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('auth/logout')?>"><i class="material-icons">power_settings_new</i><span class="menu-title" data-i18n="">Logout</span></a></li>
     </ul>
     <div class="navigation-background"></div><a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="#" data-target="slide-out"><i class="material-icons">menu</i></a>
 </aside>
