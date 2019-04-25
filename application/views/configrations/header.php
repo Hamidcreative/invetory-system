@@ -54,5 +54,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </header>
 <!-- END: Header-->
 
-<?php include('sidebar.php') ;?>
+ 
 

@@ -13,6 +13,7 @@ class MY_Controller extends CI_Controller{
     }
         public function show($viewPath, $data = NULL, $bool = false){
         $this->load->view('configrations/header',$data, $bool);
+        $this->load->view('configrations/sidebar',$data, $bool);
         $this->load->view($viewPath, $data, $bool);
         $this->load->view('configrations/footer',$data, $bool);
     }
