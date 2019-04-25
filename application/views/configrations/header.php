@@ -30,6 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/custom/custom.css">
     <!-- END: Custom CSS-->
+<script src="<?=base_url()?>assets/js/jquery-3.4.0.min.js" type="text/javascript"></script>
 </head>
 <!-- END: Head-->
 <body class="vertical-layout page-header-light vertical-menu-collapsible vertical-dark-menu 2-columns  " data-open="click" data-menu="vertical-dark-menu" data-col="2-columns">
@@ -46,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <!-- profile-dropdown-->
                 <ul class="dropdown-content" id="profile-dropdown">
                     <li><a class="grey-text text-darken-1" href="user-profile-page.html"><i class="material-icons">person_outline</i> Profile</a></li>
-                    <li><a class="grey-text text-darken-1" href="user-login.html"><i class="material-icons">keyboard_tab</i> Logout</a></li>
+                    <li><a class="grey-text text-darken-1" href="<?=base_url('auth/logout')?>"><i class="material-icons">keyboard_tab</i> Logout</a></li>
                 </ul>
             </div>
         </nav>
