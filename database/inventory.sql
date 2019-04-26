@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2019 at 07:54 PM
+-- Generation Time: Apr 26, 2019 at 07:01 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -70,6 +70,13 @@ CREATE TABLE `role` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `role`
+--
+
+INSERT INTO `role` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Administrator', 1, '2019-04-26 00:00:00', '2019-04-26 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +92,7 @@ CREATE TABLE `user` (
   `lastname` varchar(100) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `avatar` varchar(255) NOT NULL,
+  `notes` text,
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -93,8 +101,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `password`, `firstname`, `lastname`, `status`, `avatar`, `updated_at`, `created_at`) VALUES
-(1, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid', 'Raza', 1, '', '2019-04-25 00:00:00', '2019-04-25 00:00:00');
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `firstname`, `lastname`, `status`, `avatar`, `notes`, `updated_at`, `created_at`) VALUES
+(1, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -156,6 +164,13 @@ CREATE TABLE `warehouse_type` (
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `warehouse_type`
+--
+
+INSERT INTO `warehouse_type` (`id`, `name`, `status`, `updated_at`, `created_at`) VALUES
+(1, 'Test', 1, '2019-04-26 00:00:00', '2019-04-26 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -229,7 +244,7 @@ ALTER TABLE `inventory_type`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -259,7 +274,7 @@ ALTER TABLE `warehouse`
 -- AUTO_INCREMENT for table `warehouse_type`
 --
 ALTER TABLE `warehouse_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
