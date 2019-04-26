@@ -3,7 +3,10 @@
         <div class="container"><span><?= date('Y')?>          <a href="#" target="_blank">Inventory System</a> All rights reserved.</span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>
     </div>
 </footer>
-
+<script>
+	TOKEN_VAL = '<?=$csrf['hash'];?>';
+	TOKEN_NAME = '<?=$csrf['name'];?>';
+</script>
 <!-- END: Footer-->
 <!-- BEGIN VENDOR JS-->
 <script src="<?=base_url()?>assets/js/vendors.min.js" type="text/javascript"></script>

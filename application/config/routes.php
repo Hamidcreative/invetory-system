@@ -58,6 +58,8 @@ $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'auth/login';
 
 //Whare hosue Types
+$route['users'] = 'user/index';
+$route['users/(:num)'] = 'user/edit/$1';
 $route['wharehouse/types/(:any)'] = 'Warehouse/types/$1';
 
 

@@ -113,6 +113,7 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
             'SortType' : 'asc'
         }
     }
+
     oTable = selector.dataTable({
         "bServerSide": true,
         "bProcessing": true,
@@ -126,8 +127,9 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "sAjaxSource": url,
         "iDisplayLength": 10,
         'fnServerData' : function(sSource, aoData, fnCallback){
+            aoData.push({'name':TOKEN_NAME, 'value':TOKEN_VAL});
             $.ajax({
-                'dataType': 'json',
+                'dataType': 'json', 
                 'type': 'POST',
                 'url': url,
                 'data': aoData,

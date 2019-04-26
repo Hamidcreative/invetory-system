@@ -7,7 +7,7 @@
             <h4 class="card-title">Page Length Options</h4>
             <div class="row">
               <div class="col s12">
-                <table id="page-length-option" class="display usersList">
+                <table class="display usersList">
                   <thead>
                     <tr>
                       <th>Id</th>
@@ -38,7 +38,7 @@
         var url_DT = "<?=base_url();?>user/listing";
         var aoColumns_DT = [
             /* User ID */ {
-                "mData": "id",
+                "mData": "ID",
                 "bVisible": true,
                 "bSortable": true,
                 "bSearchable": true
@@ -59,12 +59,12 @@
                 "mData": "status"
             },
             {
-                "mData" : "ViewEditActionButtons"
+                "mData" : "actionButtons"
             }
         ];
-        var HiddenColumnID_DT = "id";
+        var HiddenColumnID_DT = "";
         var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
-        commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT,HiddenColumnID_DT);
+        commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
 
         //Code for search box
         $("#search-input").on("keyup",function (e) {

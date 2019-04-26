@@ -105,7 +105,7 @@ Intro
 
 #intro .modal .modal-content:after
 {
-    background: url('../../../app-assets/images/gallery/wave.png');
+    background: url('../../../assets/images/gallery/wave.png');
     -webkit-background-size: cover;
             background-size: cover;
 }
@@ -121,7 +121,7 @@ Intro
     height: 100px;
 
     opacity: 1; 
-    background: url('../../../app-assets/images/gallery/wave.png');
+    background: url('../../../assets/images/gallery/wave.png');
     -webkit-background-size: cover;
             background-size: cover;
 }

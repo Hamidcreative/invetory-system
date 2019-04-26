@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class MY_Controller extends CI_Controller{
 
+    public $csrf;
 
     public function __construct()
     {
@@ -19,9 +20,15 @@ class MY_Controller extends CI_Controller{
             return redirect('/login');
         }
 
+        $this->csrf = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
     }
 
     public function show($viewPath, $data = NULL, $bool = false){
+        $data['csrf'] = $this->csrf;
         $this->load->view('configrations/header',$data, $bool);
         $this->load->view('configrations/sidebar',$data, $bool);
         $this->load->view($viewPath, $data, $bool);
