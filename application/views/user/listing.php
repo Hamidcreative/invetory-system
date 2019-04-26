@@ -72,4 +72,17 @@
         });
 
     });
+    
+    $(document).on('click','.delete-user', function(e){
+      var userId = $(this).attr('data-id');
+      $.ajax({
+        url:"<?=base_url('users')?>/"+userId,
+        type:"DELETE",
+        success:function(data){
+          data = JSON.parse(data);
+          showToast(data['type'], data['message'], data['type']);
+          oTable.fnDraw();
+        }
+      });
+    })
 </script>

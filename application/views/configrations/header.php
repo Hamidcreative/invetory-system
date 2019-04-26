@@ -26,11 +26,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/themes/vertical-dark-menu-template/materialize.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/themes/vertical-dark-menu-template/style.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/pages/data-tables.css">
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/jquery.toast.css">
     <!-- END: Page Level CSS-->
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/custom/custom.css">
     <!-- END: Custom CSS-->
-<script src="<?=base_url()?>assets/js/jquery-3.4.0.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/js/jquery-3.4.0.min.js" type="text/javascript"></script>
 </head>
 <!-- END: Head-->
 <body class="vertical-layout page-header-light vertical-menu-collapsible vertical-dark-menu 2-columns  " data-open="click" data-menu="vertical-dark-menu" data-col="2-columns">

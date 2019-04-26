@@ -59,6 +59,7 @@ $route['login'] = 'auth/login';
 
 //Whare hosue Types
 $route['users'] = 'user/index';
+$route['users/add'] = 'user/add';
 $route['users/(:num)'] = 'user/edit/$1';
 $route['wharehouse/types/(:any)'] = 'Warehouse/types/$1';
 

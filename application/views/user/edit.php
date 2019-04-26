@@ -25,7 +25,7 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12">
+                                    <form class="col s12" method="POST" action="<?=base_url('users/'.$user->id)?>">
                                         <div class="row">
                                             <div class="input-field col m6 s12">
                                                 <input name="firstname" type="text" value="<?=$user->firstname?>">
@@ -38,27 +38,39 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="email" type="email" value="<?=$user->email?>">
-                                                <label for="email">Email</label>
+                                                <input name="username" type="text" value="<?=$user->username?>">
+                                                <label for="username">Username</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <input name="password" type="password" value="">
-                                                <label for="password">Password (Leave empty if don't want to change)</label>
+                                                <input name="email" type="email" value="<?=$user->email?>">
+                                                <label for="email">Email</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select>
+                                                <input name="password" type="password" value="">
+                                                <label for="password">Password (Leave empty if don't want to change)</label>
+                                            </div>
+                                            <div class="input-field col m6 s12">
+                                                <select name="roles">
                                                 <?php foreach($roles as $key => $role) { ?>
                                                     <option value="<?=$role->id?>"><?=$role->name?></option>
                                                 <?php } ?>
                                                 </select>
                                                 <label>Select Role</label>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <textarea name="notes" class="materialize-textarea"><?=$user->notes?></textarea>
+                                                <label for="notes">Notes</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col m6 s12 file-field input-field">
                                                 <div class="btn float-right">
                                                     <span>File</span>
-                                                    <input type="file">
+                                                    <input name="avatar" type="file">
                                                 </div>
                                                 <div class="file-path-wrapper">
                                                     <input class="file-path validate" type="text">
@@ -67,17 +79,13 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <textarea name="notes" class="materialize-textarea"><?=$user->notes?></textarea>
-                                                <label for="notes">Notes</label>
-                                            </div>
-                                            <div class="row">
-                                                <div class="input-field col s12">
-                                                    <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit
-                                                        <i class="material-icons right">send</i>
-                                                    </button>
-                                                </div>
+                                                <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit
+                                                    <i class="material-icons right">send</i>
+                                                </button>
                                             </div>
                                         </div>
+                                        </div>
+                                        <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                                     </form>
                                 </div>
                             </div>
