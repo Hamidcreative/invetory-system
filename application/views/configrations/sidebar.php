@@ -9,9 +9,7 @@
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                     <li><a class="collapsible-body" href="<?=base_url('user')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Users</span></a></li>
-                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add user</span></a></li>
-                    <li><a class="collapsible-body" href="<?= base_url()?>users" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Users</span></a></li>
-                    <li><a class="collapsible-body" href="<?= base_url()?>users/add" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add user</span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('user/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add user</span></a></li>
                 </ul>
             </div>
         </li>
@@ -19,8 +17,8 @@
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">local_grocery_store</i><span class="menu-title" data-i18n="">Warehouses</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="<?= base_url()?>warehouse" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Warehouses</span></a></li>
-                    <li><a class="collapsible-body" href="<?= base_url()?>warehouse/add" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add Warehouse</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('warehouse')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Warehouses</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('warehouse/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add Warehouse</span></a></li>
                 </ul>
             </div>
         </li>
@@ -28,8 +26,8 @@
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">local_grocery_store</i><span class="menu-title" data-i18n="">Warehouse Types</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="<?= base_url()?>warehouse/types" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Warehouse Types</span></a></li>
-                    <li><a class="collapsible-body" href="<?= base_url()?>warehouse/types/add" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add Warehouse Type</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('warehouse/types')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Warehouse Types</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('warehouse/types/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Add Warehouse Type</span></a></li>
                 </ul>
             </div>
         </li>

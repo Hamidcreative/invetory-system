@@ -16,4 +16,10 @@ class User extends MY_Controller {
         $list = $this->Common_model->select_fields_joined_DT($select_data,'user','','','','','',$addColumn);
         print $list;
 	}
+	public function add(){
+		$this->show('user/add');
+	}
+	public function destroy(){
+
+	}
 }
