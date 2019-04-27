@@ -12,3 +12,6 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .hidden{
     display:none;
 }
+.deletemodal, .statusmodal{
+    cursor: pointer;
+}

@@ -1,3 +1,22 @@
+
+
+
+<div id="deletemodal" class="modal">
+    <div class="modal-content">
+        <input type="hidden" id="hiddenUserID" >
+        <h4>Trashed</h4>
+        <p>Are you sure you want to delete permanently? </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Disagree</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat Agree">Agree</a>
+    </div>
+</div>
+
+
+
+
+
 <footer class="page-footer footer footer-static footer-light navbar-border navbar-shadow">
     <div class="footer-copyright">
         <div class="container"><span><?= date('Y')?>          <a href="#" target="_blank">Inventory System</a> All rights reserved.</span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>

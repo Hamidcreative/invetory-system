@@ -458,6 +458,8 @@ jQuery.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
     };
 };
 
+// custom js for inventory system
+$('.modal').modal();
 function readURL(input, el) {
 
   if (input.files && input.files[0]) {
