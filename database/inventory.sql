@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2019 at 07:01 PM
--- Server version: 10.1.31-MariaDB
--- PHP Version: 7.2.4
+-- Generation Time: Apr 27, 2019 at 04:47 PM
+-- Server version: 10.1.30-MariaDB
+-- PHP Version: 7.2.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -41,6 +41,13 @@ CREATE TABLE `inventory` (
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`id`, `item_id`, `description`, `warehouse_id`, `user_id`, `inventory_type_id`, `min_level`, `status`, `updated_at`, `created_at`) VALUES
+(1, 'test', 'teesss', 1, 1, 1, 12, 0, '2019-04-27 02:31:08', '2019-04-27 02:31:08');
+
 -- --------------------------------------------------------
 
 --
@@ -55,6 +62,36 @@ CREATE TABLE `inventory_type` (
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `inventory_type`
+--
+
+INSERT INTO `inventory_type` (`id`, `name`, `description`, `status`, `updated_at`, `created_at`) VALUES
+(1, 'tested by hamid', 'test', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 'testing', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `code` varchar(200) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `code`, `created_date`, `updated_at`) VALUES
+(2, 'view_WH', '6_WH', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 'view_WH', '7_WH', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -102,7 +139,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `firstname`, `lastname`, `status`, `avatar`, `notes`, `updated_at`, `created_at`) VALUES
-(1, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00');
+(1, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid', 'Raza', 0, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -151,6 +188,14 @@ CREATE TABLE `warehouse` (
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `warehouse`
+--
+
+INSERT INTO `warehouse` (`id`, `name`, `descrption`, `warehouse_type_id`, `status`, `updated_at`, `created_at`) VALUES
+(6, 'Warehouse one', ' Warehouse one description', 3, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, 'WareHouse two', 'WareHouse two', 3, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -170,7 +215,9 @@ CREATE TABLE `warehouse_type` (
 --
 
 INSERT INTO `warehouse_type` (`id`, `name`, `status`, `updated_at`, `created_at`) VALUES
-(1, 'Test', 1, '2019-04-26 00:00:00', '2019-04-26 00:00:00');
+(3, 'Local', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 'Main', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 'asas', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -186,6 +233,12 @@ ALTER TABLE `inventory`
 -- Indexes for table `inventory_type`
 --
 ALTER TABLE `inventory_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `permissions`
+--
+ALTER TABLE `permissions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -232,13 +285,19 @@ ALTER TABLE `warehouse_type`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `inventory_type`
 --
 ALTER TABLE `inventory_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -268,13 +327,13 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `warehouse`
 --
 ALTER TABLE `warehouse`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `warehouse_type`
 --
 ALTER TABLE `warehouse_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

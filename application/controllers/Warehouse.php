@@ -34,6 +34,7 @@ class Warehouse extends MY_Controller {
             if($this->input->post()) {
                 $id = $this->input->post('id');
                 $deleted = $this->Common_model->delete('warehouse', ['id' => $id]);
+                           $this->Common_model->delete('permissions',['code' => $id.'_WH']);
                 if ($deleted)
                     echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
                 else
@@ -70,6 +71,11 @@ class Warehouse extends MY_Controller {
                     'warehouse_type_id' => $this->input->post('types'),
                 ];
                 $insert = $this->Common_model->insert_record('warehouse', $data);
+                $permissions = [
+                    'name' => 'view_WH',
+                    'code' => $this->db->insert_id().'_WH',
+                ];
+                $this->Common_model->insert_record('permissions', $permissions);
                 if($insert){
                     $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse info Added successfully']);
                     redirect('warehouse');
