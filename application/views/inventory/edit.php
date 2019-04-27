@@ -5,13 +5,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Edit User : <?=$user->username?></h5>
-                        Last Modified : <?=$user->updated_at?>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Edit Inventory : <?=$inventory->item_id?></h5>
+                        Last Modified : <?=$inventory->updated_at?>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url()?>users">Users</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url()?>inventory">Inventory</a></li>
                             <li class="breadcrumb-item"><a href="#">Edit</a></li>
                         </ol>
                     </div>
@@ -37,65 +37,65 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" enctype="multipart/form-data" action="<?=base_url('users/'.$user->id)?>">
+                                    <form class="col s12" method="POST" enctype="multipart/form-data" action="<?=base_url('inventory/'.$inventory->id)?>">
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="firstname" required type="text" value="<?=$user->firstname?>">
-                                                <label for="firstname">First Name</label>
+                                                <input name="item_id" required type="text" value="<?=$inventory->item_id?>">
+                                                <label for="item_id">Item No.</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <input name="lastname" required type="text" value="<?=$user->lastname?>">
-                                                <label for="lastname">Last Name</label>
+                                                <input name="description" required type="text" value="<?=$inventory->description?>">
+                                                <label for="description">Description</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="username" required type="text" value="<?=$user->username?>">
-                                                <label for="username">Username</label>
-                                            </div>
-                                            <div class="input-field col m6 s12">
-                                                <input name="email" required type="email" value="<?=$user->email?>">
-                                                <label for="email">Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col m6 s12">
-                                                <input name="password" type="password" value="">
-                                                <label for="password">Password (Leave empty if don't want to change)</label>
-                                            </div>
-                                            <div class="input-field col m6 s12">
-                                                <select name="roles" required>
-                                                <?php foreach($roles as $key => $role) {
-                                                        if($role->id == $user->roles)
+                                                <select name="warehouse_id" required>
+                                                    <option value="">Select Warehouse</option>
+                                                    <?php foreach($warehouses as $key => $warehouse) { 
+                                                        if($warehouse->id == $inventory->warehouse_id)
                                                             $selected = 'selected';
                                                         else 
                                                             $selected = '';
                                                     ?>
-                                                    <option <?=$selected?> value="<?=$role->id?>"><?=$role->name?></option>
-                                                <?php } ?>
+                                                        <option <?=$selected?> value="<?=$warehouse->id?>"><?=$warehouse->name?></option>
+                                                    <?php } ?>
                                                 </select>
-                                                <label>Select Role</label>
+                                                <label>Warehouse</label>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <textarea name="notes" class="materialize-textarea"><?=$user->notes?></textarea>
-                                                <label for="notes">Notes</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col m4 s12 file-field input-field">
-                                                <div class="btn float-right">
-                                                    <span>Avatar</span>
-                                                    <input name="avatar" type="file">
-                                                </div>
-                                                <div class="file-path-wrapper">
-                                                    <?php if(empty($user->avatar))
-                                                        $user->avatar = defaultVal('avatar');
+                                            <div class="input-field col m6 s12">
+                                                <select name="user_id" required>
+                                                    <option value="">Select User</option>
+                                                    <?php foreach($users as $key => $user) { 
+                                                        if($user->id == $inventory->user_id)
+                                                            $selected = 'selected';
+                                                        else 
+                                                            $selected = '';
                                                     ?>
-                                                    <img class="avatar-preview" src="<?=base_url('assets/uploads/avatar/'.$user->avatar)?>" class="img-responsive" style="height:100px" />
-                                                    <!-- <input class="file-path validate" type="text"> -->
-                                                </div>
+                                                        <option <?=$selected?> value="<?=$user->id?>"><?=$user->firstname.' '.$user->lastname?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <label>User</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col m6 s12">
+                                                <select name="inventory_type_id" required>
+                                                    <option value="">Select Inventory Type</option>
+                                                    <?php foreach($inventory_types as $key => $inventory_type) { 
+                                                        if($inventory_type->id == $inventory->inventory_type_id)
+                                                            $selected = 'selected';
+                                                        else 
+                                                            $selected = '';
+                                                    ?>
+                                                        <option <?=$selected?> value="<?=$inventory_type->id?>"><?=$inventory_type->name?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <label>Inventory Type</label>
+                                            </div>
+                                            <div class="input-field col m6 s12">
+                                                <input name="min_level" required type="text" value="<?=$inventory->min_level?>">
+                                                <label for="min_level">Minimum Level</label>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -117,9 +117,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).on('change', '.file-field input[name="avatar"]', function(e){
-        readURL(this, $('.avatar-preview'));
-    })
-</script>

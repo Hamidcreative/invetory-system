@@ -19,4 +19,15 @@
 		return false;
 	}
 
+	function defaultVal($type){
+		switch ($type) {
+			case 'avatar':
+				return 'default.svg';
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+	}
 ?>

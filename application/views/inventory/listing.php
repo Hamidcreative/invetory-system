@@ -4,17 +4,19 @@
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <h4 class="card-title">User Listing</h4>
+            <h4 class="card-title">Inventory Listing</h4>
             <div class="row">
               <div class="col s12">
-                <table class="display usersList">
+                <table class="display inventoryList">
                   <thead>
                     <tr>
                       <th>Id</th>
-                      <th>Username</th>
-                      <th>Email</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
+                      <th>Item No.</th>
+                      <th>Description</th>
+                      <th>Warehouse</th>
+                      <th>User</th>
+                      <th>Type</th>
+                      <th>Min Level</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -35,7 +37,7 @@
     <h4 class="header-content"></h4>
     <p class="body-content"></p>
   </div>
-  <input type="hidden" name="user_id" />
+  <input type="hidden" name="inventory_id" />
   <input type="hidden" name="new_status" />
   <input type="hidden" name="method" />
   <div class="modal-footer">
@@ -49,8 +51,8 @@
         //// Need To Work ON New Way Of DataTables..
         oTable ="";
         //Initialize Select2 Elements
-        var usersTableSelector = $(".usersList");
-        var url_DT = "<?=base_url();?>user/listing";
+        var usersTableSelector = $(".inventoryList");
+        var url_DT = "<?=base_url();?>inventory/listing";
         var aoColumns_DT = [
             /* User ID */ {
                 "mData": "ID",
@@ -59,16 +61,22 @@
                 "bSearchable": true
             },
             {
-                "mData" : "username"
+                "mData" : "item_id"
             },
             {
-                "mData" : "email"
+                "mData" : "description"
             },
             {
-                "mData" : "firstname"
+                "mData" : "warehouse"
             },
             {
-                "mData" : "lastname"
+                "mData" : "user"
+            },
+            {
+                "mData" : "inventory_type"
+            },
+            {
+                "mData" : "min_level"
             },
             {
                 "mData": "status",
@@ -96,7 +104,7 @@
 
   // confirm modal trigger
   $(document).on('click', '.confirm-modal-trigger', function(e) {
-      $('#confirm-modal').find('input[name="user_id"]').val($(this).attr('data-id'));
+      $('#confirm-modal').find('input[name="inventory_id"]').val($(this).attr('data-id'));
       var current_status = $(this).attr('data-status');
       if(current_status != null){ // status change case
         if(current_status == 1){
@@ -110,11 +118,11 @@
         }
         $('#confirm-modal').find('input[name="method"]').val('PATCH');
         $('#confirm-modal').find('.header-content').html('Change User Status');
-        $('#confirm-modal').find('.body-content').html('This will change the user status from '+current_status+' to '+new_status+'. Are you really want to do this ?');
+        $('#confirm-modal').find('.body-content').html('This will change the item status from '+current_status+' to '+new_status+'. Are you really want to do this ?');
       } else { // delete case
           $('#confirm-modal').find('.header-content').html('Delete User');
         $('#confirm-modal').find('input[name="method"]').val('DELETE');
-          $('#confirm-modal').find('.body-content').html('This will completely remove the user from the system. Are you really want to do this ?');
+          $('#confirm-modal').find('.body-content').html('This will completely remove the item from the system. Are you really want to do this ?');
       }
       var Modalelem = document.querySelector('#confirm-modal');
       var instance = M.Modal.init(Modalelem);
@@ -122,11 +130,11 @@
   });
 
   $(document).on('click', '#confirm-modal .agree', function(e){
-    var userId = $(this).parents('#confirm-modal').find('input[name="user_id"]').val();
+    var inventoryId = $(this).parents('#confirm-modal').find('input[name="inventory_id"]').val();
     var method = $(this).parents('#confirm-modal').find('input[name="method"]').val();
     var status = $(this).parents('#confirm-modal').find('input[name="new_status"]').val();
       $.ajax({
-        url:"<?=base_url('users')?>/"+userId,
+        url:"<?=base_url('inventory')?>/"+inventoryId,
         type:method,
         data:{status:status},
         success:function(data){

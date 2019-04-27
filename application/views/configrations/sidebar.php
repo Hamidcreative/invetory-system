@@ -35,8 +35,8 @@
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Inventories</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventories</span></a></li>
-                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Inventory</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventories</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Inventory</span></a></li>
                 </ul>
             </div>
         </li>

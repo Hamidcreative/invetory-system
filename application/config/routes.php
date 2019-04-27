@@ -61,6 +61,7 @@ $route['login'] = 'auth/login';
 $route['users'] = 'user/index';
 $route['users/add'] = 'user/add';
 $route['users/(:num)'] = 'user/edit/$1';
+$route['inventory/(:num)'] = 'inventory/edit/$1';
 $route['wharehouse/types/(:any)'] = 'Warehouse/types/$1';
 
 

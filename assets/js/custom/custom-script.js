@@ -122,8 +122,9 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "bDestroy":true,
         "sServerMethod": "GET",
         "aaSorting":[[ sortBy['ColumnID'], sortBy['SortType'] ]],
-        "sDom" : sDom,
+        // "sDom" : sDom,
         "aoColumns":aoColumns,
+        "responsive": true,
         "sAjaxSource": url,
         "iDisplayLength": 10,
         'fnServerData' : function(sSource, aoData, fnCallback){
@@ -456,3 +457,16 @@ jQuery.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
             0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
     };
 };
+
+function readURL(input, el) {
+
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      el.attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}

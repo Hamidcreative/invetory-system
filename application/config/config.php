@@ -454,8 +454,7 @@ $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
 //$config['csrf_exclude_uris'] = array();
-$config['csrf_exclude_uris'] = array('wharehouse/types/listing'); //temp solutions
-$config['csrf_exclude_uris'] = array('user/listing'); //temp solutions
+$config['csrf_exclude_uris'] = ['wharehouse/types/listing','user/listing','inventory/listing']; //temp solutions
 
 /*
 |--------------------------------------------------------------------------

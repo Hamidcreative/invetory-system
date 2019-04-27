@@ -24,7 +24,13 @@ class MY_Controller extends CI_Controller{
             'name' => $this->security->get_csrf_token_name(),
             'hash' => $this->security->get_csrf_hash()
         ];
+        
+        $config['upload_path']          = './assets/uploads/avatar/';
+        $config['allowed_types']        = 'jpg|png';
+        $config['max_width']            = 1024;
+        $config['max_height']           = 768;
 
+        $this->load->library('upload', $config);
     }
 
     public function show($viewPath, $data = NULL, $bool = false){
