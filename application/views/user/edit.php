@@ -11,7 +11,7 @@
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url()?>users">Users</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('users')?>">Users</a></li>
                             <li class="breadcrumb-item"><a href="#">Edit</a></li>
                         </ol>
                     </div>

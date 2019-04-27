@@ -456,3 +456,6 @@ jQuery.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
             0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
     };
 };
+
+// custom js for inventory system
+$('.modal').modal();

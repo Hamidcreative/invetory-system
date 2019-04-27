@@ -6,24 +6,114 @@ class Warehouse extends MY_Controller {
         parent::__construct();
     }
 
-    public function index()
-    {
-        $this->show('wharehouse/listing');
+    public function index($param = NULL){// whare house types listing
+        if($param === 'listing'){
+            $selectData = array('
+            WH.id AS ID,
+            WH.name AS Name,
+		    WH.status As Status,
+		    warehouse_type.name As Type,
+		    CASE WHEN WH.status = 1 THEN CONCAT("<span  data-id=\'0\' class=\'badge green statusmodal\'> Published </span>") WHEN WH.status = 0 THEN CONCAT ("<span data-id=\'1\' class=\'badge red statusmodal\'>Pending    </span>") ELSE CONCAT ("<span  data-id=\'1\' class=\' badge red statusmodal\'> ", WH.status, " </span>") END AS Status
+		    ',false);
+            $addColumns = array(
+                'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
+            );
+            $where = '';
+            $joins = array(
+                array(
+                    'table'     => 'warehouse WH',
+                    'condition' => 'WH.warehouse_type_id = warehouse_type.id',
+                    'type'      => 'Right'
+                )
+            );
+            $returnedData = $this->Common_model->select_fields_joined_DT($selectData,'warehouse_type',$joins,'','','','',$addColumns);
+            print_r($returnedData);
+            return NULL;
+        }
+        elseif($param === 'delete'){
+            if($this->input->post()) {
+                $id = $this->input->post('id');
+                $deleted = $this->Common_model->delete('warehouse', ['id' => $id]);
+                if ($deleted)
+                    echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
+                else
+                    echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
+            }
+        }
+        elseif($param === 'status'){
+            $id = $this->input->post('id');
+            $status = $this->input->post('status');
+            $whereUpdate = array('id' => $id);
+            $update = array('status'=>$status);
+            $returnedData = $this->Common_model->update('warehouse',$whereUpdate,$update);
+            if ($returnedData)
+                echo json_encode(['type' => 'success', 'message' => 'Record updated successfully']);
+            else
+                echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
+        }
+        else{
+            $this->show('warehouse/listing');
+            return NULL;
+        }
     }
-
-    public function listing(){// whare house listing
-        $select_data = ['id as ID ,username, email, firstname, lastname, status', false];
-        $addColumn = array(
-            'actionButtons' => array('<span class="tbicon"> <a href="'.base_url().'" class="tooltip"><i class="icon-pencil"></i></a> </span>','ID')
-        );
-        $list = $this->Common_model->select_fields_joined_DT($select_data,'user','','','','','',$addColumn);
-        print $list;
+    public function add(){ // add warehouse
+        if($this->input->method() == 'post'){
+            $this->form_validation->set_rules('name', 'Name', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid data']);
+                return redirect('warehouse/add');
+            }
+            else {
+                $data = [
+                    'name' => $this->input->post('name'),
+                    'descrption' => $this->input->post('descrption'),
+                    'warehouse_type_id' => $this->input->post('types'),
+                ];
+                $insert = $this->Common_model->insert_record('warehouse', $data);
+                if($insert){
+                    $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse info Added successfully']);
+                    redirect('warehouse');
+                } else {
+                    $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
+                    redirect('warehouse/add');
+                }
+            }
+        }else {
+            $data = [
+                'types' => $this->Common_model->select_fields_where('warehouse_type','id,name',array('status' => 1),FALSE),
+            ];
+            $this->show('warehouse/add', $data);
+        }
     }
-    public function add(){ // add wharehouse
-        $this->show('wharehouse/add');
-    }
-    public function destroy(){  //destroy whare hosue
-
+    public function edit($id){ // add warehouse
+        if($this->input->method() == 'post'){
+            $this->form_validation->set_rules('name', 'Name', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid data']);
+                return redirect('warehouse/'.$id);
+            }
+            else {
+                $data = [
+                    'name' => $this->input->post('name'),
+                    'descrption' => $this->input->post('descrption'),
+                    'warehouse_type_id' => $this->input->post('types'),
+                ];
+                $update = $this->Common_model->update('warehouse',['id'=>$id], $data);
+                if($update){
+                    $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse info updated successfully']);
+                    redirect('warehouse');
+                } else {
+                    $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
+                    redirect('warehouse/'.$id);
+                }
+            }
+        }else {
+            $data = [
+                'warehouse' => $this->Common_model->select_fields_where('warehouse','*', ['id'=>$id], true),
+                'types' => $this->Common_model->select_fields_where('warehouse_type','id,name',array('status' => 1),FALSE),
+            ];
+            $this->show('warehouse/edit', $data);
+        }
     }
     public function types($param = NULL){// whare house types listing
         if($param === 'listing'){
@@ -31,10 +121,10 @@ class Warehouse extends MY_Controller {
             id AS ID,
             `name` AS Name,
 		    `status` As Status,
-		    CASE WHEN status = 1 THEN CONCAT("<span class=\'badge green\'> Published </span>") WHEN status = 0 THEN CONCAT ("<span class=\'badge red\'>Pending</span>") ELSE CONCAT ("<span class=\' badge red\'> ", status, " </span>") END AS Status
+		    CASE WHEN status = 1 THEN CONCAT("<span  data-id=\'0\' class=\'badge green statusmodal\'> Published </span>") WHEN status = 0 THEN CONCAT ("<span data-id=\'1\' class=\'badge red statusmodal\'>Pending    </span>") ELSE CONCAT ("<span  data-id=\'1\' class=\' badge red statusmodal\'> ", status, " </span>") END AS Status
 		    ',false);
             $addColumns = array(
-                'ViewEditActionButtons' => array('<a href="'.base_url().'" id="edit"><i class="material-icons">edit</i></a><a href="#" data-target=".approval-modal-forstatus" data-toggle="modal"><i class="material-icons">delete</i></a>','ID')
+                'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/types/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
             );
             $where = '';
             $returnedData = $this->Common_model->select_fields_joined_DT($selectData,'warehouse_type','',$where,'','','',$addColumns);
@@ -42,65 +132,80 @@ class Warehouse extends MY_Controller {
             return NULL;
         }
         elseif($param === 'delete'){
-            if(!$this->input->post()){
-                echo "FAIL::No Value Posted";
-                return false;
+            if($this->input->post()) {
+                $id = $this->input->post('id');
+                $deleted = $this->Common_model->delete('warehouse_type', ['id' => $id]);
+                if ($deleted)
+                    echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
+                else
+                    echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
             }
-            $id = $this->input->post('id');
-            $value = $this->input->post('value');
-            if(empty($id) or !is_numeric($id)){
-                echo "FAIL::Posted values are not VALID";
-                return NULL;
-            }
-            if(empty($value)){
-                echo "FAIL::Posted values are not VALID";
-                return NULL;
-            }
-            $data='';
-            if($value == 'delete'){
-                $whereUpdate = array( 'id' => $id );
-                $returnedData = $this->Common_model->delete('warehouse_type',$whereUpdate);
-                    echo "OK::Record Deleted";
-                }else{
-                    echo "FAIL::Record Not Deleted";
-                }
-                return NULL;
         }
         elseif($param === 'status'){
-            if(!$this->input->post()){
-                echo "FAIL::No Value Posted";
-                return false;
-            }
             $id = $this->input->post('id');
-            $value = $this->input->post('value');
-            if(empty($id) or !is_numeric($id)){
-                echo "FAIL::Posted values are not VALID";
-                return NULL;
-            }
-            if(empty($value)){
-                echo "FAIL::Posted values are not VALID";
-                return NULL;
-            }
-            $data='';
-            if($value == 'status'){
-                $whereUpdate = array('id' => $id);
-                $update = array();
-                $returnedData = $this->Common_model->update('warehouse_type',$whereUpdate,$update);
-                echo "OK::Status Change";
-            }else{
-                echo "FAIL::Status Not Change";
-            }
-            return NULL;
+            $status = $this->input->post('status');
+            $whereUpdate = array('id' => $id);
+            $update = array('status'=>$status);
+            $returnedData = $this->Common_model->update('warehouse_type',$whereUpdate,$update);
+            if ($returnedData)
+                echo json_encode(['type' => 'success', 'message' => 'Record updated successfully']);
+            else
+                echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
         }
         else{
-            $this->show('wharehousetypes/listing');
+            $this->show('warehousetypes/listing');
             return NULL;
         }
     }
-    public function add_type(){ // add wharehouse
-        $this->show('wharehousetypes/add');
-    }
-    public function destroy_type(){  //destroy whare hosue
-
-    }
+    public function add_type(){ // add warehouse type
+        if($this->input->method() == 'post'){
+            $this->form_validation->set_rules('name', 'Name', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid data']);
+                return redirect('warehouse/types/add');
+            }
+            else {
+                $data = [
+                    'name' => $this->input->post('name'),
+                ];
+                $insert = $this->Common_model->insert_record('warehouse_type', $data);
+                if($insert){
+                    $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse Types info Added successfully']);
+                    redirect('warehouse/types');
+                } else {
+                    $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
+                    redirect('warehouse/types/add');
+                }
+            }
+        }else {
+            $this->show('warehousetypes/add');
+        }
+    }   
+    public function edit_type($id){ // edit warehouse
+        if($this->input->method() == 'post'){
+            $this->form_validation->set_rules('name', 'Name', 'required');
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid data']);
+                return redirect('warehouse/types/'.$id);
+            }
+            else {
+                $data = [
+                    'name' => $this->input->post('name'),
+                ];
+                $update = $this->Common_model->update('warehouse_type',['id'=>$id], $data);
+                if($update){
+                    $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse Types info updated successfully']);
+                    redirect('warehouse/types');
+                } else {
+                    $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
+                    redirect('warehouse/types/'.$id);
+                }
+            }
+        }else {
+            $data = [
+                'warehouse' => $this->Common_model->select_fields_where('warehouse_type','*', ['id'=>$id], true),
+            ];
+            $this->show('warehousetypes/edit', $data);
+        }        
+    }     
 }

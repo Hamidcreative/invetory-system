@@ -57,11 +57,30 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['login'] = 'auth/login';
 
-//Whare hosue Types
+//users
 $route['users'] = 'user/index';
 $route['users/add'] = 'user/add';
 $route['users/(:num)'] = 'user/edit/$1';
-$route['wharehouse/types/(:any)'] = 'Warehouse/types/$1';
+
+
+//Whare hosue
+$route['warehouse/listing/(:any)'] = 'Warehouse/index/$1'; // whare house types listing
+$route['warehouse/add'] = 'Warehouse/add';
+$route['warehouse/edit/(:num)'] = 'Warehouse/edit/$1';
+
+
+//Whare hosue Types
+$route['warehouse/types/listing/(:any)'] = 'Warehouse/types/$1'; // whare house types listing
+$route['warehouse/types/add'] = 'Warehouse/add_type';
+$route['warehouse/types/edit/(:num)'] = 'Warehouse/edit_type/$1';
+
+
+//Inventory hosue Types
+$route['inventory/types'] = 'Inventorytypes/index';
+$route['inventory/types/listing/(:any)'] = 'Inventorytypes/index/$1'; // inventory  types listing
+$route['inventory/types/add'] = 'Inventorytypes/add';
+$route['inventory/types/edit/(:num)'] = 'Inventorytypes/edit/$1';
+
 
 
 
