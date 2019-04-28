@@ -63,7 +63,7 @@ $route['users/add'] = 'user/add';
 $route['users/(:num)'] = 'user/edit/$1';
 
 //Whare hosue
-$route['warehouse/listing/(:any)'] = 'Warehouse/index/$1'; // whare house types listing
+$route['warehouse/listing/(:any)'] = 'Warehouse/index/$1'; // whare house listing
 $route['warehouse/add'] = 'Warehouse/add';
 $route['warehouse/edit/(:num)'] = 'Warehouse/edit/$1';
 
@@ -75,11 +75,17 @@ $route['warehouse/types/edit/(:num)'] = 'Warehouse/edit_type/$1';
 //Inventory 
 $route['inventory/(:num)'] = 'inventory/edit/$1';
 
+
+
 //Inventory hosue Types
+
 $route['inventory/types'] = 'Inventorytypes/index';
 $route['inventory/types/listing/(:any)'] = 'Inventorytypes/index/$1'; // inventory  types listing
 $route['inventory/types/add'] = 'Inventorytypes/add';
 $route['inventory/types/edit/(:num)'] = 'Inventorytypes/edit/$1';
+
+
+$route['crud'] = 'Crud/index';
 
 
 
