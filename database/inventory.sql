@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2019 at 09:24 AM
+-- Generation Time: Apr 28, 2019 at 09:35 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -98,6 +98,20 @@ CREATE TABLE `inventory_type` (
 INSERT INTO `inventory_type` (`id`, `name`, `description`, `status`, `updated_at`, `created_at`) VALUES
 (1, 'test inventory type', 'test inventory type description', 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00'),
 (2, 'test inventory type', 'test inventory type description', 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `code` varchar(200) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -264,6 +278,12 @@ ALTER TABLE `inventory_type`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `role`
 --
 ALTER TABLE `role`
@@ -314,6 +334,12 @@ ALTER TABLE `inventory`
 --
 ALTER TABLE `inventory_type`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `role`
