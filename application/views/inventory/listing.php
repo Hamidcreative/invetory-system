@@ -13,10 +13,25 @@
                       <th>Id</th>
                       <th>Item No.</th>
                       <th>Description</th>
+                      <th>Amount</th>
                       <th>Warehouse</th>
-                      <th>User</th>
                       <th>Type</th>
                       <th>Min Level</th>
+                      <th>Check In Date</th>
+                      <th>Check In By</th>
+                      <th>Check In Amount</th>
+                      <th>Check Out Date</th>
+                      <th>Check Out By</th>
+                      <th>Check Out Amount</th>
+                      <th>Send To Warehouse</th>
+                      <th>Send Date</th>
+                      <th>Send Amount</th>
+                      <th>Send By</th>
+                      <th>Parcel Id</th>
+                      <th>Recieve Date</th>
+                      <th>Recieve Amount</th>
+                      <th>Recieve Warehouse</th>
+                      <th>Recieve By</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -67,16 +82,61 @@
                 "mData" : "description"
             },
             {
-                "mData" : "warehouse"
+                "mData" : "amount"
             },
             {
-                "mData" : "user"
+                "mData" : "warehouse"
             },
             {
                 "mData" : "inventory_type"
             },
             {
                 "mData" : "min_level"
+            },
+            {
+                "mData" : "checkin_date"
+            },
+            {
+                "mData" : "checkin_by"
+            },
+            {
+                "mData" : "checkin_amount"
+            },
+            {
+                "mData" : "checkout_date"
+            },
+            {
+                "mData" : "checkout_by"
+            },
+            {
+                "mData" : "checkout_amount"
+            },
+            {
+                "mData" : "send_warehouse"
+            },
+            {
+                "mData" : "send_date"
+            },
+            {
+                "mData" : "send_amount"
+            },
+            {
+                "mData" : "send_by"
+            },
+            {
+                "mData" : "parcel_id"
+            },
+            {
+                "mData" : "recieve_date"
+            },
+            {
+                "mData" : "recieve_amount"
+            },
+            {
+                "mData" : "recieve_warehouse"
+            },
+            {
+                "mData" : "recieve_by"
             },
             {
                 "mData": "status",

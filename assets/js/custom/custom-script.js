@@ -124,9 +124,9 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "aaSorting":[[ sortBy['ColumnID'], sortBy['SortType'] ]],
         // "sDom" : sDom,
         "aoColumns":aoColumns,
-        "responsive": true,
         "sAjaxSource": url,
         "iDisplayLength": 10,
+        "responsive":true,
         'fnServerData' : function(sSource, aoData, fnCallback){
             aoData.push({'name':TOKEN_NAME, 'value':TOKEN_VAL});
             $.ajax({
@@ -472,3 +472,7 @@ function readURL(input, el) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+ $(document).ready(function(){
+    $('.datepicker').datepicker();
+  });
