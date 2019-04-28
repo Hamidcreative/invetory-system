@@ -5,12 +5,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Warehouse</h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Add Warehouse</h5>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <ol class="breadcrumbs mb-0">
-                                <li class="breadcrumb-item"><a href="<?= base_url('warehouse')?>">Warehouse</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('warehouse')?>"> Warehouse</a></li>
                                 <li class="breadcrumb-item"><a href="#">Add</a></li>
                             </ol>
                         </ol>

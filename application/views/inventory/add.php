@@ -5,12 +5,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Add Inventory Item</h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Add Spare Part</h5>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
-                            <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url()?>inventory">Inventory</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('dashboard')?>">Home</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('inventory')?>">Spare Parts</a></li>
                             <li class="breadcrumb-item"><a href="#">Add</a></li>
                         </ol>
                     </div>
@@ -71,7 +71,7 @@
                                         <div class="row">
                                             <div class="input-field col m6 s12">
                                                 <select name="inventory_type_id" required>
-                                                    <option value="">Select Inventory Type</option>
+                                                    <option value="">Select Spare Part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                         if($inventory_type->id == set_value('inventory_type_id'))
                                                             $selected = 'selected';

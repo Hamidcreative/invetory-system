@@ -4,6 +4,7 @@
         <h1 class="logo-wrapper"><a class="brand-logo darken-1" href="index.html"><!--<img src="<?/*=base_url()*/?>assets/images/logo/materialize-logo.png" alt=""/>--><span class="logo-text hide-on-med-and-down">Inventory System</span></a><a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a></h1>
     </div>
     <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+        <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('dashboard')?>"><i class="material-icons">settings_input_svideo</i><span class="menu-title" data-i18n="">Dashboard</span></a></li>
         <li class="bold">
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">face</i><span class="menu-title" data-i18n="">Users</span></a>
             <div class="collapsible-body">
@@ -32,20 +33,20 @@
             </div>
         </li>
         <li class="bold">
-            <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Inventories</span></a>
+            <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Spare Parts</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventories</span></a></li>
-                    <li><a class="collapsible-body" href="<?= base_url('inventory/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Inventory</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Spare Part</span></a></li>
                 </ul>
             </div>
         </li>
         <li class="bold">
-            <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Inventory Types</span></a>
+            <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Spare Parts Types</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="<?=base_url('inventory/types')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventory Types</span></a></li>
-                    <li><a class="collapsible-body" href="<?=base_url('inventory/types/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Inventory type </span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('inventory/types')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts Types</span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('inventory/types/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Spare Part type </span></a></li>
                 </ul>
             </div>
         </li>
