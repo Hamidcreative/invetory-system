@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2019 at 09:35 AM
--- Server version: 10.1.31-MariaDB
--- PHP Version: 7.2.4
+-- Generation Time: Apr 30, 2019 at 08:47 PM
+-- Server version: 10.1.30-MariaDB
+-- PHP Version: 7.2.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -97,7 +97,7 @@ CREATE TABLE `inventory_type` (
 
 INSERT INTO `inventory_type` (`id`, `name`, `description`, `status`, `updated_at`, `created_at`) VALUES
 (1, 'test inventory type', 'test inventory type description', 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00'),
-(2, 'test inventory type', 'test inventory type description', 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00');
+(2, 'testing', 'test inventory type description', 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -109,9 +109,17 @@ CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
   `code` varchar(200) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `created_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `code`, `created_date`, `updated_at`) VALUES
+(3, 'view_WH', '4_WH', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 'view_WH', '5_WH', '2019-04-30 18:04:59', '2019-04-30 18:04:59');
 
 -- --------------------------------------------------------
 
@@ -161,22 +169,12 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `firstname`, `lastname`, `status`, `avatar`, `notes`, `updated_at`, `created_at`) VALUES
 (1, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', 'test', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(3, 'admin1', 'admin2@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 0, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(5, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(6, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(10, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, 'Jellyfish.jpg', '', '2019-04-27 10:30:32', '2019-04-25 00:00:00'),
-(13, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(14, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(15, 'admin', 'admin@yopmail.com', '0192023a7bbd73250516f069df18b500', 'Hamid4', 'Raza', 1, '', '', '2019-04-25 00:00:00', '2019-04-25 00:00:00'),
-(16, 'admin13', 'test@yopmail.com', '098f6bcd4621d373cade4e832627b4f6', 'test', 'test', 0, '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 'admin135', 'sageattar1122@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 'admin134', 'sageattar11224@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 'test', 'sageattar13122@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 'test32', 'test33@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, 'Desert.jpg', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(21, 'test434', 'test323@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, 'Desert1.jpg', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(22, 'admin44', 'tes44t@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 0, 'Chrysanthemum.jpg', '', '2019-04-27 10:30:08', '0000-00-00 00:00:00'),
+(19, 'test', 'sageattar13122@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 1, '', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(20, 'test32', 'test33@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 1, 'Desert.jpg', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(21, 'test434', 'test323@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 1, 'Desert1.jpg', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(22, 'admin44', 'tes44t@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'Arslan Mehmood', 'Khalid', 1, 'Chrysanthemum.jpg', '', '2019-04-27 10:30:08', '0000-00-00 00:00:00'),
 (23, 'admin444', 'erere@top.com', '098f6bcd4621d373cade4e832627b4f6', 'ee', 'tee', 0, 'Desert3.jpg', NULL, '2019-04-27 01:46:25', '2019-04-27 01:46:25'),
-(24, 'admin3333', 'tes333t@yopmail.com', '098f6bcd4621d373cade4e832627b4f6', 'test', 'test', 0, 'Hydrangeas.jpg', 'test', '2019-04-27 02:10:25', '2019-04-27 02:01:15');
+(24, 'admin3333', 'tes333t@yopmail.com', '098f6bcd4621d373cade4e832627b4f6', 'test', 'test', 1, 'Hydrangeas.jpg', 'test', '2019-04-27 02:10:25', '2019-04-27 02:01:15');
 
 -- --------------------------------------------------------
 
@@ -188,12 +186,113 @@ CREATE TABLE `user_activity` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `model_id` int(11) NOT NULL,
-  `action_id` int(11) NOT NULL,
+  `method` varchar(100) NOT NULL,
   `model_name` varchar(100) NOT NULL,
   `detail` text NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `created_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `action_on` int(11) DEFAULT NULL,
+  `rout` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_activity`
+--
+
+INSERT INTO `user_activity` (`id`, `user_id`, `model_id`, `method`, `model_name`, `detail`, `updated_at`, `created_at`, `action_on`, `rout`) VALUES
+(36, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-29 16:32:34', '2019-04-29 16:32:34', 1, 'warehouse/view/2'),
+(37, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-29 16:32:35', '2019-04-29 16:32:35', 1, 'warehouse/view/2'),
+(38, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-29 16:32:36', '2019-04-29 16:32:36', 1, 'warehouse/view/2'),
+(39, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-29 16:32:36', '2019-04-29 16:32:36', 1, 'warehouse/view/2'),
+(40, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-29 16:32:37', '2019-04-29 16:32:37', 1, 'warehouse/view/2'),
+(41, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-29 16:32:51', '2019-04-29 16:32:51', 1, 'warehouse/view/1'),
+(42, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-29 16:32:51', '2019-04-29 16:32:51', 1, 'warehouse/view/1'),
+(43, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-29 16:32:52', '2019-04-29 16:32:52', 1, 'warehouse/view/1'),
+(44, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:31:49', '2019-04-30 16:31:49', 1, 'warehouse/view/2'),
+(45, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:31:52', '2019-04-30 16:31:52', 1, 'warehouse/view/2'),
+(46, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:31:55', '2019-04-30 16:31:55', 1, 'warehouse/view/2'),
+(47, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:31:56', '2019-04-30 16:31:56', 1, 'warehouse/view/2'),
+(48, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:31:58', '2019-04-30 16:31:58', 1, 'warehouse/view/2'),
+(49, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:31:59', '2019-04-30 16:31:59', 1, 'warehouse/view/2'),
+(50, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:32:03', '2019-04-30 16:32:03', 1, 'warehouse/view/2'),
+(51, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:32:05', '2019-04-30 16:32:05', 1, 'warehouse/view/2'),
+(52, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:34:14', '2019-04-30 16:34:14', 1, 'warehouse/view/2'),
+(53, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:34:17', '2019-04-30 16:34:17', 1, 'warehouse/view/2'),
+(54, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:35:44', '2019-04-30 16:35:44', 1, 'warehouse/view/2'),
+(55, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:35:45', '2019-04-30 16:35:45', 1, 'warehouse/view/2'),
+(56, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:57:23', '2019-04-30 16:57:23', 20, 'warehouse/view/1'),
+(57, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:57:25', '2019-04-30 16:57:25', 24, 'warehouse/view/1'),
+(58, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:57:26', '2019-04-30 16:57:26', 22, 'warehouse/view/1'),
+(59, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:57:31', '2019-04-30 16:57:31', 21, 'warehouse/view/1'),
+(60, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 16:57:34', '2019-04-30 16:57:34', 19, 'warehouse/view/1'),
+(61, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:57:38', '2019-04-30 16:57:38', 1, 'warehouse/view/1'),
+(62, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:57:41', '2019-04-30 16:57:41', 20, 'warehouse/view/1'),
+(63, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:57:43', '2019-04-30 16:57:43', 22, 'warehouse/view/1'),
+(64, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:57:44', '2019-04-30 16:57:44', 19, 'warehouse/view/1'),
+(65, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 16:57:47', '2019-04-30 16:57:47', 21, 'warehouse/view/1'),
+(66, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:32', '2019-04-30 17:01:32', 20, 'warehouse/view/1'),
+(67, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:33', '2019-04-30 17:01:33', 19, 'warehouse/view/1'),
+(68, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:34', '2019-04-30 17:01:34', 21, 'warehouse/view/1'),
+(69, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:36', '2019-04-30 17:01:36', 22, 'warehouse/view/1'),
+(70, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:38', '2019-04-30 17:01:38', 1, 'warehouse/view/1'),
+(71, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:01:51', '2019-04-30 17:01:51', 24, 'warehouse/view/1'),
+(72, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:01:52', '2019-04-30 17:01:52', 19, 'warehouse/view/1'),
+(73, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:01:54', '2019-04-30 17:01:54', 22, 'warehouse/view/1'),
+(74, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:01:56', '2019-04-30 17:01:56', 22, 'warehouse/view/1'),
+(75, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:02:01', '2019-04-30 17:02:01', 19, 'warehouse/view/1'),
+(76, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:02:08', '2019-04-30 17:02:08', 24, 'warehouse/view/1'),
+(77, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:06:00', '2019-04-30 17:06:00', 20, 'warehouse/view/1'),
+(78, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:06:01', '2019-04-30 17:06:01', 1, 'warehouse/view/1'),
+(79, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:06:02', '2019-04-30 17:06:02', 19, 'warehouse/view/1'),
+(80, 1, 1, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:06:03', '2019-04-30 17:06:03', 24, 'warehouse/view/1'),
+(81, 1, 1, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:06:04', '2019-04-30 17:06:04', 24, 'warehouse/view/1'),
+(82, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:46:44', '2019-04-30 17:46:44', 24, 'warehouse/view/4'),
+(83, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:46:51', '2019-04-30 17:46:51', 24, 'warehouse/view/4'),
+(84, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:46:53', '2019-04-30 17:46:53', 22, 'warehouse/view/4'),
+(85, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:52:55', '2019-04-30 17:52:55', 21, 'warehouse/view/4'),
+(86, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 17:53:45', '2019-04-30 17:53:45', 1, 'warehouse/view/4'),
+(87, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 17:53:56', '2019-04-30 17:53:56', 1, 'warehouse/view/4'),
+(88, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:14', '2019-04-30 18:01:14', 20, 'warehouse/view/4'),
+(89, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:16', '2019-04-30 18:01:16', 19, 'warehouse/view/4'),
+(90, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:18', '2019-04-30 18:01:18', 1, 'warehouse/view/4'),
+(91, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:22', '2019-04-30 18:01:22', 19, 'warehouse/view/4'),
+(92, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:23', '2019-04-30 18:01:23', 1, 'warehouse/view/4'),
+(93, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:24', '2019-04-30 18:01:24', 20, 'warehouse/view/4'),
+(94, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:25', '2019-04-30 18:01:25', 21, 'warehouse/view/4'),
+(95, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:29', '2019-04-30 18:01:29', 22, 'warehouse/view/4'),
+(96, 1, 4, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-04-30 18:01:30', '2019-04-30 18:01:30', 24, 'warehouse/view/4'),
+(97, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:40', '2019-04-30 18:01:40', 22, 'warehouse/view/4'),
+(98, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:41', '2019-04-30 18:01:41', 21, 'warehouse/view/4'),
+(99, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:42', '2019-04-30 18:01:42', 24, 'warehouse/view/4'),
+(100, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:44', '2019-04-30 18:01:44', 20, 'warehouse/view/4'),
+(101, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:45', '2019-04-30 18:01:45', 1, 'warehouse/view/4'),
+(102, 1, 4, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-04-30 18:01:47', '2019-04-30 18:01:47', 19, 'warehouse/view/4');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_permissions`
+--
+
+CREATE TABLE `user_permissions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_permissions`
+--
+
+INSERT INTO `user_permissions` (`id`, `user_id`, `permission_id`, `created_at`, `updated_at`) VALUES
+(10, 22, 3, '2019-04-30 18:01:40', '2019-04-30 18:01:40'),
+(11, 21, 3, '2019-04-30 18:01:41', '2019-04-30 18:01:41'),
+(12, 24, 3, '2019-04-30 18:01:42', '2019-04-30 18:01:42'),
+(13, 20, 3, '2019-04-30 18:01:44', '2019-04-30 18:01:44'),
+(14, 1, 3, '2019-04-30 18:01:45', '2019-04-30 18:01:45'),
+(15, 19, 3, '2019-04-30 18:01:47', '2019-04-30 18:01:47');
 
 -- --------------------------------------------------------
 
@@ -237,8 +336,8 @@ CREATE TABLE `warehouse` (
 --
 
 INSERT INTO `warehouse` (`id`, `name`, `descrption`, `warehouse_type_id`, `status`, `updated_at`, `created_at`) VALUES
-(1, 'test warehouse', 'test ware house description', 1, 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00'),
-(2, 'test warehouse', 'test ware house description', 1, 1, '2019-04-27 00:00:00', '2019-04-27 00:00:00');
+(4, 'Main Warehosue', '  Main Warehouse karachi', 2, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 'Local Warehouse', '  Local Warehouse lahore', 1, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -259,7 +358,8 @@ CREATE TABLE `warehouse_type` (
 --
 
 INSERT INTO `warehouse_type` (`id`, `name`, `status`, `updated_at`, `created_at`) VALUES
-(1, 'Test', 1, '2019-04-26 00:00:00', '2019-04-26 00:00:00');
+(1, 'Local', 1, '2019-04-26 00:00:00', '2019-04-26 00:00:00'),
+(2, 'Main', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -302,6 +402,12 @@ ALTER TABLE `user_activity`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user_permissions`
+--
+ALTER TABLE `user_permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user_role`
 --
 ALTER TABLE `user_role`
@@ -339,7 +445,7 @@ ALTER TABLE `inventory_type`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -357,7 +463,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_activity`
 --
 ALTER TABLE `user_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+
+--
+-- AUTO_INCREMENT for table `user_permissions`
+--
+ALTER TABLE `user_permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_role`
@@ -369,13 +481,13 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `warehouse`
 --
 ALTER TABLE `warehouse`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `warehouse_type`
 --
 ALTER TABLE `warehouse_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
