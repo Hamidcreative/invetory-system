@@ -10,4 +10,11 @@ class Report extends MY_Controller {
         ];
         $this->show('reports/activity',$data);
     }
+    public function inventory_report()
+    {
+        $data = [
+            'warehouse' => $this->Common_model->select_fields_where('warehouse','id,name',array('status' => 1),FALSE),
+        ];
+        $this->show('reports/inventory',$data);
+    }
 }

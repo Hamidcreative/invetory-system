@@ -97,7 +97,7 @@
 
         oTable = "";
         var regTableSelector = $("#warehousetypes");
-        var url_DT = "<?=base_url();?>dashboard/activity_listing/listing";
+        var url_DT = "<?=base_url();?>dashboard/spares_listing/listing";
         var aoColumns_DT = [
             /* ID */ {
                 "mData": "ID",
@@ -140,7 +140,7 @@
         var sortBy = {
             'ColumnID' : 0,
             'SortType' : 'desc'
-        };   
+        };
         var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         commonDataTables(regTableSelector, url_DT, aoColumns_DT, sDom_DT, HiddenColumnID_DT,RowCallBack=null,DrawCallBack=null,filters=null,sortBy );
 
@@ -162,7 +162,7 @@
                 'id': ID,"<?=$csrf['name']?>":"<?=$csrf['hash']?>",
             };
             $.ajax({
-                url:"<?=base_url();?>dashboard/activity_listing/delete",
+                url:"<?=base_url();?>dashboard/spares_listing/delete",
                 data: postData,
                 type:"POST",
                 success: function (data) {
@@ -193,7 +193,7 @@
 //        });
     });
 
-    
+
 
 
 </script>

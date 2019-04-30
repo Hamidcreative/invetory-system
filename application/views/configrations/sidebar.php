@@ -54,8 +54,8 @@
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">description</i><span class="menu-title" data-i18n="">Reports</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
-                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventory Report</span></a></li>
-                    <li><a class="collapsible-body" href="<?=base_url('reports')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> User Report </span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('spares/report')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spares Report</span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('users/report')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> User Report </span></a></li>
                 </ul>
             </div>
         </li>

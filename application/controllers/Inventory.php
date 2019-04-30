@@ -112,6 +112,8 @@ class Inventory extends MY_Controller {
 		} else if($this->input->method() == 'patch') {
 			$data = $this->input->input_stream();
 			$updated = $this->Common_model->update('inventory', ['id'=>$inventoryId], $data);
+			$activity = array('model_id' => $inventoryId,'action_on'=>$inventoryId,'method' => 'Status Upated', 'model_name' => 'spares','detail'=> 'Spare part status updated','rout'=>'inventory/'.$inventoryId);
+			logs($activity);
 			if($updated)
 				echo json_encode(['type'=>'success','message'=>'Item status updated successfully']);
 			else 
@@ -184,7 +186,5 @@ class Inventory extends MY_Controller {
 		$this->show('inventory/add', $data);
 		
 	}
-	public function destroy(){
 
-	}
 }

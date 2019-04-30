@@ -104,7 +104,7 @@ function commonDataTablesPage(selector,url,aoColumns,sDom,HiddenColumnID,start,R
         }
     });
 }
-function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters,sortBy ){
+function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters ,sortBy){
     // console.log(HiddenColumnID);
     //Little Code For Sorting.
     if(typeof sortBy === "undefined"){
@@ -156,8 +156,8 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "sAjaxSource": url,
         "iDisplayLength": 10,
         "responsive":true,
-        dom: doms,   // added by hamid
-        buttons: expbuttons, // added by hamid
+        "dom": 'Bfrtip',   // added by hamid when added it for buttons that hide the show enteries
+        "buttons": expbuttons, // added by hamid
         'fnServerData' : function(sSource, aoData, fnCallback){
             aoData.push({'name':TOKEN_NAME, 'value':TOKEN_VAL});
             $.ajax({

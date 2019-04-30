@@ -97,7 +97,9 @@ $route['dashboard/activity_listing/(:any)'] = 'Dashboard/activity_listing/$1'; /
 
 // reports
 
-$route['reports'] = 'Report'; // user activity listing
+$route['users/report'] = 'Report'; // user activity listing
+$route['spares/report'] = 'Report/inventory_report'; // user activity listing
+
 
 
 
