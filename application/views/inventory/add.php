@@ -81,7 +81,7 @@
                                                         <option <?=$selected?> value="<?=$inventory_type->id?>"><?=$inventory_type->name?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label>Inventory Type</label>
+                                                <label>Spare Type</label>
                                             </div>
                                             <div class="input-field col m6 s12">
                                                 <input name="min_level" required type="text" value="<?=set_value('min_level')?>">

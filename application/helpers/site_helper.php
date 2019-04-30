@@ -30,4 +30,27 @@
 				break;
 		}
 	}
+
+
+
+/*must use  similar
+userID      who performed activity
+model_id    modified table id
+
+*******method*******
+   add,update delete,status
+   assigned user  // use when user assigned to WH
+   removed user   // use when user removed from WH
+
+Modal name      modified table name
+detail          activity description
+action_on  used  for which user
+
+*/
+    function logs($activity){
+		$ci = & get_instance();
+		$activity['user_id'] = $ci->session->userdata('user')->id;
+		$ci->Common_model->insert_record('user_activity', $activity);
+	}
+
 ?>

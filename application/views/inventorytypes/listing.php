@@ -6,12 +6,12 @@
 			<div class="container">
 				<div class="row">
 					<div class="col s12 m6 l6">
-						<h5 class="breadcrumbs-title mt-0 mb-0">Inventory Types</h5>
+						<h5 class="breadcrumbs-title mt-0 mb-0">Spare Part Types</h5>
 					</div>
 					<div class="col s12 m6 l6 right-align-md">
 						<ol class="breadcrumbs mb-0">
-							<li class="breadcrumb-item"><a href="<?= base_url('')?>">Inventory</a></li>
-							<li class="breadcrumb-item"><a href="<?= base_url('inventory/types')?>">Inventory Types</a></li>
+							<li class="breadcrumb-item"><a href="<?= base_url('')?>">Spare Parts</a></li>
+							<li class="breadcrumb-item"><a href="<?= base_url('inventory/types')?>">Spare Part Types</a></li>
 							<li class="breadcrumb-item"><a href="#">Listing</a></li>
 						</ol>
 					</div>

@@ -104,7 +104,7 @@ function commonDataTablesPage(selector,url,aoColumns,sDom,HiddenColumnID,start,R
         }
     });
 }
-function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters,sortBy){
+function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters,sortBy ){
     // console.log(HiddenColumnID);
     //Little Code For Sorting.
     if(typeof sortBy === "undefined"){
@@ -113,6 +113,35 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
             'SortType' : 'asc'
         }
     }
+    var expbuttons =[
+        {
+            extend: 'csv',
+            footer: true,
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
+        },
+        {
+            extend: 'excel',
+            footer: true,
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
+        },
+        {
+            extend: 'print',
+            footer: true,
+            exportOptions: {
+                columns: 'th:not(:last-child)'
+            }
+        }
+    ];
+      if(typeof expbuttons === "undefined"){ // added by hamid
+          var doms = '';
+          var expbuttons= '';
+      }else{
+         var doms= 'Bfrtip';
+     }
 
     oTable = selector.dataTable({
         "bServerSide": true,
@@ -127,6 +156,8 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "sAjaxSource": url,
         "iDisplayLength": 10,
         "responsive":true,
+        dom: doms,   // added by hamid
+        buttons: expbuttons, // added by hamid
         'fnServerData' : function(sSource, aoData, fnCallback){
             aoData.push({'name':TOKEN_NAME, 'value':TOKEN_VAL});
             $.ajax({

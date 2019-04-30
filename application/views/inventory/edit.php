@@ -5,13 +5,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Edit Inventory : <?=$inventory->item_id?></h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Spare Part : <?=$inventory->item_id?></h5>
                         Last Modified : <?=$inventory->updated_at?>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url()?>inventory">Inventory</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url()?>inventory">Spare Parts </a></li>
                             <li class="breadcrumb-item"><a href="#">Edit</a></li>
                         </ol>
                     </div>
@@ -72,7 +72,7 @@
                                         <div class="row">
                                             <div class="input-field col m6 s12">
                                                 <select name="inventory_type_id" required>
-                                                    <option value="">Select Inventory Type</option>
+                                                    <option value="">Select Spare part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                         if($inventory_type->id == $inventory->inventory_type_id)
                                                             $selected = 'selected';
@@ -82,7 +82,7 @@
                                                         <option <?=$selected?> value="<?=$inventory_type->id?>"><?=$inventory_type->name?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label>Inventory Type</label>
+                                                <label>Spare Type</label>
                                             </div>
                                             <div class="input-field col m6 s12">
                                                 <input name="min_level" required type="text" value="<?=$inventory->min_level?>">

@@ -16,3 +16,18 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     cursor: pointer;
 }
 .field-group-heading{border-bottom: 1px solid black;margin-bottom: 5px}
+
+.dragbtn{
+    width: 60%;
+    margin: 10px;
+}
+#divs2 .dragbtn{
+    float:right;
+}
+div#divs1 ,#divs2 {
+    height: 800px;
+}
+.col.s6.m6.l6.card.card-tabs.left_contanier {
+    width: 45%;
+    margin-right: 5%;
+}

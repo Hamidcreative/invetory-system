@@ -16,7 +16,7 @@ class Warehouse extends MY_Controller {
 		    CASE WHEN WH.status = 1 THEN CONCAT("<span  data-id=\'0\' class=\'badge green statusmodal\'> Published </span>") WHEN WH.status = 0 THEN CONCAT ("<span data-id=\'1\' class=\'badge red statusmodal\'>Pending    </span>") ELSE CONCAT ("<span  data-id=\'1\' class=\' badge red statusmodal\'> ", WH.status, " </span>") END AS Status
 		    ',false);
             $addColumns = array(
-                'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
+                'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/view/$1" id="view"><i class="material-icons">remove_red_eye</i></a><a href="'.base_url().'warehouse/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
             );
             $where = '';
             $joins = array(
@@ -119,6 +119,71 @@ class Warehouse extends MY_Controller {
                 'types' => $this->Common_model->select_fields_where('warehouse_type','id,name',array('status' => 1),FALSE),
             ];
             $this->show('warehouse/edit', $data);
+        }
+    }
+    public function view($id){
+        $wheres = array(
+            'code'=>$id.'_WH',
+            'name'=>'view_WH',
+        );
+        $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$wheres,TRUE);
+
+        $where = array('permission_id'=>$permissionsid->id);
+        $joins = array(
+            array(
+                'table'     => 'user_permissions up',
+                'condition' => 'up.user_id = user.id',
+                'type'      => 'Right'
+            )
+        );
+        $whusers = $this->Common_model->select_fields_where_like_join('user','user.id,user.username',$joins,$where);
+        $data = [
+            'warehouse' => $this->Common_model->select_fields_where('warehouse','*', ['id'=>$id], true),
+            'whusers'   => $whusers,
+            'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
+        ];
+        $this->show('warehouse/view',$data);
+    }
+    public function assignusers(){
+        $userID = $this->input->post('userID');
+        $task    = $this->input->post('div');
+        $whID   = $this->input->post('whID');
+
+        $where = array(
+            'code'=>$whID.'_WH',
+            'name'=>'view_WH',
+        );
+        $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$where,TRUE);
+        if($task == 'divs1'){
+            $data = [
+                'user_id' => $userID,
+                'permission_id' => $permissionsid->id,
+            ];
+            $insert = $this->Common_model->insert_record('user_permissions', $data);
+            if ($insert){
+                echo json_encode(['type' => 'success', 'message' => 'Assigned user successfully']);
+                $activity = array('model_id' => $whID,'action_on'=>$userID,'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
+                logs($activity);
+            }
+            else{
+                echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
+            }
+        }elseif ($task == 'divs2'){
+            $where = [
+                'user_id' => $userID,
+                'permission_id' => $permissionsid->id,
+            ];
+            $deleted = $this->Common_model->delete('user_permissions',$where);
+            if ($deleted){
+                echo json_encode(['type' => 'wanning', 'message' => 'Removed user successfully']);
+                $activity = array('model_id' => $whID,'action_on'=>$userID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
+                logs($activity);
+            }
+            else
+                echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
+        }else{
+
+            echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
         }
     }
     public function types($param = NULL){// whare house types listing

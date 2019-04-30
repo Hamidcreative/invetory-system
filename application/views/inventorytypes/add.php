@@ -9,8 +9,9 @@
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
-                            <li class="breadcrumb-item"><a href="<?= base_url('')?>">Inventory</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url('inventory/types')?>">Inventory Types</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('inventory')?>">Spare Parts</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('inventory/types')?>">Spare Parts Types</a></li>
                             <li class="breadcrumb-item"><a href="#">Add</a></li>
                         </ol>
                     </div>

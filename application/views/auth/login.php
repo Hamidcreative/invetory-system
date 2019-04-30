@@ -51,16 +51,7 @@
                   <label for="password">Password</label>
                 </div>
               </div>
-              <div class="row">
-                <div class="col s12 m12 l12 ml-2 mt-1">
-                  <p>
-                    <label>
-                      <input type="checkbox" />
-                      <span>Remember Me</span>
-                    </label>
-                  </p>
-                </div>
-              </div>
+               
               <div class="row">
                 <div class="input-field col s12">
                   <button type="submit" class="btn waves-effect waves-light border-round gradient-45deg-purple-deep-orange col s12">Login</button>

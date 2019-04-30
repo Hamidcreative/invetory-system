@@ -1,6 +1,4 @@
 
-
-
 <div id="deletemodal" class="modal">
     <div class="modal-content">
         <input type="hidden" id="hiddenUserID" >
@@ -13,16 +11,11 @@
     </div>
 </div>
 
-
-
-
-
 <footer class="page-footer footer footer-static footer-light navbar-border navbar-shadow">
     <div class="footer-copyright">
-        <div class="container"><span><?= date('Y')?>          <a href="#" target="_blank">Inventory System</a> All rights reserved.</span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>
+        <div class="container"><span><?= date('Y')?><a href="#" target="_blank">Inventory System</a> All rights reserved.</span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>
     </div>
 </footer>
-
 
 <script>
 	TOKEN_VAL = '<?=$csrf['hash'];?>';
@@ -36,7 +29,18 @@
 <script src="<?=base_url()?>assets/vendors/data-tables/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/vendors/data-tables/js/dataTables.select.min.js" type="text/javascript"></script>
-    <script src="<?=base_url()?>assets/js/jquery.toast.js" type="text/javascript"></script>
+<!-- for reports controller-->
+<?php if($this->router->fetch_class() == 'Report'){ //add route here to allow these files ?>
+
+    <script src="<?=base_url()?>assets/vendors/data-tables/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/vendors/data-tables/js/buttons.bootstrap.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/vendors/data-tables/js/vfs_fonts.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/vendors/data-tables/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="<?=base_url()?>assets/vendors/data-tables/js/buttons.print.min.js" type="text/javascript"></script>
+
+<?php } ?>
+
+<script src="<?=base_url()?>assets/js/jquery.toast.js" type="text/javascript"></script>
 <!-- END PAGE VENDOR JS-->
 <!-- BEGIN THEME  JS-->
 <script src="<?=base_url()?>assets/js/plugins.js" type="text/javascript"></script>

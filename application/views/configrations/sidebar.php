@@ -55,7 +55,7 @@
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                     <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Inventory Report</span></a></li>
-                    <li><a class="collapsible-body" href="#" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> User Report </span></a></li>
+                    <li><a class="collapsible-body" href="<?=base_url('reports')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> User Report </span></a></li>
                 </ul>
             </div>
         </li>

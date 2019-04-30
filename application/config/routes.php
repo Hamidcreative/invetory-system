@@ -64,6 +64,7 @@ $route['users/(:num)'] = 'user/edit/$1';
 
 //Whare hosue
 $route['warehouse/listing/(:any)'] = 'Warehouse/index/$1'; // whare house listing
+$route['warehouse/assignusers'] = 'Warehouse/assignusers'; // whare house listing
 $route['warehouse/add'] = 'Warehouse/add';
 $route['warehouse/edit/(:num)'] = 'Warehouse/edit/$1';
 
@@ -89,6 +90,14 @@ $route['crud'] = 'Crud/index';
 
 
 
+// Dashboas
+
+$route['dashboard/activity_listing/(:any)'] = 'Dashboard/activity_listing/$1'; // activity listing
+
+
+// reports
+
+$route['reports'] = 'Report'; // user activity listing
 
 
 

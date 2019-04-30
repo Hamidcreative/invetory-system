@@ -593,4 +593,29 @@ class Common_model extends CI_Model
         }
     }
     //End of Common DataTables Queries
+
+    // added by hamid
+    public function count_all_row($table){
+        $resut = $this->db->count_all_results($table);
+        return $resut;
+    }
+    public function select_where_not_in($table, $ids){
+        if($ids){
+            $ignore = array();
+            foreach($ids as $id){
+                array_push($ignore , $id->id);
+            }
+            $this->db->where_not_in('id', $ignore);
+        }
+        $this->db->select('id,username');
+        $this->db->from($table);
+        $this->db->where('status', 1);
+
+        $query = $this->db->get();
+        if($query->num_rows() > 0) //counting result from query
+        {
+            return $query->result_object();
+        }
+    }
+
 }
