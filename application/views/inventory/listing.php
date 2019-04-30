@@ -171,7 +171,8 @@
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
 
         //Code for search box
-        $("#search-input").on("keyup",function (e) {
+        $(".dataTables_filter input").on("keyup",function (e) {
+          e.preventDefault();
             oTable.fnFilter( $(this).val());
         });
 

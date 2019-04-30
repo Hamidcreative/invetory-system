@@ -86,7 +86,10 @@ class User extends MY_Controller {
 		} else {
 			$user = $this->Common_model->select_fields_where('user','*', ['id'=>$userId], true);
 			$userrole = $this->Common_model->select_fields_where('user_role','role_id', ['user_id'=>$userId],true) ;
-			$user->roles = $userrole->role_id;
+			if($userrole)
+				$user->roles = $userrole->role_id;
+			else
+				$user->roles = '';
 			$data = [
 				'user' => $user,
 				'roles' => $this->Common_model->select('role')
@@ -149,7 +152,12 @@ class User extends MY_Controller {
 	protected function updateUserRole($roleId, $userId){
 		// check if existing role is same than no need to change any thing
 		$userRole = $this->Common_model->select_fields_where('user_role', 'id, role_id', ['user_id'=>$userId], true);
-		if($userRole->$role_id != $roleId) 
-			$this->Common_model->update('user_role', ['id'=>$userRole->id], ['role_id'=>$roleId]);
+		if($userRole){
+			if($userRole->$role_id != $roleId) 
+				$this->Common_model->update('user_role', ['id'=>$userRole->id], ['role_id'=>$roleId]);
+		}
+		else {
+			$this->Common_model->insert_record('user_role', ['role_id'=>$roleId, 'user_id'=>$userId]);
+		}
 	}
 }

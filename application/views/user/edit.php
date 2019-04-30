@@ -5,14 +5,24 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Edit User : <?=$user->username?></h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">
+                            <?php 
+                            if($this->session->userdata('user')->id != $user->id) echo 'Edit User';
+                            else echo 'You are logged in as ';
+
+                            ?> : 
+                            <?=$user->username?></h5>
                         Last Modified : <?=$user->updated_at?>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
+                            <?php if($this->session->userdata('user')->id != $user->id) { ?>
                             <li class="breadcrumb-item"><a href="<?= base_url('users')?>">Users</a></li>
                             <li class="breadcrumb-item"><a href="#">Edit</a></li>
+                            <?php } else { ?>
+                            <li class="breadcrumb-item"><a href="#">Profile</a></li>
+                            <?php } ?>
                         </ol>
                     </div>
                 </div>
