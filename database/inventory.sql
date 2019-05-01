@@ -191,7 +191,7 @@ CREATE TABLE `user_activity` (
   `detail` text NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `action_on` int(11) DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
   `rout` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
