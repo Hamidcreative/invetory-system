@@ -31,13 +31,28 @@ class MY_Controller extends CI_Controller{
         $config['max_height']           = 768;
 
         $this->load->library('upload', $config);
+
+        $this->notifications = $this->getNotifications();
     }
 
     public function show($viewPath, $data = NULL, $bool = false){
         $data['csrf'] = $this->csrf;
+        $data['notifications'] = $this->notifications;
         $this->load->view('configrations/header',$data, $bool);
         $this->load->view('configrations/sidebar',$data, $bool);
         $this->load->view($viewPath, $data, $bool);
         $this->load->view('configrations/footer',$data, $bool);
+    }
+
+    public function getNotifications(){
+        return [
+            'minimumlevelstock' => $this->checkMinimumStock()
+        ];
+    }
+
+    public function checkMinimumStock(){
+        $stock = $this->Common_model->select_fields_where('inventory','id, item_id',['quantity <= min_level'],  TRUE, '', '', '', '', ['updated_at','desc']);
+        if($stock) return true;
+        return false;
     }
 }

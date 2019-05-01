@@ -127,8 +127,9 @@ class Warehouse extends MY_Controller {
             'name'=>'view_WH',
         );
         $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$wheres,TRUE);
-
-        $where = array('permission_id'=>$permissionsid->id);
+        $where = [];
+        if($permissionsid)
+            $where = array('permission_id'=>$permissionsid->id);
         $joins = array(
             array(
                 'table'     => 'user_permissions up',
