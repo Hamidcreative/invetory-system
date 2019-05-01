@@ -59,6 +59,7 @@
                 </ul>
             </div>
         </li>
+        <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('export')?>"><i class="material-icons">import_export</i><span class="menu-title" data-i18n="">Export Database</span></a></li>
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('users/'.$this->session->userdata('user')->id)?>"><i class="material-icons">settings</i><span class="menu-title" data-i18n="">Profile</span></a></li>
 
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('auth/logout')?>"><i class="material-icons">power_settings_new</i><span class="menu-title" data-i18n="">Logout</span></a></li>
