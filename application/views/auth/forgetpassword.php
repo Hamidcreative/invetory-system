@@ -8,7 +8,7 @@
     <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google.">
     <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template, eCommerce dashboard, analytic dashboard">
     <meta name="author" content="ThemeSelect">
-    <title>User Login Invetory Management System </title>
+    <title>User Forget Password Inventory Management System </title>
     <link rel="apple-touch-icon" href="../../../assets/images/favicon/apple-touch-icon-152x152.png">
     <link rel="shortcut icon" type="image/x-icon" href="../../../assets/images/favicon/favicon-32x32.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -31,38 +31,27 @@
       <div class="col s12">
         <div class="container"><div id="login-page" class="row">
           <div class="col s12 m6 l4 z-depth-4 card-panel border-radius-6 login-card bg-opacity-8">
-            <form class="login-form" method="post" action="<?=base_url('login')?>">
+            <form class="login-form" method="post" action="<?=base_url('forgetpassword')?>">
               <div class="row">
                 <div class="input-field col s12">
-                  <h5 class="ml-4">Sign in</h5>
+                  <h5 class="ml-4">Your Email Address </h5>
                 </div>
               </div>
               <div class="row margin">
                 <div class="input-field col s12">
-                  <i class="material-icons prefix pt-2">person_outline</i>
-                  <input id="username" name="username" type="text">
-                  <label for="username" class="center-align">Username</label>
+                  <i class="material-icons prefix pt-2">mail_outline</i>
+                  <input id="email" name="email" type="text" <?= set_value('email')?> >
+                  <label for="email" class="center-align">Email</label>
                 </div>
               </div>
-              <div class="row margin">
-                <div class="input-field col s12">
-                  <i class="material-icons prefix pt-2">lock_outline</i>
-                  <input id="password" name="password" type="password">
-                  <label for="password">Password</label>
-                </div>
-              </div>
+
                
               <div class="row">
                 <div class="input-field col s12">
-                  <button type="submit" class="btn waves-effect waves-light border-round gradient-45deg-purple-deep-orange col s12">Login</button>
+                  <button type="submit" class="btn waves-effect waves-light border-round gradient-45deg-purple-deep-orange col s12">Send </button>
                 </div>
               </div>
               <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
-              <div class="row">
-                <div class="input-field col s6 m6 l6">
-                  <p class="margin right-align medium-small"><a href="<?=base_url('auth/forgetpassword')?>">Forgot password ?</a></p>
-                </div>
-              </div>
             </form>
           </div>
         </div>
