@@ -158,7 +158,7 @@ class User extends MY_Controller
 		// check if existing role is same than no need to change any thing
 		$userRole = $this->Common_model->select_fields_where('user_role', 'id, role_id', ['user_id' => $userId], true);
 		if ($userRole) {
-			if ($userRole->$role_id != $roleId)
+			if ($userRole->role_id != $roleId)
 				$this->Common_model->update('user_role', ['id' => $userRole->id], ['role_id' => $roleId]);
 		} else {
 			$this->Common_model->insert_record('user_role', ['role_id' => $roleId, 'user_id' => $userId]);

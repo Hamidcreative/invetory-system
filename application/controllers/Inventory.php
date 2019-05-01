@@ -53,7 +53,13 @@ class Inventory extends MY_Controller {
         $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,'','','','',$addColumns);
         print $list;
 	}
-	
+
+	public function minlevellisting(){
+		$select_data = ['id as ID ,item_id, description, amount, quantity, min_level', false];
+        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory');
+        print $list;
+	}
+
 	public function edit($inventoryId){
 		if($this->input->method() == 'post'){
 			$existingInventory = $this->Common_model->select_fields_where('inventory','item_id',['id'=>$inventoryId], true);
@@ -185,6 +191,11 @@ class Inventory extends MY_Controller {
 		];
 		$this->show('inventory/add', $data);
 		
+	}
+
+	public function minlevel()
+	{
+		$this->show('inventory/minlevelstock_listing');
 	}
 
 }
