@@ -44,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <ul class="navbar-list right">
                     <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light toggle-fullscreen" href="javascript:void(0);"><i class="material-icons">settings_overscan</i></a></li>
                      <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">
-<?php if($notifications['minimumlevelstock']) echo '1' ;?>
+                    <?php if($notifications['minimumlevelstock']) echo '1' ;?>
                      </small></i></a></li>
                     <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="<?=checkFilePath('assets/uploads/avatar/'.$this->session->userdata('user')->avatar)?>" alt="avatar"><i></i></span></a></li>
                 </ul>
@@ -67,5 +67,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </header>
 <!-- END: Header-->
 
- 
 

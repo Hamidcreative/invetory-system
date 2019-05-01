@@ -133,8 +133,6 @@ class Inventory extends MY_Controller {
 			'inventory' => $this->Common_model->select_fields_where('inventory', '*', ['id'=>$inventoryId],true)
 		];
 		$this->show('inventory/edit', $data);
-		
-
 	}
 
 	public function add(){
@@ -190,7 +188,6 @@ class Inventory extends MY_Controller {
 			'inventory_types' => $this->Common_model->select('inventory_type'),
 		];
 		$this->show('inventory/add', $data);
-		
 	}
 
 	public function minlevel()
@@ -198,4 +195,75 @@ class Inventory extends MY_Controller {
 		$this->show('inventory/minlevelstock_listing');
 	}
 
+	public function import(){
+		if($this->input->method() == 'post'){
+			$file = $_FILES['excel_file']['tmp_name'];
+			$handle = fopen($file, "r");
+		    if ($file == NULL)
+		    	$message = json_encode(['type' => 'error', 'message' => 'Input File is not Valid']);
+		    else {
+		    	try{
+			    	$dataToInsert = [];
+			    	$dataToUpdate = [];
+			    	$existingItem = $this->Common_model->select_fields('inventory', 'item_id');
+
+			    	$existingItemIds = [];
+			    	foreach ($existingItem as $key => $value) {
+			    		array_push($existingItemIds, $value->item_id);
+			    	}
+
+	            	$this->load->library('excel');
+			        $object = PHPExcel_IOFactory::load($file);
+					foreach($object->getWorksheetIterator() as $worksheet) {
+					    $highestRow = $worksheet->getHighestRow();
+					    $highestColumn = $worksheet->getHighestColumn();
+					    for($row=2; $row<=$highestRow; $row++) {
+					    	$itemId = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+					    	$itemType = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+
+					    	// check item type exist already 
+					    	$itemTypeId = $this->Common_model->select_fields_where('inventory_type','id',['name'=>$itemType], true);
+					    	if(!$itemTypeId)
+					    		// create the type
+					    		$itemTypeId = $this->Common_model->insert_record('inventory_type', [
+					    			'name' => $itemType,
+					    			'description' => $itemType,
+					    			'status' => 1,
+					    			'created_at' => date('Y-m-d h:i:s'),
+					    			'updated_at' => date('Y-m-d h:i:s'),
+					    		]);
+					    	else 
+					    		$itemTypeId = $itemTypeId->id;
+					    	// item id is unique in our system , check if exist already than push to dataToUpdate
+
+					    	if(in_array($itemId, $existingItemIds))
+					    		array_push($dataToUpdate, [
+					    			'item_id' => $itemId,
+					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
+					    			'inventory_type_id' => $itemTypeId ,
+					    		]);
+					    	else 
+					    		array_push($dataToInsert, [
+					    			'item_id' => $itemId,
+					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
+					    			'inventory_type_id' => $itemTypeId ,
+					    		]);
+
+					    }
+					}
+
+					if(!empty($dataToInsert))
+						$this->Common_model->insert_multiple('inventory', $dataToInsert);
+					if(!empty($dataToUpdate))
+						$this->Common_model->update_multiple('inventory', $dataToUpdate, 'item_id');
+			      
+			      	$message = json_encode(['type' => 'success', 'message' => 'File has been imported successfully']);
+
+			    } catch(Exception $e){
+			    	$message = json_encode(['type' => 'error', 'message' => 'Error Importing']);
+			    }
+		    }
+		    echo $message;
+		}
+	}
 }

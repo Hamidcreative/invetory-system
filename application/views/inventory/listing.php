@@ -75,7 +75,9 @@
     <a href="#!" class="modal-close waves-effect waves-red btn-flat">No</a>
   </div>
 </div>
-
+<form class="csv_import" method="POST" enctype="multipart/form-data">
+  <input type="file" class="hidden" name="excel_file" accept=".csv, .xlsx" />
+</form>
 <script type="text/javascript">
     $(function () {
         //// Need To Work ON New Way Of DataTables..
@@ -167,7 +169,7 @@
             }
         ];
         var HiddenColumnID_DT = "";
-        var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        var sDom_DT = 'Blf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
 
         //Code for search box
@@ -220,4 +222,34 @@
         }
       });
   })
+
+  $(document).on('change', 'input[name="excel_file"]', function(e){
+    if($(this).val() != '' && $(this).val() != null)
+      importData();
+     
+  })
+
+
+
+  function importData(e){
+    console.log('testing');
+    var formData = new FormData();
+    formData.append('excel_file', $('input[name="excel_file"]')[0].files[0]);
+    $.ajax({
+        url:"<?=base_url('inventory/import')?>",
+        type:"POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data:formData,
+        beforeSend:function(e){
+          showToast('Importing...', 'Please wait - this may take while', 'information');
+        },
+        success:function(data){
+          $.toast().reset('all');
+          data = JSON.parse(data);
+          showToast(data['type'], data['message'], data['type']);
+        }
+      });
+  }
 </script>

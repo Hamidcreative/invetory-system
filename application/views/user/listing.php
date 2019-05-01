@@ -100,7 +100,7 @@
             }
         ];
         var HiddenColumnID_DT = "";
-        var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
 
         //Code for search box

@@ -30,7 +30,7 @@
 <script src="<?=base_url()?>assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
 <script src="<?=base_url()?>assets/vendors/data-tables/js/dataTables.select.min.js" type="text/javascript"></script>
 <!-- for reports controller-->
-<?php if($this->router->fetch_class() == 'Report'){ //add route here to allow these files ?>
+<?php if($this->router->fetch_class() == 'Report' or strtolower($this->router->fetch_class()) == 'inventory' ){ //add route here to allow these files ?>
 
     <script src="<?=base_url()?>assets/vendors/data-tables/js/dataTables.buttons.min.js" type="text/javascript"></script>
     <script src="<?=base_url()?>assets/vendors/data-tables/js/buttons.bootstrap.min.js" type="text/javascript"></script>
@@ -48,6 +48,8 @@
 <!-- END THEME  JS-->
 <!-- BEGIN PAGE LEVEL JS-->
 <script src="<?=base_url()?>assets/js/scripts/data-tables.js" type="text/javascript"></script>
+
+
 <!-- END PAGE LEVEL JS-->
   <script>
     <?php if($this->session->flashdata('alert')){ ?>

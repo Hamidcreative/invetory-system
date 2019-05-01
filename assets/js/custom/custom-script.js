@@ -119,29 +119,17 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
             footer: true,
             exportOptions: {
                 columns: 'th:not(:last-child)'
-            }
+            },
+            text:'Export To Excel'
         },
         {
-            extend: 'excel',
-            footer: true,
-            exportOptions: {
-                columns: 'th:not(:last-child)'
-            }
-        },
-        {
-            extend: 'print',
-            footer: true,
-            exportOptions: {
-                columns: 'th:not(:last-child)'
+            text: 'Import Spare Parts',
+            action: function ( e, dt, node, config ) {
+                $('input[name="excel_file"]').trigger('click');
             }
         }
     ];
-      if(typeof expbuttons === "undefined"){ // added by hamid
-          var doms = '';
-          var expbuttons= '';
-      }else{
-         var doms= 'Bfrtip';
-     }
+   
 
     oTable = selector.dataTable({
         "bServerSide": true,
@@ -151,7 +139,7 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "bDestroy":true,
         "sServerMethod": "GET",
         "aaSorting":[[ sortBy['ColumnID'], sortBy['SortType'] ]],
-        // "sDom" : sDom,
+        "sDom" : sDom,
         "aoColumns":aoColumns,
         "sAjaxSource": url,
         "iDisplayLength": 10,

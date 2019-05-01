@@ -24,7 +24,6 @@ class Export extends MY_Controller {
 				$filename = 'Database';
 			}
 
-			 //finally generate the excel report now
             $this->load->library('excel');
 	         //activate worksheet number 1
 			foreach($tablesToExport as $key => $table) {

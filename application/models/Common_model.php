@@ -365,6 +365,7 @@ class Common_model extends CI_Model
         $query = $this->db->insert_batch($tbl, $data);
         return $query;
     }
+
     /**
      * @param $tbl
      * @param $data
@@ -429,6 +430,11 @@ class Common_model extends CI_Model
         } else {
             return $this->db->_error_message();
         }
+    }
+    function update_multiple($tbl, $data, $column)
+    {
+        $query = $this->db->update_batch($tbl,$data, $column);
+        return $query;
     }
 //Common Update Queries End
     //Common DataTables Queries
