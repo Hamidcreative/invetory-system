@@ -23,7 +23,7 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" action="<?=base_url('export/database')?>">
+                                    <form class="col s12" method="POST" action="<?=base_url('export/database')?>" style="min-height: 200px">
                                         <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                                         <div class="row">
                                             <div class="input-field col m6 s12">
