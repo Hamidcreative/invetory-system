@@ -18,18 +18,95 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .field-group-heading{border-bottom: 1px solid black;margin-bottom: 5px}
 
 .dragbtn{
-    width: 60%;
-    margin: 10px;
+    width: 100%;
+    margin: 4px 0;
 }
 #divs2 .dragbtn{
     float:right;
 }
+
+
+
+
+div#divs1::-webkit-scrollbar-track ,#divs2::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+div#divs1::-webkit-scrollbar ,#divs2::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+
+div#divs1::-webkit-scrollbar-thumb ,#divs2::-webkit-scrollbar-thumb
+{
+    background-color: rgba(6, 6, 6, 0.72);
+    border: 2px solid #555555;
+    border-radius: 10px;
+}
+
+
+
 div#divs1 ,#divs2 {
-    height: 800px;
+    height: 500px;
+    overflow: auto;
 }
 .col.s6.m6.l6.card.card-tabs.left_contanier {
     width: 45%;
     margin-right: 5%;
 }
-
 .select-dropdown{top:0!important;overflow-y: auto !important;}
+
+/* drag and drop css */
+div#divs2 {
+    width: 100%;
+    float: right;
+}
+ul#sortList{
+    width:60%;
+    display: block;
+}
+#divs2 ul#sortList {
+    float: right;
+}
+.list-group-item:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.sort-handle {
+    cursor: move;
+}
+.list-group-item {
+    position: relative;
+    padding: 2px 0 0 7px;
+    margin-bottom: 0;
+    border-radius: 0;
+    font-size: 15px;
+    border: 1px solid rgba(0,0,0,.1);
+    list-style: none;
+    background: rgba(0, 0, 0, 0.05);
+    display: block;
+    width: 60%;
+    color: rgba(0, 0, 0, 0.59);
+}
+a.list-group-item:nth-child(odd) {
+    border-left: 2px solid #607d8b!important;
+}
+a.list-group-item:nth-child(even) {
+    border-left: 2px solid #2196F3!important;
+}
+a.list-group-item:nth-child(3n+0){
+    border-left: 2px solid #2c323f !important;
+}
+.col.s6.m6.l6.card.card-tabs.right_contanier {
+    border-top: 3px solid #607D8C!important;
+}.col.s6.m6.l6.card.card-tabs.left_contanier {
+    border-top: 3px solid #2c323f!important;
+}
+.right_contanier h4.card-title, .left_contanier h4.card-title {
+    padding: 15px 0 0 0;
+}

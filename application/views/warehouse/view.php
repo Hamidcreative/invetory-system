@@ -36,32 +36,43 @@
                                                 <div class="card-title">
                                                     <h4 class="card-title">Assigned user to <?= $warehouse->name ?> </h4>
                                                 </div>
-                                                <div class="card-content" id="divs1"  data-id="0" ondrop="drops(event)" ondragover="allowDrops(event)" class="col-md-3 blog-parent-single">
+
+                                                <div class="" id="divs1"  data-id="0" ondrop="drops(event)" ondragover="allowDrops(event)" class="col-md-3 blog-parent-single">
+
                                                     <?php
                                                     if(!empty($whusers)) {
-                                                        foreach($whusers as $whuser){ ?>
-                                                                <a class="waves-effect waves-light  btn dragbtn" draggable="true" ondragstart="drags(event)" id="single<?=$whuser->id?>" data-id="0" ><?=$whuser->username?></a>
+                                                        ?>
 
-                                                        <?php }
-                                                    } ?>
+                                                             <?php foreach($whusers as $whuser){  ;?>
+                                                                <a class="list-group-item sort-handle dragbtn" draggable="true" ondragstart="drags(event)" id="single<?=$whuser->id?>" data-id="0" ><?= $whuser->username?></a>
+
+                                                        <?php } ?>
+
+                                                    <?php } ?>
 
                                                 </div>
+
                                             </div>
 
                                             <div class="col s6 m6 l6 card card-tabs right_contanier">
                                                 <div class="card-title">
                                                     <h4 class="card-title">Users list</h4>
                                                 </div>
-                                                <div class="card-content" id="divs2" data-id="1"  ondrop="drops(event)" ondragover="allowDrops(event)" class="col-md-3 blog-parent-single">
+
+                                                <div class="" id="divs2" data-id="1"  ondrop="drops(event)" ondragover="allowDrops(event)" class="col-md-3 blog-parent-single">
                                                     <?php
-                                                    if(!empty($allusers)){
-                                                        foreach($allusers as $users){ ?>
+                                                    if(!empty($allusers)){?>
 
-                                                            <a class="waves-effect waves-light  btn dragbtn" draggable="true" ondragstart="drags(event)" id="single<?=$users->id?>" data-id="1" ><?=$users->username?></a>
+                                                            <?php  foreach($allusers as $users){ ?>
 
-                                                    <?php }} ?>
+                                                            <a class="list-group-item sort-handle dragbtn" draggable="true" ondragstart="drags(event)" id="single<?=$users->id?>" data-id="1" ><?=$users->username?></a>
+                                                            <?php } ?>
+
+                                                    <?php } ?>
+
 
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
