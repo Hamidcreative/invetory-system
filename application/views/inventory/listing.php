@@ -28,27 +28,14 @@
                       <th>Id</th>
                       <th>Item No.</th>
                       <th>Description</th>
-                      <th>Amount</th>
-                      <th>Warehouse</th>
                       <th>Type</th>
+                      <th>Amount</th>
+                      <th>Quantity</th>
                       <th>Min Level</th>
-                      <th>Check In Date</th>
-                      <th>Check In By</th>
-                      <th>Check In Amount</th>
-                      <th>Check Out Date</th>
-                      <th>Check Out By</th>
-                      <th>Check Out Amount</th>
-                      <th>Send To Warehouse</th>
-                      <th>Send Date</th>
-                      <th>Send Amount</th>
-                      <th>Send By</th>
-                      <th>Parcel Id</th>
-                      <th>Recieve Date</th>
-                      <th>Recieve Amount</th>
-                      <th>Recieve Warehouse</th>
-                      <th>Recieve By</th>
+                      <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
                       <th>Status</th>
                       <th>Action</th>
+                      <?php } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -99,62 +86,18 @@
                 "mData" : "description"
             },
             {
+                "mData" : "inventory_type"
+            },
+            {
                 "mData" : "amount"
             },
             {
-                "mData" : "warehouse"
-            },
-            {
-                "mData" : "inventory_type"
+                "mData" : "quantity"
             },
             {
                 "mData" : "min_level"
             },
-            {
-                "mData" : "checkin_date"
-            },
-            {
-                "mData" : "checkin_by"
-            },
-            {
-                "mData" : "checkin_amount"
-            },
-            {
-                "mData" : "checkout_date"
-            },
-            {
-                "mData" : "checkout_by"
-            },
-            {
-                "mData" : "checkout_amount"
-            },
-            {
-                "mData" : "send_warehouse"
-            },
-            {
-                "mData" : "send_date"
-            },
-            {
-                "mData" : "send_amount"
-            },
-            {
-                "mData" : "send_by"
-            },
-            {
-                "mData" : "parcel_id"
-            },
-            {
-                "mData" : "recieve_date"
-            },
-            {
-                "mData" : "recieve_amount"
-            },
-            {
-                "mData" : "recieve_warehouse"
-            },
-            {
-                "mData" : "recieve_by"
-            },
+            <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
             {
                 "mData": "status",
                 "mRender": function(data, type, row){
@@ -167,9 +110,14 @@
             {
                 "mData" : "actionButtons"
             }
+          <?php } ?>
         ];
         var HiddenColumnID_DT = "";
+        <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
         var sDom_DT = 'Blf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        <?php } else { ?>
+        var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        <?php } ?>
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
 
         //Code for search box

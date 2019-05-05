@@ -95,7 +95,7 @@
                                                 <label for="checkin_date">Date.</label>
                                             </div>
                                             <div class="input-field col m4 s12">
-                                                <select name="checkin_by" required>
+                                                <select name="checkin_by">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('checkin_by'))
@@ -120,7 +120,7 @@
                                                 <label for="checkout_date">Date.</label>
                                             </div>
                                             <div class="input-field col m4 s12">
-                                                <select name="checkout_by" required>
+                                                <select name="checkout_by">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('checkout_by'))
@@ -141,7 +141,7 @@
                                         <div class="row field-group-heading"> <h6>Send To Warehouse Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="send_warehouse_id" required>
+                                                <select name="send_warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('send_warehouse_id'))
@@ -163,7 +163,7 @@
                                                 <label for="send_amount">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="send_by" required>
+                                                <select name="send_by">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('send_by'))
@@ -180,7 +180,7 @@
                                         <div class="row field-group-heading"> <h6>Receive From Warehouse Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="recieve_warehouse_id" required>
+                                                <select name="recieve_warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('recieve_warehouse_id'))
@@ -202,7 +202,7 @@
                                                 <label for="recieve_amount">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="recieve_by" required>
+                                                <select name="recieve_by">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('recieve_by'))

@@ -43,19 +43,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="nav-wrapper">
                 <ul class="navbar-list right">
                     <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light toggle-fullscreen" href="javascript:void(0);"><i class="material-icons">settings_overscan</i></a></li>
+                    <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                      <li><a class="waves-effect waves-block waves-light notification-button" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge">
-                    <?php if($notifications['minimumlevelstock']) echo '1' ;?>
+                     <?php if($notifications['minimumlevelstock']) echo '1';?>
                      </small></i></a></li>
-                    <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="<?=checkFilePath('assets/uploads/avatar/'.$this->session->userdata('user')->avatar)?>" alt="avatar"><i></i></span></a></li>
+                    <?php } ?>
+                    <li><a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="<?=checkFilePath($this->session->userdata('user')->avatar)?>" alt="avatar"><i></i></span></a></li>
                 </ul>
                  <!-- notifications-dropdown-->
+                <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                 <ul class="dropdown-content" id="notifications-dropdown">
-                    <?php if($notifications['minimumlevelstock']) {?>
+                    <?php if($notifications['minimumlevelstock']) { ?>
                     <li><a class="grey-text text-darken-2" href="<?=base_url('inventory/minlevel')?>"><span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span> Minimum Stock Level Reached</a>
                     </li>
                     <?php } ?>
                   <li class="divider"></li>
                 </ul>
+                <?php } ?>
                 <!-- profile-dropdown-->
                 <ul class="dropdown-content" id="profile-dropdown">
                     <li><a class="grey-text text-darken-1" href="<?=base_url('users/'.$this->session->userdata('user')->id)?>"><i class="material-icons">person_outline</i> Profile</a></li>

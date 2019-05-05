@@ -24,6 +24,9 @@ class Inventorytypes extends MY_Controller
             return NULL;
         }
         elseif($param === 'delete'){
+            if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
             if($this->input->post()) {
                 $id = $this->input->post('id');
                 $deleted = $this->Common_model->delete('inventory_type', ['id' => $id]);
@@ -34,6 +37,9 @@ class Inventorytypes extends MY_Controller
             }
         }
         elseif($param === 'status'){
+            if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+        
             $id = $this->input->post('id');
             $status = $this->input->post('status');
             $whereUpdate = array('id' => $id);
@@ -50,6 +56,9 @@ class Inventorytypes extends MY_Controller
         }
     }
     public function add(){ // add warehouse type
+        if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -74,6 +83,9 @@ class Inventorytypes extends MY_Controller
         }
     }
     public function edit($id){ // edit warehouse
+        if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {

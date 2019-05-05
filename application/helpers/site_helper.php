@@ -32,11 +32,12 @@
 	}
 
 	function checkFilePath($path){
-		if(file_exists($path))
-			return base_url($path);
+		if(file_exists('assets/uploads/avatar/'.$path) && !empty($path))
+			return base_url('assets/uploads/avatar/'.$path);
 		else 
 			return base_url('assets/uploads/avatar/default.svg');
 	}
+
 	function isEmailExist($email){
 		$ci = & get_instance();
 		$email = $ci->Common_model->select_fields_where('user', 'email', ['email'=>$email,'status'=>1], true);
@@ -126,6 +127,46 @@ action_on  used  for which user
 		$ci = & get_instance();
 		$activity['user_id'] = $ci->session->userdata('user')->id;
 		$ci->Common_model->insert_record('user_activity', $activity);
+	}
+
+	function getUserRole($userId) {
+		$ci = & get_instance();
+		$joins = [
+			['table'=>'user_role ur', 'condition'=>'ur.role_id = r.id', 'type'=>'inner']
+		];
+		$role = $ci->Common_model->select_fields_where_like_join('role r', 'r.name', $joins, ['ur.user_id'=>$userId], true);
+		return $role->name;
+	}
+
+	function isAdministrator($userId) {
+		$ci = & get_instance();
+		if($ci->session->userdata('user_role') == 'Administrator') return true;
+		return false;
+	}
+
+	function isSuperUser($userId) {
+		$ci = & get_instance();
+		if($ci->session->userdata('user_role') == 'Super User') return true;
+		return false;
+	}
+
+	function isEndUser($userId) {
+		$ci = & get_instance();
+		if($ci->session->userdata('user_role') == 'End User') return true;
+		return false;
+	}
+
+	function getUserWareHouseIds($userId) {
+		$ci = & get_instance();
+		$joins = [
+			['table'=>'user_permissions up', 'condition'=>'up.permission_id = p.id', 'type'=>'inner']
+		];
+		$warehouseIds = $ci->Common_model->select_fields_where_like_join('permissions p', "REPLACE(p.code, '_view_WH', '') as id", $joins, ['up.user_id'=>$userId, 'p.name'=>'View Warehouse']);
+		$wh_ids = [];
+		foreach ($warehouseIds as $key => $value) {
+			array_push($wh_ids, $value->id);
+		}
+		return $wh_ids;
 	}
 
 ?>

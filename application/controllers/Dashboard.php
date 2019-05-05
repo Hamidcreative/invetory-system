@@ -2,9 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller {
-	
-	public function index()
-	{
+	function __construct(){
+        parent::__construct();
+        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
+    }
+
+	public function index() {
 		$data = array(
 			'warehoses' => $this->Common_model->count_all_row('warehouse'),
 			'users' => $this->Common_model->count_all_row('user'),
@@ -13,6 +16,7 @@ class Dashboard extends MY_Controller {
 		);
 		$this->show('dashboard/index',$data);
 	}
+
 	public function activity_listing($param = NULL){// whare house types listing
 		if($param === 'listing' || $param === 'filter'  ){
 			$selectData = array('
@@ -68,6 +72,7 @@ class Dashboard extends MY_Controller {
 			return NULL;
 		}
 	}
+	
 	public function spares_listing($param = NULL){// whare house types listing
 		if($param === 'listing' || $param === 'filter'  ){
 			$selectData = array('

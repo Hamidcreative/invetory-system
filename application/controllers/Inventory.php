@@ -35,22 +35,20 @@ class Inventory extends MY_Controller {
 	}
 
 	public function listing(){
-		$select_data = ['i.id as ID ,item_id, i.description, i.amount,  w.name as warehouse, it.name as inventory_type, i.min_level, i.checkin_date, ciu.firstname as checkin_by, i.checkin_amount, i.checkout_date, cou.firstname as checkout_by, i.checkout_amount, sw.name as send_warehouse, send_date, send_amount, su.firstname as send_by, parcel_id, recieve_date, recieve_amount, rw.name as recieve_warehouse, ru.firstname as recieve_by, i.status', false];
+		$select_data = ['i.id as ID ,i.item_id, i.description, it.name as inventory_type, i.amount, i.quantity, i.min_level, i.status', false];
 		$joins = [
 			['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
-			['table'=>'warehouse w', 'condition'=>'i.warehouse_id = w.id', 'type'=>'left'],
-			['table'=>'warehouse sw', 'condition'=>'i.send_warehouse_id = sw.id', 'type'=>'left'],
-			['table'=>'warehouse rw', 'condition'=>'i.recieve_warehouse_id = rw.id', 'type'=>'left'],
-			['table'=>'user u', 'condition'=>'i.user_id = u.id', 'type'=>'left'],
-			['table'=>'user ciu', 'condition'=>'i.checkin_by = ciu.id', 'type'=>'left'],
-			['table'=>'user cou', 'condition'=>'i.checkout_by = cou.id', 'type'=>'left'],
-			['table'=>'user su', 'condition'=>'i.send_by = su.id', 'type'=>'left'],
-			['table'=>'user ru', 'condition'=>'i.recieve_by = ru.id', 'type'=>'left'],
 		];
+		$warehouseIds = '';
+		$warehouseId = '';
+		if(!isAdministrator($this->session->userdata('user')->id)){
+			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
+			$warehouseId = 'warehouse_id';
+		}
         $addColumns = array(
             'actionButtons' => array('<a href="'.base_url().'inventory/$1"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
         );
-        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,'','','','',$addColumns);
+        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,'',$warehouseId, $warehouseIds, '', $addColumns);
         print $list;
 	}
 
@@ -61,6 +59,17 @@ class Inventory extends MY_Controller {
 	}
 
 	public function edit($inventoryId){
+        if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
+        if(!isAdministrator($this->session->userdata('user')->id)){
+			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
+			$inventory = $this->Common_model->select_fields_where('inventory','warehouse_id',['id'=>$inventoryId], true);
+			// stop user editing spare part of other ware house
+			if(!in_array($inventory->warehouse_id, $warehouseIds))
+				return redirect('inventory');
+		}
+
 		if($this->input->method() == 'post'){
 			$existingInventory = $this->Common_model->select_fields_where('inventory','item_id',['id'=>$inventoryId], true);
 			if($this->input->post('item_id') != $existingInventory->item_id)
@@ -126,16 +135,26 @@ class Inventory extends MY_Controller {
 				echo json_encode(['type'=>'error','message'=>'Error updating item status']);
 			exit;
 		}
+
+		$where_in = '';
+		if(!isAdministrator($this->session->userdata('user')->id)){
+			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+		}
+		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+
 		$data = [
-			'users' => $this->Common_model->select('user'),
-			'warehouses' => $this->Common_model->select('warehouse'),
-			'inventory_types' => $this->Common_model->select('inventory_type'),
+			'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+			'warehouses' => $warehouses,
+			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
 			'inventory' => $this->Common_model->select_fields_where('inventory', '*', ['id'=>$inventoryId],true)
 		];
 		$this->show('inventory/edit', $data);
 	}
 
 	public function add(){
+        if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
 		if($this->input->method() == 'post'){
 
 			array_push($this->inventoryfields, ['field' => 'item_id', 'label' => 'Item No.', 'rules' => 'required|is_unique[inventory.item_id]']);
@@ -182,20 +201,31 @@ class Inventory extends MY_Controller {
 			}
 		}
 
+		$where_in = '';
+		if(!isAdministrator($this->session->userdata('user')->id))
+			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+		
+		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+
 		$data = [
-			'users' => $this->Common_model->select('user'),
-			'warehouses' => $this->Common_model->select('warehouse'),
-			'inventory_types' => $this->Common_model->select('inventory_type'),
+			'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+			'warehouses' => $warehouses,
+			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
 		];
 		$this->show('inventory/add', $data);
 	}
 
 	public function minlevel()
 	{
-		$this->show('inventory/minlevelstock_listing');
+        if(isAdministrator($this->session->userdata('user')->id)) 
+			$this->show('inventory/minlevelstock_listing');
 	}
 
 	public function import(){
+
+        if(isEndUser($this->session->userdata('user')->id)) 
+            return redirect('inventory');
+
 		if($this->input->method() == 'post'){
 			$file = $_FILES['excel_file']['tmp_name'];
 			$handle = fopen($file, "r");
@@ -234,7 +264,7 @@ class Inventory extends MY_Controller {
 					    		]);
 					    	else 
 					    		$itemTypeId = $itemTypeId->id;
-					    	// item id is unique in our system , check if exist already than push to dataToUpdate
+					    	// item id is unique in our system , check if exist already than do plus One in the item quantity
 
 					    	if(in_array($itemId, $existingItemIds))
 					    		array_push($dataToUpdate, [

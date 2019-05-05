@@ -27,9 +27,11 @@
 								<thead>
 								<tr>
 									<th>Id</th>
-									<th>Name</th>									 
+									<th>Name</th>	
+            						<?php if(!isEndUser($this->session->userdata('user')->id)) { ?>		 
 									<th>Status</th>
 									<th>Action</th>
+									<?php } ?>
 								</tr>
 								</thead>
 								<tbody>
@@ -48,7 +50,7 @@
 		var regTableSelector = $("#warehousetypes");
 		var url_DT = "<?=base_url();?>inventory/types/listing/listing";
 		var aoColumns_DT = [
-			/* ID */ {
+			{
 				"mData": "ID",
 				"bVisible": true,
 				"bSortable": true,
@@ -57,12 +59,14 @@
 			{
 				"mData": "Name"
 			},
+            <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
 			{
 				"mData": "Status"
 			},
 			{
 				"mData": "ViewEditActionButtons"
 			}
+			<?php } ?> 
 		];
 		var HiddenColumnID_DT = "ID";
 		var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';

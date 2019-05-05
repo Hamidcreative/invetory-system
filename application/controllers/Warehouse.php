@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Warehouse extends MY_Controller {
     function __construct(){
         parent::__construct();
+        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
     }
 
     public function index($param = NULL){// whare house types listing
@@ -34,7 +35,11 @@ class Warehouse extends MY_Controller {
             if($this->input->post()) {
                 $id = $this->input->post('id');
                 $deleted = $this->Common_model->delete('warehouse', ['id' => $id]);
-                           $this->Common_model->delete('permissions',['code' => $id.'_WH']);
+                // delete warehouse permissions
+                $permission = $this->Common_model->select_fields_where('permissions', 'id', ['code' => $id.'_view_WH']);
+                $this->Common_model->delete('permissions',['id' => $permission->id]);
+                $this->Common_model->delete('user_permissions',['permission_id' => $permission->id]);
+
                 if ($deleted)
                     echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
                 else
@@ -57,6 +62,7 @@ class Warehouse extends MY_Controller {
             return NULL;
         }
     }
+
     public function add(){ // add warehouse
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
@@ -72,8 +78,8 @@ class Warehouse extends MY_Controller {
                 ];
                 $insert = $this->Common_model->insert_record('warehouse', $data);
                 $permissions = [
-                    'name' => 'view_WH',
-                    'code' => $this->db->insert_id().'_WH',
+                    'name' => 'View Warehouse',
+                    'code' => $this->db->insert_id().'_view_WH',
                 ];
                 $this->Common_model->insert_record('permissions', $permissions);
                 if($insert){
@@ -91,6 +97,7 @@ class Warehouse extends MY_Controller {
             $this->show('warehouse/add', $data);
         }
     }
+
     public function edit($id){ // add warehouse
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
@@ -121,6 +128,7 @@ class Warehouse extends MY_Controller {
             $this->show('warehouse/edit', $data);
         }
     }
+
     public function view($id){
         $wheres = array(
             'code'=>$id.'_WH',
@@ -130,6 +138,7 @@ class Warehouse extends MY_Controller {
         $where = [];
         if($permissionsid)
             $where = array('permission_id'=>$permissionsid->id);
+
         $joins = array(
             array(
                 'table'     => 'user_permissions up',
@@ -145,14 +154,14 @@ class Warehouse extends MY_Controller {
         ];
         $this->show('warehouse/view',$data);
     }
+
     public function assignusers(){
         $userID = $this->input->post('userID');
         $task    = $this->input->post('div');
         $whID   = $this->input->post('whID');
 
         $where = array(
-            'code'=>$whID.'_WH',
-            'name'=>'view_WH',
+            'code'=>$whID.'_view_WH'
         );
         $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$where,TRUE);
         if($task == 'divs1'){
@@ -163,7 +172,7 @@ class Warehouse extends MY_Controller {
             $insert = $this->Common_model->insert_record('user_permissions', $data);
             if ($insert){
                 echo json_encode(['type' => 'success', 'message' => 'Assigned user successfully']);
-                $activity = array('model_id' => $whID,'action_on'=>$userID,'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $activity = array('model_id' => $whID, 'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else{
@@ -177,7 +186,7 @@ class Warehouse extends MY_Controller {
             $deleted = $this->Common_model->delete('user_permissions',$where);
             if ($deleted){
                 echo json_encode(['type' => 'wanning', 'message' => 'Removed user successfully']);
-                $activity = array('model_id' => $whID,'action_on'=>$userID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $activity = array('model_id' => $whID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else
@@ -187,6 +196,7 @@ class Warehouse extends MY_Controller {
             echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
         }
     }
+
     public function types($param = NULL){// whare house types listing
         if($param === 'listing'){
             $selectData = array('
@@ -229,6 +239,7 @@ class Warehouse extends MY_Controller {
             return NULL;
         }
     }
+
     public function add_type(){ // add warehouse type
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
@@ -253,6 +264,7 @@ class Warehouse extends MY_Controller {
             $this->show('warehousetypes/add');
         }
     }   
+
     public function edit_type($id){ // edit warehouse
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');

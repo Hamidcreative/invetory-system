@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Export extends MY_Controller {
 	
+	function __construct(){
+        parent::__construct();
+        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
+    }
+
 	public function index()
 	{
 		$data = [];

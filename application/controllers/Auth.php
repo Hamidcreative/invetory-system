@@ -32,6 +32,8 @@ class Auth extends CI_Controller {
             	$password = $this->input->post('password');
             	if(authenticateUser($username, $password)){
             		$this->session->set_userdata('loggedin', true);
+            		// save user role in session
+            		$this->session->set_userdata('user_role', getUserRole($this->session->userdata('user')->id));
             		redirect('dashboard');
             	} else {
             		$this->session->set_flashdata('alert',['type'=>'error', 'message'=>'Invalid Credentials']);

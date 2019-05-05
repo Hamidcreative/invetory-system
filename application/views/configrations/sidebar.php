@@ -4,6 +4,7 @@
         <h1 class="logo-wrapper"><a class="brand-logo darken-1" href="index.html"><!--<img src="<?/*=base_url()*/?>assets/images/logo/materialize-logo.png" alt=""/>--><span class="logo-text hide-on-med-and-down">Inventory System</span></a><a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a></h1>
     </div>
     <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+        <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('dashboard')?>"><i class="material-icons">settings_input_svideo</i><span class="menu-title" data-i18n="">Dashboard</span></a></li>
         <li class="bold">
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">face</i><span class="menu-title" data-i18n="">Users</span></a>
@@ -32,6 +33,7 @@
                 </ul>
             </div>
         </li>
+        <?php } if(!isEndUser($this->session->userdata('user')->id)) { ?>
         <li class="bold">
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">photo_filter</i><span class="menu-title" data-i18n="">Spare Parts</span></a>
             <div class="collapsible-body">
@@ -50,16 +52,24 @@
                 </ul>
             </div>
         </li>
+        <?php } else { ?>
+            <li><a class="collapsible-body" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts</span></a></li>
+            <li><a class="collapsible-body" href="<?=base_url('inventory/types')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts Types</span></a></li>
+        <?php } if(!isEndUser($this->session->userdata('user')->id)) { ?>
         <li class="bold">
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">description</i><span class="menu-title" data-i18n="">Reports</span></a>
             <div class="collapsible-body">
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                     <li><a class="collapsible-body" href="<?=base_url('spares/report')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spares Report</span></a></li>
+                <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                     <li><a class="collapsible-body" href="<?=base_url('users/report')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> User Report </span></a></li>
+                <?php } ?>
                 </ul>
             </div>
         </li>
+        <?php } if(isAdministrator($this->session->userdata('user')->id)) { ?>
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('export')?>"><i class="material-icons">import_export</i><span class="menu-title" data-i18n="">Export Database</span></a></li>
+        <?php } ?>
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('users/'.$this->session->userdata('user')->id)?>"><i class="material-icons">settings</i><span class="menu-title" data-i18n="">Profile</span></a></li>
 
         <li class="bold"><a class="waves-effect waves-cyan " href="<?=base_url('auth/logout')?>"><i class="material-icons">power_settings_new</i><span class="menu-title" data-i18n="">Logout</span></a></li>

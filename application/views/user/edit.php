@@ -73,6 +73,7 @@
                                                 <input name="password" type="password" value="">
                                                 <label for="password">Password (Leave empty if don't want to change)</label>
                                             </div>
+                                            <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                                             <div class="input-field col m6 s12">
                                                 <select name="roles" required>
                                                 <?php foreach($roles as $key => $role) {
@@ -86,13 +87,21 @@
                                                 </select>
                                                 <label>Select Role</label>
                                             </div>
+                                            <?php } else {?>
+                                            <div class="input-field col s6">
+                                                <textarea name="notes" class="materialize-textarea"><?=$user->notes?></textarea>
+                                                <label for="notes">Notes</label>
+                                            </div>
+                                            <?php } ?>
                                         </div>
+                                         <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <textarea name="notes" class="materialize-textarea"><?=$user->notes?></textarea>
                                                 <label for="notes">Notes</label>
                                             </div>
                                         </div>
+                                            <?php } ?>
                                         <div class="row">
                                             <div class="col m4 s12 file-field input-field">
                                                 <div class="btn float-right">

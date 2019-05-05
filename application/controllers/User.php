@@ -6,6 +6,9 @@ class User extends MY_Controller
 
 	public function index()
 	{
+		if(!isAdministrator($this->session->userdata('user')->id)) 
+			return redirect('inventory');
+
 		$this->show('user/listing');
 	}
 
@@ -21,6 +24,11 @@ class User extends MY_Controller
 
 	public function edit($userId)
 	{
+		if(!isAdministrator($this->session->userdata('user')->id)) {
+			if($this->input->method() == 'patch' or $this->input->method() == 'delete' or $this->session->userdata('user')->id != $userId)
+            	return redirect('inventory');
+		}
+
 		if ($this->input->method() == 'post') {
 			$existingUserInfo = $this->Common_model->select_fields_where('user', 'email, username', ['id' => $userId], true);
 			if ($this->input->post('username') != $existingUserInfo->username)
@@ -36,7 +44,10 @@ class User extends MY_Controller
 			$this->form_validation->set_rules('username', 'Username', 'required' . $is_unique_usename);
 			$this->form_validation->set_rules('firstname', 'First Name', 'required');
 			$this->form_validation->set_rules('lastname', 'Last Name', 'required');
-			$this->form_validation->set_rules('roles', 'Role', 'required');
+
+			if(isAdministrator($this->session->userdata('user')->id)) 
+				$this->form_validation->set_rules('roles', 'Role', 'required');
+
 			$this->form_validation->set_rules('email', 'Email', 'required' . $is_unique_email);
 
 			if ($this->form_validation->run() == FALSE) {
@@ -62,8 +73,13 @@ class User extends MY_Controller
 
 				$update = $this->Common_model->update('user', ['id' => $userId], $data);
 				if ($update) {
-					// update user role
-					$this->updateUserRole($this->input->post('roles'), $userId);
+					// update user info saved in session
+					if($this->session->userdata('user')->id == $userId)
+						$this->session->set_userdata('user', $this->Common_model->select_fields_where('user','*',['id'=>$userId], true));
+					
+					if(isAdministrator($this->session->userdata('user')->id)) 
+						// update user role
+						$this->updateUserRole($this->input->post('roles'), $userId);
 
 					$this->session->set_flashdata('alert', ['type' => 'success', 'message' => 'User info update successfully']);
 					redirect('users');
@@ -103,6 +119,9 @@ class User extends MY_Controller
 
 	public function add()
 	{
+		if(!isAdministrator($this->session->userdata('user')->id)) 
+			return redirect('inventory');
+
 		if ($this->input->method() == 'post') {
 			$this->form_validation->set_rules('username', 'Username', 'required|is_unique[user.username]');
 			$this->form_validation->set_rules('firstname', 'First Name', 'required');
