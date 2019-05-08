@@ -77,6 +77,7 @@ $route['warehouse/types/edit/(:num)'] = 'Warehouse/edit_type/$1';
 
 //Inventory 
 $route['inventory/(:num)'] = 'inventory/edit/$1';
+ 
 
 
 
@@ -88,7 +89,7 @@ $route['inventory/types/add'] = 'Inventorytypes/add';
 $route['inventory/types/edit/(:num)'] = 'Inventorytypes/edit/$1';
 
 
-$route['crud'] = 'Crud/index';
+
 
 
 $route['inventory/barcode'] = 'inventory/barcode';

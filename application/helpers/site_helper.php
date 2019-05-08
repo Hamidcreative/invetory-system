@@ -170,5 +170,15 @@ action_on  used  for which user
 		}
 		return $wh_ids;
 	}
+	function isActive($controller,$method=null){
+		$ci = get_instance();
+		$class  = $ci->router->fetch_class();
+		$function = $ci->router->fetch_method();
+
+			return ( $class == $controller && $function == $method) ? 'active' : '';
+		 
+
+
+	}
 
 ?>
