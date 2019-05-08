@@ -78,7 +78,7 @@
                                     <tr>
                                        <th>Id</th>
                                        <th>User Name</th>
-                                       <th>Action On</th>
+                                       <th>Warehouse Name</th>
                                        <th>Modal</th>
                                        <th>Activity</th>
 <!--                                       <th>Effected</th> <!--     Modal ID -->

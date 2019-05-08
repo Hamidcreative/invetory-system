@@ -66,9 +66,8 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th>User Name</th>
-                                                    <th>For User</th>
+                                                    <th>Warehouse Name</th>
                                                     <th>Modal</th>
-                                                    <th>Modal id</th>
                                                     <th>Activity</th>
                                                     <!--                                       <th>Effected</th> <!--     Modal ID -->
                                                     <th>Date</th>
@@ -114,9 +113,7 @@
             {
                 "mData": "Modal"
             },
-            {
-                "mData": "Modalid"
-            },
+            
             {
                 "mData": "Activity"
             },

@@ -90,6 +90,7 @@ class User extends MY_Controller
 			}
 		} else if ($this->input->method() == 'delete') {
 			$deleted = $this->Common_model->delete('user', ['id' => $userId]);
+			$deleted = $this->Common_model->delete('user_role', ['user_id' => $userId]);
 			if ($deleted)
 				echo json_encode(['type' => 'success', 'message' => 'User deleted successfully']);
 			else

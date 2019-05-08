@@ -7,7 +7,10 @@ class Inventorytypes extends MY_Controller
     {
         parent::__construct();
     }
-    public function index($param = NULL){// whare house types listing
+    public function index($param = NULL){
+        if(isEndUser($this->session->userdata('user')->id))
+            return redirect('inventory');
+
         if($param === 'listing'){
             $selectData = array('
             id AS ID,

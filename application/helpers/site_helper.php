@@ -163,8 +163,10 @@ action_on  used  for which user
 		];
 		$warehouseIds = $ci->Common_model->select_fields_where_like_join('permissions p', "REPLACE(p.code, '_view_WH', '') as id", $joins, ['up.user_id'=>$userId, 'p.name'=>'View Warehouse']);
 		$wh_ids = [];
-		foreach ($warehouseIds as $key => $value) {
-			array_push($wh_ids, $value->id);
+		if($warehouseIds){
+			foreach ($warehouseIds as $key => $value) {
+				array_push($wh_ids, $value->id);
+			}
 		}
 		return $wh_ids;
 	}

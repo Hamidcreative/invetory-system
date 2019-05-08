@@ -54,7 +54,7 @@
         </li>
         <?php } else { ?>
             <li><a class="collapsible-body" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts</span></a></li>
-            <li><a class="collapsible-body" href="<?=base_url('inventory/types')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts Types</span></a></li>
+            
         <?php } if(!isEndUser($this->session->userdata('user')->id)) { ?>
         <li class="bold">
             <a class="collapsible-header waves-effect waves-cyan " href="#"><i class="material-icons">description</i><span class="menu-title" data-i18n="">Reports</span></a>

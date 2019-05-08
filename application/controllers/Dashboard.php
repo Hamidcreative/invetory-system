@@ -22,7 +22,7 @@ class Dashboard extends MY_Controller {
 			$selectData = array('
             user_activity.id AS ID,
             user.username AS Name,
-            userfor.username AS for_user,  
+            wh.name AS for_user,  
             user_activity.method AS Activity,		     	     
 		    user_activity.model_name As Modal,	     
 		    user_activity.model_id As Modalid,	     
@@ -48,8 +48,8 @@ class Dashboard extends MY_Controller {
 					'type'      => 'LEFT'
 				),
 				array(
-					'table'     => 'user as userfor',
-					'condition' =>  'userfor.id = user_activity.action_on ',
+					'table'     => 'warehouse as wh',
+					'condition' =>  'wh.id = user_activity.warehouse_id ',
 					'type'      => 'LEFT'
 				),
 			);

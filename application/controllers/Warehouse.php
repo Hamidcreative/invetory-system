@@ -7,7 +7,7 @@ class Warehouse extends MY_Controller {
         if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
     }
 
-    public function index($param = NULL){// whare house types listing
+    public function index($param = NULL){// whare house  listing
         if($param === 'listing'){
             $selectData = array('
             WH.id AS ID,
@@ -34,16 +34,20 @@ class Warehouse extends MY_Controller {
         elseif($param === 'delete'){
             if($this->input->post()) {
                 $id = $this->input->post('id');
-                $deleted = $this->Common_model->delete('warehouse', ['id' => $id]);
+                 $this->Common_model->delete('warehouse', ['id' => $id]);
                 // delete warehouse permissions
                 $permission = $this->Common_model->select_fields_where('permissions', 'id', ['code' => $id.'_view_WH']);
-                $this->Common_model->delete('permissions',['id' => $permission->id]);
-                $this->Common_model->delete('user_permissions',['permission_id' => $permission->id]);
+                $deleted =$this->Common_model->delete('permissions',['id' => $permission[0]->id]);
+                $this->Common_model->delete('user_permissions',['permission_id' => $permission[0]->id]);
 
-                if ($deleted)
+                if ($deleted){
                     echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
-                else
+                }
+                else{
                     echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
+                }
+
+
             }
         }
         elseif($param === 'status'){
@@ -131,8 +135,7 @@ class Warehouse extends MY_Controller {
 
     public function view($id){
         $wheres = array(
-            'code'=>$id.'_WH',
-            'name'=>'view_WH',
+            'code'=>$id.'_view_WH'
         );
         $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$wheres,TRUE);
         $where = [];
@@ -172,7 +175,7 @@ class Warehouse extends MY_Controller {
             $insert = $this->Common_model->insert_record('user_permissions', $data);
             if ($insert){
                 echo json_encode(['type' => 'success', 'message' => 'Assigned user successfully']);
-                $activity = array('model_id' => $whID, 'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $activity = array('warehouse_id' =>$whID ,'model_id' => $whID, 'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else{
@@ -186,7 +189,7 @@ class Warehouse extends MY_Controller {
             $deleted = $this->Common_model->delete('user_permissions',$where);
             if ($deleted){
                 echo json_encode(['type' => 'wanning', 'message' => 'Removed user successfully']);
-                $activity = array('model_id' => $whID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $activity = array('warehouse_id' =>$whID,'model_id' => $whID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else
