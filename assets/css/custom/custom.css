@@ -59,7 +59,7 @@ div#divs1 ,#divs2 {
     width: 45%;
     margin-right: 5%;
 }
-.select-dropdown{top:0!important;overflow-y: auto !important;}
+/*.select-dropdown{top:0!important;overflow-y: auto !important;}*/
 
 /* drag and drop css */
 div#divs2 {

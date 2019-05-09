@@ -22,7 +22,7 @@ class Dashboard extends MY_Controller {
 			$selectData = array('
             user_activity.id AS ID,
             user.username AS Name,
-            wh.name AS for_user,  
+            user_activity.name AS for_user,  
             user_activity.method AS Activity,		     	     
 		    user_activity.model_name As Modal,	     
 		    user_activity.model_id As Modalid,	     
@@ -46,12 +46,7 @@ class Dashboard extends MY_Controller {
 					'table'     => 'user',
 					'condition' =>  'user.id = user_activity.user_id ',
 					'type'      => 'LEFT'
-				),
-				array(
-					'table'     => 'warehouse as wh',
-					'condition' =>  'wh.id = user_activity.warehouse_id ',
-					'type'      => 'LEFT'
-				),
+				)
 			);
 			$returnedData = $this->Common_model->select_fields_joined_DT($selectData,'user_activity',$joins,$where,'','','',$addColumns);
 			print_r($returnedData);

@@ -34,6 +34,8 @@ class Auth extends CI_Controller {
             		$this->session->set_userdata('loggedin', true);
             		// save user role in session
             		$this->session->set_userdata('user_role', getUserRole($this->session->userdata('user')->id));
+					$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Logged in', 'model_name' => 'User','name'=> $username,'detail'=> 'User logged in','rout'=>'users/'.$this->session->userdata('user')->id);
+					logs($activity);
             		redirect('dashboard');
             	} else {
             		$this->session->set_flashdata('alert',['type'=>'error', 'message'=>'Invalid Credentials']);

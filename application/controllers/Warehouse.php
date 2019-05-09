@@ -34,14 +34,16 @@ class Warehouse extends MY_Controller {
         elseif($param === 'delete'){
             if($this->input->post()) {
                 $id = $this->input->post('id');
+                 $name = $this->Common_model->select_fields_where('warehouse','name', ['id' => $id],true);
                  $this->Common_model->delete('warehouse', ['id' => $id]);
                 // delete warehouse permissions
                 $permission = $this->Common_model->select_fields_where('permissions', 'id', ['code' => $id.'_view_WH']);
                 $deleted =$this->Common_model->delete('permissions',['id' => $permission[0]->id]);
                 $this->Common_model->delete('user_permissions',['permission_id' => $permission[0]->id]);
-
                 if ($deleted){
                     echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
+                    $activity = array('warehouse_id' =>$id,'model_id' => $id,'method' => 'Deleted', 'model_name' => 'Warehouse','name'=> $name->name,'detail'=> 'Wareouse Deleted','rout'=>'');
+                    logs($activity);
                 }
                 else{
                     echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
@@ -56,10 +58,15 @@ class Warehouse extends MY_Controller {
             $whereUpdate = array('id' => $id);
             $update = array('status'=>$status);
             $returnedData = $this->Common_model->update('warehouse',$whereUpdate,$update);
-            if ($returnedData)
+            if ($returnedData){
                 echo json_encode(['type' => 'success', 'message' => 'Record updated successfully']);
-            else
+                $name = $this->Common_model->select_fields_where('warehouse','name', ['id' => $id],true);
+                $activity = array('warehouse_id' =>$id,'model_id' => $id,'method' => 'Status Updated', 'model_name' => 'Warehouse','name'=> $name->name,'detail'=> 'Status updated','rout'=>'warehouse/view/'.$id);
+                logs($activity);
+            }else{
                 echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
+            }
+
         }
         else{
             $this->show('warehouse/listing');
@@ -81,13 +88,16 @@ class Warehouse extends MY_Controller {
                     'warehouse_type_id' => $this->input->post('types'),
                 ];
                 $insert = $this->Common_model->insert_record('warehouse', $data);
+                $whId = $this->db->insert_id();
                 $permissions = [
                     'name' => 'View Warehouse',
-                    'code' => $this->db->insert_id().'_view_WH',
+                    'code' => $whId.'_view_WH',
                 ];
                 $this->Common_model->insert_record('permissions', $permissions);
                 if($insert){
                     $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse info Added successfully']);
+                    $activity = array('warehouse_id' =>$whId,'model_id' => $whId,'method' => 'Added', 'model_name' => 'Warehouse','name'=> $this->input->post('name'),'detail'=> 'Warehouse Added','rout'=>'warehouse/view/'.$whId);
+                    logs($activity);
                     redirect('warehouse');
                 } else {
                     $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
@@ -102,7 +112,7 @@ class Warehouse extends MY_Controller {
         }
     }
 
-    public function edit($id){ // add warehouse
+    public function edit($id){ // Edit warehouse
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -118,6 +128,8 @@ class Warehouse extends MY_Controller {
                 $update = $this->Common_model->update('warehouse',['id'=>$id], $data);
                 if($update){
                     $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse info updated successfully']);
+                    $activity = array('warehouse_id' =>$id,'model_id' => $id,'method' => 'Updated', 'model_name' => 'Warehouse','name' => $this->input->post('name'),'detail'=> 'Warehouse Updated','rout'=>'warehouse/view/'.$id);
+                    logs($activity);
                     redirect('warehouse');
                 } else {
                     $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
@@ -133,32 +145,38 @@ class Warehouse extends MY_Controller {
         }
     }
 
-    public function view($id){
-        $wheres = array(
-            'code'=>$id.'_view_WH'
-        );
-        $permissionsid = $this->Common_model->select_fields_where('permissions', 'id',$wheres,TRUE);
-        $where = [];
-        if($permissionsid)
-            $where = array('permission_id'=>$permissionsid->id);
+    public function view($id){ // view warehouse
 
-        $joins = array(
-            array(
-                'table'     => 'user_permissions up',
-                'condition' => 'up.user_id = user.id',
-                'type'      => 'Right'
-            )
-        );
-        $whusers = $this->Common_model->select_fields_where_like_join('user','user.id,user.username',$joins,$where);
-        $data = [
-            'warehouse' => $this->Common_model->select_fields_where('warehouse','*', ['id'=>$id], true),
-            'whusers'   => $whusers,
-            'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
-        ];
-        $this->show('warehouse/view',$data);
-    }
+            $wheres = array(
+                'code' => $id . '_view_WH'
+            );
+            $permissionsid = $this->Common_model->select_fields_where('permissions', 'id', $wheres, TRUE);
+            $where = [];
+            if ($permissionsid)
+                $where = array('permission_id' => $permissionsid->id);
 
-    public function assignusers(){
+            $joins = array(
+                array(
+                    'table' => 'user_permissions up',
+                    'condition' => 'up.user_id = user.id',
+                    'type' => 'Right'
+                )
+            );
+            $whusers = $this->Common_model->select_fields_where_like_join('user', 'user.id,user.username', $joins, $where);
+            $data = [
+                'warehouse' => $this->Common_model->select_fields_where('warehouse', '*', ['id' => $id], true),
+                'whusers' => $whusers,
+                'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
+            ];
+
+        if(isset($warehouse)) {
+            $this->show('warehouse/view', $data);
+        }else{
+            $this->load->view('errors/pages/notfound');
+        }
+}
+
+    public function assignusers(){  // Assigned permissions to view warehouse
         $userID = $this->input->post('userID');
         $task    = $this->input->post('div');
         $whID   = $this->input->post('whID');
@@ -175,7 +193,8 @@ class Warehouse extends MY_Controller {
             $insert = $this->Common_model->insert_record('user_permissions', $data);
             if ($insert){
                 echo json_encode(['type' => 'success', 'message' => 'Assigned user successfully']);
-                $activity = array('warehouse_id' =>$whID ,'model_id' => $whID, 'method' => 'Added User', 'model_name' => 'warehouse','detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $name = $this->Common_model->select_fields_where('warehouse','name', ['id' => $whID],true);
+                $activity = array('warehouse_id' =>$whID ,'model_id' => $whID, 'method' => 'Added User', 'model_name' => 'Warehouse','name' => $name->name,'detail'=> 'Assigned user to  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else{
@@ -189,7 +208,8 @@ class Warehouse extends MY_Controller {
             $deleted = $this->Common_model->delete('user_permissions',$where);
             if ($deleted){
                 echo json_encode(['type' => 'wanning', 'message' => 'Removed user successfully']);
-                $activity = array('warehouse_id' =>$whID,'model_id' => $whID,'method' => 'removed user', 'model_name' => 'warehouse','detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
+                $name = $this->Common_model->select_fields_where('warehouse','name', ['id' => $whID],true);
+                $activity = array('warehouse_id' =>$whID,'model_id' => $whID,'method' => 'Removed user', 'model_name' => 'Warehouse','name'=> $name->name,'detail'=> 'Removed user from  Warehouse','rout'=>'warehouse/view/'.$whID);
                 logs($activity);
             }
             else
@@ -219,11 +239,15 @@ class Warehouse extends MY_Controller {
         elseif($param === 'delete'){
             if($this->input->post()) {
                 $id = $this->input->post('id');
+                $name = $this->Common_model->select_fields_where('warehouse_type','name', ['id' => $id],true);
                 $deleted = $this->Common_model->delete('warehouse_type', ['id' => $id]);
-                if ($deleted)
+                if ($deleted){
                     echo json_encode(['type' => 'success', 'message' => 'Record deleted successfully']);
-                else
+                    $activity = array('warehouse_id' =>'','model_id' => '','method' => 'Deleted', 'model_name' => 'Warehouse Type','name'=> $name->name,'detail'=> 'Removed Warehouse Types','rout'=>'');
+                    logs($activity);
+                }else{
                     echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
+                }
             }
         }
         elseif($param === 'status'){
@@ -232,10 +256,15 @@ class Warehouse extends MY_Controller {
             $whereUpdate = array('id' => $id);
             $update = array('status'=>$status);
             $returnedData = $this->Common_model->update('warehouse_type',$whereUpdate,$update);
-            if ($returnedData)
+            if ($returnedData){
                 echo json_encode(['type' => 'success', 'message' => 'Record updated successfully']);
-            else
+                $name = $this->Common_model->select_fields_where('warehouse_type','name', ['id' => $id],true);
+                $activity = array('warehouse_id' =>'','model_id' => '','method' => 'Status Updated', 'model_name' => 'Warehouse Type','name'=> $name->name,'detail'=> 'Warehouse types status updated','rout'=>'');
+                logs($activity);
+            }
+            else{
                 echo json_encode(['type' => 'error', 'message' => 'Record not updated']);
+            }
         }
         else{
             $this->show('warehousetypes/listing');
@@ -257,6 +286,8 @@ class Warehouse extends MY_Controller {
                 $insert = $this->Common_model->insert_record('warehouse_type', $data);
                 if($insert){
                     $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse Types info Added successfully']);
+                    $activity = array('warehouse_id' =>'','model_id' => '','method' => 'Added', 'model_name' => 'Warehouse Type','name'=> $this->input->post('name'),'detail'=> 'Warehouse types Added','rout'=>'');
+                    logs($activity);
                     redirect('warehouse/types');
                 } else {
                     $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
@@ -282,6 +313,8 @@ class Warehouse extends MY_Controller {
                 $update = $this->Common_model->update('warehouse_type',['id'=>$id], $data);
                 if($update){
                     $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse Types info updated successfully']);
+                    $activity = array('warehouse_id' =>'','model_id' => '','method' => 'Updated', 'model_name' => 'Warehouse Type','name'=> $this->input->post('name'),'detail'=> 'Warehouse types Updated','rout'=>'');
+                    logs($activity);
                     redirect('warehouse/types');
                 } else {
                     $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
