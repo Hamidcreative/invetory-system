@@ -17,8 +17,8 @@ class Dashboard extends MY_Controller {
 		$this->show('dashboard/index',$data);
 	}
 
-	public function activity_listing($param = NULL){// whare house types listing
-		if($param === 'listing' || $param === 'filter'  ){
+	public function activity_listing($param = NULL){  //  User activity listing
+		if($param === 'listing'){
 			$selectData = array('
             user_activity.id AS ID,
             user.username AS Name,
@@ -32,14 +32,12 @@ class Dashboard extends MY_Controller {
 			$addColumns = array(
 				'ViewEditActionButtons' => array('<a href="'.base_url().'for_user" id="view"><i class="material-icons">remove_red_eye</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
 			);
-			if($param === 'filter'){
-				$id = $this->input->post('id');
+			$where = '';
+			if(!empty($this->input->post('whID'))){
 				$where = array(
-						"model_name" => 'warehouse',
-						"model_id"  => $id
+					"model_name" => 'Warehouse',
+					"warehouse_id"  => $this->input->post('whID')
 				);
-			}else{
-				$where = '';
 			}
 			$joins = array(
 				array(
@@ -63,7 +61,6 @@ class Dashboard extends MY_Controller {
 			}
 		}
 		else{
-			//$this->show('warehouse/listing');
 			return NULL;
 		}
 	}
