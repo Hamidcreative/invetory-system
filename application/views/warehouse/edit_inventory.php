@@ -5,13 +5,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Add Spare Part</h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Edit Warehouse Spare Part</h5>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url('dashboard')?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="<?= base_url('inventory')?>">Spare Parts</a></li>
-                            <li class="breadcrumb-item"><a href="#">Add</a></li>
+                            <li class="breadcrumb-item"><a href="<?= base_url('warehouse')?>">Warehouses</a></li>
+                            <li class="breadcrumb-item"><a href="<?=base_url('warehouse/view/'.$warehouseitem->warehouse_id)?>">Spare Parts</a></li>
+                            <li class="breadcrumb-item"><a href="#">Edit</a></li>
                         </ol>
                     </div>
                 </div>
@@ -36,28 +37,28 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" action="<?=base_url('inventory/add')?>">
+                                    <form class="col s12" method="POST" enctype="multipart/form-data" action="<?=base_url('warehouse/'.$warehouseitem->warehouse_id.'/inventory/'.$warehouseitem->id)?>">
                                         <div class="row field-group-heading"> <h6>Basic Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="item_id" required type="text" value="<?=set_value('item_id')?>">
+                                                <input type="text" readonly value="<?=$warehouseitem->item_id?>">
                                                 <label for="item_id">Item No.</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <input name="description" required type="text" value="<?=set_value('description')?>">
+                                                <input type="text" readonly value="<?=$warehouseitem->description?>">
                                                 <label for="description">Description</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="amount" required type="text" value="<?=set_value('amount')?>">
+                                                <input name="send_amount" required type="text" value="<?=$warehouseitem->send_amount?>">
                                                 <label for="description">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="warehouse_id" required>
+                                                <select name="warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
-                                                        if($warehouse->id == set_value('warehouse_id'))
+                                                        if($warehouse->id == $warehouseitem->warehouse_id)
                                                             $selected = 'selected';
                                                         else 
                                                             $selected = '';
@@ -70,21 +71,17 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="inventory_type_id" required>
-                                                    <option value="">Select Spare Part Type</option>
+                                                <select>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
-                                                        if($inventory_type->id == set_value('inventory_type_id'))
-                                                            $selected = 'selected';
-                                                        else 
-                                                            $selected = '';
+                                                        if($inventory_type->id == $warehouseitem->inventory_type_id) {
                                                     ?>
                                                         <option <?=$selected?> value="<?=$inventory_type->id?>"><?=$inventory_type->name?></option>
-                                                    <?php } ?>
+                                                    <?php } } ?>
                                                 </select>
                                                 <label>Spare Type</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <input name="min_level" required type="text" value="<?=set_value('min_level')?>">
+                                                <input readonly required type="text" value="<?=$warehouseitem->min_level?>">
                                                 <label for="min_level">Minimum Level</label>
                                             </div>
                                         </div>

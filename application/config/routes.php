@@ -74,6 +74,8 @@ $route['warehouse/edit/(:num)'] = 'Warehouse/edit/$1';
 $route['warehouse/types/listing/(:any)'] = 'Warehouse/types/$1'; // whare house types listing
 $route['warehouse/types/add'] = 'Warehouse/add_type';
 $route['warehouse/types/edit/(:num)'] = 'Warehouse/edit_type/$1';
+$route['warehouse/(:num)/inventory/listing'] = 'Warehouse/inventorylisting/$1';
+$route['warehouse/(:num)/inventory/(:num)'] = 'Warehouse/inventory/$1/$2';
 
 //Inventory 
 $route['inventory/(:num)'] = 'inventory/edit/$1';

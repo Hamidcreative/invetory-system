@@ -292,4 +292,49 @@ class Warehouse extends MY_Controller {
             $this->show('warehousetypes/edit', $data);
         }        
     }     
+
+    public function inventorylisting($warehouseId) {
+        $select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.send_amount as quantity, i.min_level, wi.status', false];
+        $joins = [
+            ['table'=>'warehouse_item wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner'],
+            ['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
+        ];
+        $addColumns = array(
+            'actionButtons' => array('<a href="'.base_url().'warehouse/'.$warehouseId.'/inventory/$1"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
+        );
+        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,['wi.warehouse_id'=>$warehouseId],'', '', '', $addColumns);
+        print $list;
+    }
+
+    public function inventory($warehouseId, $warehouseitemId){
+        if($this->input->method() == 'post'){
+            $data = [
+                'send_amount' => $this->input->post('send_amount'),
+                'warehouse_id' => $this->input->post('warehouse_id'),
+            ];
+            $update = $this->Common_model->update('warehouse_item',['id'=>$warehouseitemId], $data);
+            if($update){
+                $this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'warehouse item info updated successfully']);
+                redirect('warehouse/view/'.$warehouseId);
+            } else {
+                $this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
+                redirect('warehouse/'.$warehouseId.'/inventory/'.$warehouseitemId);
+            }
+        }else {
+            $where_in = '';
+            if(!isAdministrator($this->session->userdata('user')->id)){
+                $where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+            }
+            $warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+            $data = [
+                'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+                'warehouses' => $warehouses,
+                'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
+                'warehouseitem' => $this->Common_model->select_fields_where_like_join('warehouse_item wi','wi.*, i.item_id, i.description, i.inventory_type_id, i.min_level',
+                    [['table'=>'inventory i', 'condition'=>'i.id = wi.inventory_id', 'type'=>'inner']],
+                 ['wi.id'=>$warehouseitemId], true)
+            ];
+            $this->show('warehouse/edit_inventory', $data);
+        }
+    }
 }
