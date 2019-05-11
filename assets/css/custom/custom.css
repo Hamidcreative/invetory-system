@@ -109,9 +109,7 @@ a.list-group-item:nth-child(3n+0){
 .right_contanier h4.card-title, .left_contanier h4.card-title {
     padding: 15px 0 0 0;
 }
-/*!**/
-/*.card {*/
-    /*overflow: overlay !important;*/
-    /*overflow-x: overlay !important;*/
-    /*overflow-y: overlay;!important;*/
-/*}*!*/
+
+.card {
+    overflow: initial !important;
+}
