@@ -125,7 +125,7 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         {
             text: 'Import Spare Parts',
             action: function ( e, dt, node, config ) {
-                $('input[name="excel_file"]').trigger('click');
+                importFile();
             }
         }
     ];

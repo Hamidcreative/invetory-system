@@ -62,9 +62,6 @@
     <a href="#!" class="modal-close waves-effect waves-red btn-flat">No</a>
   </div>
 </div>
-<form class="csv_import" method="POST" enctype="multipart/form-data">
-  <input type="file" class="hidden" name="excel_file" accept=".csv, .xlsx" />
-</form>
 <script type="text/javascript">
     $(function () {
         //// Need To Work ON New Way Of DataTables..
@@ -171,33 +168,7 @@
       });
   })
 
-  $(document).on('change', 'input[name="excel_file"]', function(e){
-    if($(this).val() != '' && $(this).val() != null)
-      importData();
-     
-  })
-
-
-
-  function importData(e){
-    console.log('testing');
-    var formData = new FormData();
-    formData.append('excel_file', $('input[name="excel_file"]')[0].files[0]);
-    $.ajax({
-        url:"<?=base_url('inventory/import')?>",
-        type:"POST",
-        cache: false,
-        contentType: false,
-        processData: false,
-        data:formData,
-        beforeSend:function(e){
-          showToast('Importing...', 'Please wait - this may take while', 'information');
-        },
-        success:function(data){
-          $.toast().reset('all');
-          data = JSON.parse(data);
-          showToast(data['type'], data['message'], data['type']);
-        }
-      });
+  function importFile() {
+    window.location.assign('inventory/import');
   }
 </script>
