@@ -17,43 +17,39 @@
             </div>
         </div>
         <div class="col s12">
-            <div class="container">
-                <div class="seaction">
+            <div class="card">
+                <div class="card-content">
                     <div class="row">
-                        <div class="col s12 m12 l12">
-                            <div id="Form-advance" class="card card card-default scrollspy">
-                                <div class="card-content">
-                                    <form class="col s12" method="POST" action="<?=base_url('export/database')?>" style="min-height: 200px">
-                                        <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
-                                        <div class="row">
-                                            <div class="input-field col m6 s12">
-                                                <select name="module" required>
-                                                    <option value="full">Full Database</option>
-                                                    <option value="0">Users</option>
-                                                    <option value="1">Warehouse</option>
-                                                    <option value="2">Warehouse Types</option>
-                                                    <option value="3">Inventory</option>
-                                                    <option value="4">Inventory Types</option>
-                                                    <option value="5">Activites</option>
-                                                </select>
-                                                <label>Select Module To Export</label>
-                                            </div>
-                                            <div class="input-field col m6 s12">
-                                                <button class="btn cyan waves-effect waves-light" type="submit" name="action">Export
-                                                    <i class="material-icons right">send</i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                        <div class="col s12">
+                            <form class="col s12" method="POST" action="<?=base_url('export/database')?>" style="min-height: 200px">
+                                                        <input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
+                                                        <div class="row">
+                                                            <div class="input-field col m6 s12">
+                                                                <select name="module" required>
+                                                                    <option value="full">Full Database</option>
+                                                                    <option value="0">Users</option>
+                                                                    <option value="1">Warehouse</option>
+                                                                    <option value="2">Warehouse Types</option>
+                                                                    <option value="3">Inventory</option>
+                                                                    <option value="4">Inventory Types</option>
+                                                                    <option value="5">Activites</option>
+                                                                </select>
+                                                                <label>Select Module To Export</label>
+                                                            </div>
+                                                            <div class="input-field col m6 s12">
+                                                                <button class="btn cyan waves-effect waves-light" type="submit" name="action">Export
+                                                                    <i class="material-icons right">send</i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div>>
 <script>
     $(document).on('click','.cyan', function(e){
         showToast('Exporting...', 'Please wait - this may take time', 'information');
