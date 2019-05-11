@@ -12,21 +12,19 @@ class Inventory extends MY_Controller {
 		        ['field' => 'amount', 'label' => 'Amount', 'rules' => 'required'],
 		        ['field' => 'inventory_type_id', 'label' => 'Inventory Type', 'rules' => 'required'],
 		        ['field' => 'min_level', 'label' => 'Minimum Level', 'rules' => 'required'],
-			];
-
-		$this->warehouseInventoryfields = [
-		        ['field' => 'inventory_id', 'label' => 'Spare Part', 'rules' => 'required'],
 		        ['field' => 'checkin_date', 'label' => 'Check In Date', 'rules' => 'required'],
 		        ['field' => 'checkin_amount', 'label' => 'Check In Amount', 'rules' => 'required'],
 		        ['field' => 'checkin_by', 'label' => 'Check In By Person', 'rules' => 'required'],
 		        ['field' => 'checkout_date', 'label' => 'Check Out Date', 'rules' => 'required'],
 		        ['field' => 'checkout_amount', 'label' => 'Check Out Amount', 'rules' => 'required'],
 		        ['field' => 'checkout_by', 'label' => 'Checkout By Person', 'rules' => 'required'],
-		        ['field' => 'warehouse_id', 'label' => 'Send To Warehouse', 'rules' => 'required'],
+		        ['field' => 'send_warehouse_id', 'label' => 'Send To Warehouse', 'rules' => 'required'],
 		        ['field' => 'send_date', 'label' => 'Send Date', 'rules' => 'required'],
 		        ['field' => 'send_amount', 'label' => 'Send Amount', 'rules' => 'required'],
 		        ['field' => 'send_by', 'label' => 'Send By Person', 'rules' => 'required'],
-		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
+		        ['field' => 'recieve_warehouse_id', 'label' => 'Receive From Warehouse', 'rules' => 'required'],
+		        ['field' => 'recieve_date', 'label' => 'Receive Date', 'rules' => 'required'],
+		        ['field' => 'recieve_amount', 'label' => 'Receive Amount', 'rules' => 'required'],
 		        ['field' => 'recieve_by', 'label' => 'Receive By Person', 'rules' => 'required']
 			];
     }
@@ -94,6 +92,20 @@ class Inventory extends MY_Controller {
 					// 'user_id' => $this->input->post('user_id'),
 					'inventory_type_id' => $this->input->post('inventory_type_id'),
 					'min_level' => $this->input->post('min_level'),
+					'checkin_date' => date('Y-m-d', strtotime($this->input->post('checkin_date'))),
+					'checkin_amount' => $this->input->post('checkin_amount'),
+					'checkin_by' => $this->input->post('checkin_by'),
+					'checkout_date' => date('Y-m-d', strtotime($this->input->post('checkout_date'))),
+					'checkout_amount' => $this->input->post('checkout_amount'),
+					'checkout_by' => $this->input->post('checkout_by'),
+					'send_warehouse_id' => $this->input->post('send_warehouse_id'),
+					'send_date' => date('Y-m-d', strtotime($this->input->post('send_date'))),
+					'send_amount' => $this->input->post('send_amount'),
+					'send_by' => $this->input->post('send_by'),
+					'recieve_warehouse_id' => $this->input->post('recieve_warehouse_id'),
+					'recieve_date' => date('Y-m-d', strtotime($this->input->post('recieve_date'))),
+					'recieve_amount' => $this->input->post('recieve_amount'),
+					'recieve_by' => $this->input->post('recieve_by'),
 					'updated_at' => date('Y-m-d h:i:s'),
 				];
 				$update = $this->Common_model->update('inventory',['id'=>$inventoryId], $data);
@@ -131,6 +143,7 @@ class Inventory extends MY_Controller {
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 
 		$data = [
+			'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
 			'inventory' => $this->Common_model->select_fields_where('inventory', '*', ['id'=>$inventoryId],true)
@@ -160,6 +173,20 @@ class Inventory extends MY_Controller {
 					// 'user_id' => $this->input->post('user_id'),
 					'inventory_type_id' => $this->input->post('inventory_type_id'),
 					'min_level' => $this->input->post('min_level'),
+					'checkin_date' => date('Y-m-d', strtotime($this->input->post('checkin_date'))),
+					'checkin_amount' => $this->input->post('checkin_amount'),
+					'checkin_by' => $this->input->post('checkin_by'),
+					'checkout_date' => date('Y-m-d', strtotime($this->input->post('checkout_date'))),
+					'checkout_amount' => $this->input->post('checkout_amount'),
+					'checkout_by' => $this->input->post('checkout_by'),
+					'send_warehouse_id' => $this->input->post('send_warehouse_id'),
+					'send_date' => date('Y-m-d', strtotime($this->input->post('send_date'))),
+					'send_amount' => $this->input->post('send_amount'),
+					'send_by' => $this->input->post('send_by'),
+					'recieve_warehouse_id' => $this->input->post('recieve_warehouse_id'),
+					'recieve_date' => date('Y-m-d', strtotime($this->input->post('recieve_date'))),
+					'recieve_amount' => $this->input->post('recieve_amount'),
+					'recieve_by' => $this->input->post('recieve_by'),
 					'updated_at' => date('Y-m-d h:i:s'),
 					'created_at' => date('Y-m-d h:i:s'),
 				];
@@ -176,71 +203,16 @@ class Inventory extends MY_Controller {
 
 		$where_in = '';
 		if(!isAdministrator($this->session->userdata('user')->id))
-			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];	 
-
-		if(empty($where_in['val']) && !isAdministrator($this->session->userdata('user')->id)){
-			echo json_encode(['type'=>'error','message'=>'Contact admin']);
-			return redirect('users/'.$this->session->userdata('user')->id);// we will redirect it to message page 
-		}
+			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+		
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 
 		$data = [
+			'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
 		];
 		$this->show('inventory/add', $data);
-	}
-
-	public function send_to_warehouse(){
-		if($this->input->method() == 'post'){
-			$this->form_validation->set_rules($this->warehouseInventoryfields);
-
-			if ($this->form_validation->run() == FALSE) {
-				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
-				redirect('inventory/send_to_warehouse');
-			}
-			else {
-				$data = [
-					'inventory_id' => $this->input->post('inventory_id'),
-					'checkin_date' => date('Y-m-d', strtotime($this->input->post('checkin_date'))),
-					'checkin_amount' => $this->input->post('checkin_amount'),
-					'checkin_by' => $this->input->post('checkin_by'),
-					'checkout_date' => date('Y-m-d', strtotime($this->input->post('checkout_date'))),
-					'checkout_amount' => $this->input->post('checkout_amount'),
-					'checkout_by' => $this->input->post('checkout_by'),
-					'warehouse_id' => $this->input->post('warehouse_id'),
-					'send_date' => date('Y-m-d', strtotime($this->input->post('send_date'))),
-					'send_amount' => $this->input->post('send_amount'),
-					'send_by' => $this->input->post('send_by'),
-					'from_warehouse_id' => $this->input->post('from_warehouse_id'),
-					'recieve_by' => $this->input->post('recieve_by'),
-					'updated_at' => date('Y-m-d h:i:s'),
-					'created_at' => date('Y-m-d h:i:s'),
-				];
-				$update = $this->Common_model->insert_record('warehouse_item', $data);
-				if($update){
-					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part send to warehouse successfully']);
-					redirect('inventory');
-				} else {
-					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
-					redirect('inventory/add');
-				}
-			}
-		}
-		else {
-			$where_in = '';
-			if(!isAdministrator($this->session->userdata('user')->id)){
-				$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
-			}
-			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
-			$data = [
-				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
-				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
-				'warehouses' => $warehouses,
-				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
-			];
-			$this->show('inventory/send_to_warehouse', $data);
-		}
 	}
 
 	public function minlevel()
@@ -323,8 +295,5 @@ class Inventory extends MY_Controller {
 		    }
 		    echo $message;
 		}
-	}
-	public function barcode(){
-		$this->load->view('barcode/index');
 	}
 }
