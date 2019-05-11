@@ -307,11 +307,11 @@ class Inventory extends MY_Controller {
 	}
 
 	public function import(){
-
         if(isEndUser($this->session->userdata('user')->id)) 
             return redirect('inventory');
 
 		if($this->input->method() == 'post'){
+			$itemTypeId = $this->input->post('inventory_type_id');
 			$file = $_FILES['excel_file']['tmp_name'];
 			$handle = fopen($file, "r");
 		    if ($file == NULL)
@@ -320,11 +320,11 @@ class Inventory extends MY_Controller {
 		    	try{
 			    	$dataToInsert = [];
 			    	$dataToUpdate = [];
-			    	$existingItem = $this->Common_model->select_fields('inventory', 'item_id');
+			    	$existingItem = $this->Common_model->select_fields('inventory', 'item_id, quantity');
 
 			    	$existingItemIds = [];
 			    	foreach ($existingItem as $key => $value) {
-			    		array_push($existingItemIds, $value->item_id);
+			    		$existingItemIds[strval($value->item_id)] = $value->quantity;
 			    	}
 
 	            	$this->load->library('excel');
@@ -335,33 +335,24 @@ class Inventory extends MY_Controller {
 					    for($row=2; $row<=$highestRow; $row++) {
 					    	$itemId = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
 					    	$itemType = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-
-					    	// check item type exist already 
-					    	$itemTypeId = $this->Common_model->select_fields_where('inventory_type','id',['name'=>$itemType], true);
-					    	if(!$itemTypeId)
-					    		// create the type
-					    		$itemTypeId = $this->Common_model->insert_record('inventory_type', [
-					    			'name' => $itemType,
-					    			'description' => $itemType,
-					    			'status' => 1,
-					    			'created_at' => date('Y-m-d h:i:s'),
-					    			'updated_at' => date('Y-m-d h:i:s'),
-					    		]);
-					    	else 
-					    		$itemTypeId = $itemTypeId->id;
 					    	// item id is unique in our system , check if exist already than do plus One in the item quantity
-
-					    	if(in_array($itemId, $existingItemIds))
+					    	if(array_key_exists(strval($itemId), $existingItemIds)){
+					    		$existingItemIds[strval($itemId)] += 1;
 					    		array_push($dataToUpdate, [
 					    			'item_id' => $itemId,
 					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
-					    			'inventory_type_id' => $itemTypeId ,
+					    			'inventory_type_id' => $itemTypeId,
+					    			'quantity' => $existingItemIds[strval($itemId)],
 					    		]);
+					    	}
 					    	else 
 					    		array_push($dataToInsert, [
 					    			'item_id' => $itemId,
 					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
-					    			'inventory_type_id' => $itemTypeId ,
+					    			'inventory_type_id' => $itemTypeId,
+					    			'min_level' => 1,
+					    			'quantity' => 1,
+					    			'warehouse_id' => 1
 					    		]);
 
 					    }
@@ -379,6 +370,11 @@ class Inventory extends MY_Controller {
 			    }
 		    }
 		    echo $message;
+		} else {
+			$data = [
+				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
+			];
+			$this->show('inventory/import', $data);
 		}
 	}
 	public function barcode(){
