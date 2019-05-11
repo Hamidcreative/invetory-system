@@ -5,12 +5,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Send To Warehouse</h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Recieve From Technician</h5>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url('dashboard')?>">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Send To Warehouse</a></li>
+                            <li class="breadcrumb-item"><a href="#">Recieve From Technician</a></li>
                         </ol>
                     </div>
                 </div>
@@ -73,24 +73,8 @@
                                                 <label for="recieve_warehouse_id">From Warehouse</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="warehouse_id">
-                                                    <option value="">Select Warehouse</option>
-                                                    <?php foreach($warehouses as $key => $warehouse) { 
-                                                        if($warehouse->id == set_value('warehouse_id'))
-                                                            $selected = 'selected';
-                                                        else 
-                                                            $selected = '';
-                                                    ?>
-                                                        <option <?=$selected?> value="<?=$warehouse->id?>"><?=$warehouse->name?></option>
-                                                    <?php } ?>
-                                                </select>
-                                                <label for="warehouse_id">To Warehouse</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
                                                 <select name="checkout_by">
-                                                    <option value="">Select Person</option>
+                                                    <option value="">Select Technician</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('checkout_by'))
                                                             $selected = 'selected';
@@ -100,7 +84,7 @@
                                                         <option <?=$selected?> value="<?=$user->id?>"><?=$user->firstname.' '.$user->lastname?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label for="checkout_by">Checkout By Person</label>
+                                                <label for="checkout_by">From Technician</label>
                                             </div>
                                         </div>
                                         <div class="row">

@@ -243,6 +243,63 @@ class Inventory extends MY_Controller {
 		}
 	}
 
+	public function recieve_from_warehouse(){
+		if($this->input->method() == 'post'){
+		}
+		else {
+			$where_in = '';
+			if(!isAdministrator($this->session->userdata('user')->id)){
+				$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+			}
+			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+			$data = [
+				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
+				'warehouses' => $warehouses,
+				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
+			];
+			$this->show('inventory/recieve_from_warehouse', $data);
+		}
+	}
+
+	public function send_to_technician(){
+		if($this->input->method() == 'post'){
+		}
+		else {
+			$where_in = '';
+			if(!isAdministrator($this->session->userdata('user')->id)){
+				$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+			}
+			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+			$data = [
+				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
+				'warehouses' => $warehouses,
+				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
+			];
+			$this->show('inventory/send_to_technician', $data);
+		}
+	}
+
+	public function recieve_from_technician(){
+		if($this->input->method() == 'post'){
+		}
+		else {
+			$where_in = '';
+			if(!isAdministrator($this->session->userdata('user')->id)){
+				$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
+			}
+			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
+			$data = [
+				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
+				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
+				'warehouses' => $warehouses,
+				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
+			];
+			$this->show('inventory/recieve_from_technician', $data);
+		}
+	}
+
 	public function minlevel()
 	{
         if(isAdministrator($this->session->userdata('user')->id)) 
