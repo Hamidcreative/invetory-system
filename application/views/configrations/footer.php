@@ -13,7 +13,7 @@
 
 <footer class="page-footer footer footer-static footer-light navbar-border navbar-shadow">
     <div class="footer-copyright">
-        <div class="container"><span><?= date('Y')?><a href="#" target="_blank">Inventory System</a> All rights reserved.</span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>
+        <div class="container"><span> <a href="<?= base_url('') ?>" target="_blank">Inventory Management System</a></span><span class="right hide-on-small-only hidden">Design and Developed by <a href="">Hamid</a></span></div>
     </div>
 </footer>
 

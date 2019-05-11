@@ -147,28 +147,27 @@ class Warehouse extends MY_Controller {
 
     public function view($id){ // view warehouse
 
-            $wheres = array(
-                'code' => $id . '_view_WH'
-            );
-            $permissionsid = $this->Common_model->select_fields_where('permissions', 'id', $wheres, TRUE);
-            $where = [];
-            if ($permissionsid)
-                $where = array('permission_id' => $permissionsid->id);
+        $wheres = array(
+            'code' => $id . '_view_WH'
+        );
+        $permissionsid = $this->Common_model->select_fields_where('permissions', 'id', $wheres, TRUE);
+        $where = [];
+        if ($permissionsid)
+            $where = array('permission_id' => $permissionsid->id);
 
-            $joins = array(
-                array(
-                    'table' => 'user_permissions up',
-                    'condition' => 'up.user_id = user.id',
-                    'type' => 'Right'
-                )
-            );
-            $whusers = $this->Common_model->select_fields_where_like_join('user', 'user.id,user.username', $joins, $where);
-            $data = [
-                'warehouse' => $this->Common_model->select_fields_where('warehouse', '*', ['id' => $id], true),
-                'whusers' => $whusers,
-                'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
-            ];
-
+        $joins = array(
+            array(
+                'table' => 'user_permissions up',
+                'condition' => 'up.user_id = user.id',
+                'type' => 'Right'
+            )
+        );
+        $whusers = $this->Common_model->select_fields_where_like_join('user', 'user.id,user.username', $joins, $where);
+        $data = [
+            'warehouse' => $this->Common_model->select_fields_where('warehouse', '*', ['id' => $id], true),
+            'whusers' => $whusers,
+            'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
+        ];
         if(isset($data['warehouse'])) {
             $this->show('warehouse/view', $data);
         }else{
