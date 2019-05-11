@@ -66,11 +66,10 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th>User Name</th>
-                                                    <th>For User</th>
+                                                    <th> Name</th>
                                                     <th>Modal</th>
-                                                    <th>Modal id</th>
                                                     <th>Activity</th>
-                                                    <!--                                       <th>Effected</th> <!--     Modal ID -->
+
                                                     <th>Date</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -114,9 +113,7 @@
             {
                 "mData": "Modal"
             },
-            {
-                "mData": "Modalid"
-            },
+            
             {
                 "mData": "Activity"
             },
@@ -135,13 +132,13 @@
             }
         ];
 
-        var buttonss = ['csv', 'excel',  'print'];
+
         var HiddenColumnID_DT = "ID";
         var sortBy = {
             'ColumnID' : 0,
             'SortType' : 'desc'
-        };   
-        var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        };
+        var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         commonDataTables(regTableSelector, url_DT, aoColumns_DT, sDom_DT, HiddenColumnID_DT,RowCallBack=null,DrawCallBack=null,filters=null,sortBy );
 
 

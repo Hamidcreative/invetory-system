@@ -28,9 +28,13 @@ class User extends MY_Controller
 			if($this->input->method() == 'patch' or $this->input->method() == 'delete' or $this->session->userdata('user')->id != $userId)
             	return redirect('inventory');
 		}
+		$existingUserInfo = $this->Common_model->select_fields_where('user', 'email, username', ['id' => $userId], true);
 
+		if(empty($existingUserInfo)) {
+			$this->load->view('errors/pages/notfound');
+			return false;
+		}
 		if ($this->input->method() == 'post') {
-			$existingUserInfo = $this->Common_model->select_fields_where('user', 'email, username', ['id' => $userId], true);
 			if ($this->input->post('username') != $existingUserInfo->username)
 				$is_unique_usename = '|is_unique[user.username]';
 			else
@@ -82,6 +86,8 @@ class User extends MY_Controller
 						$this->updateUserRole($this->input->post('roles'), $userId);
 
 					$this->session->set_flashdata('alert', ['type' => 'success', 'message' => 'User info update successfully']);
+					$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Updated', 'model_name' => 'User','name'=> $this->input->post('username'),'detail'=> 'User updated','rout'=>'users/'.$userId);
+					logs($activity);
 					redirect('users');
 				} else {
 					$this->session->set_flashdata('alert', ['type' => 'error', 'message' => 'Error updating']);
@@ -89,18 +95,29 @@ class User extends MY_Controller
 				}
 			}
 		} else if ($this->input->method() == 'delete') {
+			$name = $this->Common_model->select_fields_where('user','username', ['id' => $userId],true);
 			$deleted = $this->Common_model->delete('user', ['id' => $userId]);
-			if ($deleted)
+			$deleted = $this->Common_model->delete('user_role', ['user_id' => $userId]);
+			if ($deleted){
 				echo json_encode(['type' => 'success', 'message' => 'User deleted successfully']);
-			else
+				$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Deleted', 'model_name' => 'User','name'=> $name->username,'detail'=> 'User Deleted','rout'=>'');
+				logs($activity);
+			}
+			else{
 				echo json_encode(['type' => 'error', 'message' => 'Record not deleted']);
+			}
 		} else if ($this->input->method() == 'patch') {
 			$data = $this->input->input_stream();
 			$updated = $this->Common_model->update('user', ['id' => $userId], $data);
-			if ($updated)
+			if ($updated){
 				echo json_encode(['type' => 'success', 'message' => 'User status updated successfully']);
-			else
+				$name = $this->Common_model->select_fields_where('user','username', ['id' => $userId],true);
+				$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Status Updated', 'model_name' => 'User','name'=> $name->username,'detail'=> 'User Status Updated','rout'=>'users/'.$userId);
+				logs($activity);
+			}
+			else{
 				echo json_encode(['type' => 'error', 'message' => 'Error updating user status']);
+			}
 		} else {
 			$user = $this->Common_model->select_fields_where('user', '*', ['id' => $userId], true);
 			$userrole = $this->Common_model->select_fields_where('user_role', 'role_id', ['user_id' => $userId], true);
@@ -150,12 +167,14 @@ class User extends MY_Controller
 					$data['avatar'] = $this->upload->data('file_name');
 
 					$insert = $this->Common_model->insert_record('user', $data);
-
+					$Id = $this->db->insert_id();
 					if ($insert) {
 						// create user role
 						$role = $this->input->post('roles');
 						$this->Common_model->insert_record('user_role', ['user_id' => $insert, 'role_id' => $role]);
 						$this->session->set_flashdata('alert', ['type' => 'success', 'message' => 'User info added successfully']);
+						$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Added', 'model_name' => 'User','name'=>  $this->input->post('username'),'detail'=> 'User Added','rout'=>'users/'.$Id);
+						logs($activity);
 						redirect('users');
 					} else {
 						$this->session->set_flashdata('alert', ['type' => 'error', 'message' => 'Error adding']);

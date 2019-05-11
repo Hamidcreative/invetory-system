@@ -62,6 +62,8 @@ class Export extends MY_Controller {
 
             //force user to download the Excel file without writing it to server's HD
             $objWriter->save('php://output');
+			$activity = array('warehouse_id' =>'','model_id' => '','method' => 'Database Exported', 'model_name' => 'Database','name'=> $filename,'detail'=> 'Database Exported','rout'=>'');
+			logs($activity);
 
 		}
 	}

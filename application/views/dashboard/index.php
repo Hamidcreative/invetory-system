@@ -78,7 +78,7 @@
                                     <tr>
                                        <th>Id</th>
                                        <th>User Name</th>
-                                       <th>Action On</th>
+                                       <th> Name</th>
                                        <th>Modal</th>
                                        <th>Activity</th>
 <!--                                       <th>Effected</th> <!--     Modal ID -->
@@ -145,7 +145,7 @@
              'ColumnID' : 0,
              'SortType' : 'desc'
           };
-          var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+          var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
           commonDataTables(regTableSelector, url_DT, aoColumns_DT, sDom_DT, HiddenColumnID_DT,RowCallBack=null,DrawCallBack=null,filters=null,sortBy );
 
 

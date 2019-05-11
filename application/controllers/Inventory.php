@@ -176,8 +176,12 @@ class Inventory extends MY_Controller {
 
 		$where_in = '';
 		if(!isAdministrator($this->session->userdata('user')->id))
-			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
-		
+			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];	 
+
+		if(empty($where_in['val']) && !isAdministrator($this->session->userdata('user')->id)){
+			echo json_encode(['type'=>'error','message'=>'Contact admin']);
+			return redirect('users/'.$this->session->userdata('user')->id);// we will redirect it to message page 
+		}
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 
 		$data = [
@@ -319,5 +323,8 @@ class Inventory extends MY_Controller {
 		    }
 		    echo $message;
 		}
+	}
+	public function barcode(){
+		$this->load->view('barcode/index');
 	}
 }

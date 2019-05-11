@@ -79,6 +79,7 @@ $route['warehouse/(:num)/inventory/(:num)'] = 'Warehouse/inventory/$1/$2';
 
 //Inventory 
 $route['inventory/(:num)'] = 'inventory/edit/$1';
+ 
 
 
 
@@ -90,9 +91,10 @@ $route['inventory/types/add'] = 'Inventorytypes/add';
 $route['inventory/types/edit/(:num)'] = 'Inventorytypes/edit/$1';
 
 
-$route['crud'] = 'Crud/index';
 
 
+
+$route['inventory/barcode'] = 'inventory/barcode';
 
 // Dashboas
 
