@@ -40,6 +40,9 @@
                 <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                     <li><a class="collapsible-body <?= isActive('inventory', 'index') ?>" href="<?= base_url('inventory')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Spare Parts</span></a></li>
                     <li><a class="collapsible-body" href="<?= base_url('inventory/send_to_warehouse')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Send To Warehouse</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory/recieve_from_warehouse')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Recieve From Warehouse</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory/send_to_technician')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Send To Technician</span></a></li>
+                    <li><a class="collapsible-body" href="<?= base_url('inventory/recieve_from_technician')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span>Recieve From Technician</span></a></li>
                     <li><a class="collapsible-body <?= isActive('Inventory', 'add') ?>" href="<?= base_url('inventory/add')?>" data-i18n=""><i class="material-icons">radio_button_unchecked</i><span> Add Spare Part</span></a></li>
                 </ul>
             </div>

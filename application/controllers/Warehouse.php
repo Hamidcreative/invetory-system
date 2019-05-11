@@ -169,7 +169,7 @@ class Warehouse extends MY_Controller {
                 'allusers' => $this->Common_model->select_where_not_in('user', $whusers),
             ];
 
-        if(isset($warehouse)) {
+        if(isset($data['warehouse'])) {
             $this->show('warehouse/view', $data);
         }else{
             $this->load->view('errors/pages/notfound');
