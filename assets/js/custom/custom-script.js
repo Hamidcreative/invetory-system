@@ -494,4 +494,10 @@ function readURL(input, el) {
 
  $(document).ready(function(){
     $('.datepicker').datepicker();
+
+
+     // barcode reader code started
+
   });
+
+

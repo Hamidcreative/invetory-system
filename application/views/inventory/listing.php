@@ -30,7 +30,7 @@
                       <th>Description</th>
                       <th>Type</th>
                       <th>Amount</th>
-                      <th>Quantity</th>
+                       
                       <th>Min Level</th>
                       <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
                       <th>Status</th>
@@ -91,9 +91,7 @@
             {
                 "mData" : "amount"
             },
-            {
-                "mData" : "quantity"
-            },
+
             {
                 "mData" : "min_level"
             },

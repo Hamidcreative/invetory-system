@@ -18,6 +18,42 @@
         </div>
         <div class="col s12">
             <div class="container">
+                <div class="section">
+                    <div class="card">
+                        <div class="card-content">
+                            <table>
+                                <tr>
+                                    <td colspan="2">When warehouse receive spare part form Technician. For example warehouse issue 5 items to the end user and he used only 3 and return 2 items </td>
+                                </tr>
+                                <tr>
+                                    <td>Item code:- </td>
+                                    <td>User can enter Barcode manually or Automatically filled when user scan barcode</td>
+                                </tr>
+                                <tr>
+                                    <td>Spare part name:- </td>
+                                    <td>Automatically visible when user scan barcode or enter barcode (just for confirmations ) </td>
+                                </tr>
+                                <tr>
+                                    <td>From Technician :-</td>
+                                    <td>Name of person who return the extra spare part </td>
+                                </tr>
+                                <tr>
+                                    <td>Amount:-</td>
+                                    <td>Default Quantity 1 but user can change</td>
+                                </tr>
+
+                                <tr>
+                                    <td>To Warehouse:-</td>
+                                    <td>Selct the name of the warehouse which receive the spare part</td>
+                                </tr>
+                                <tr>
+                                    <td> Scan Button:- </td>
+                                    <td> User can scan Barcode by clicking on the scan button.  </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="seaction">
                     <?php if(validation_errors() != false) { ?>
                     <div class="row">
@@ -39,18 +75,28 @@
 
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="inventory_id">
-                                                    <option value="">Select Spare Part</option>
-                                                    <?php foreach($inventories as $key => $inventory) { 
-                                                        if($inventory->id == set_value('inventory_id'))
+                                                <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
+                                                <label for="inventory_id">Item Code</label>
+                                            </div>
+                                            <div class="input-field col m6 s12">
+                                                    <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
+                                                    <label for="inventory_id">Spare Part</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col m6 s12">
+                                                <select name="checkout_by">
+                                                    <option value="">Select Technician</option>
+                                                    <?php foreach($users as $key => $user) {
+                                                        if($user->id == set_value('checkout_by'))
                                                             $selected = 'selected';
-                                                        else 
+                                                        else
                                                             $selected = '';
-                                                    ?>
-                                                        <option <?=$selected?> value="<?=$inventory->id?>"><?=$inventory->item_id?></option>
+                                                        ?>
+                                                        <option <?=$selected?> value="<?=$user->id?>"><?=$user->firstname.' '.$user->lastname?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label for="inventory_id">Spare Part</label>
+                                                <label for="checkout_by">From Technician</label>
                                             </div>
                                             <div class="input-field col m6 s12">
                                                 <input name="checkin_amount" required type="text" value="<?=set_value('checkin_amount')?>">
@@ -58,7 +104,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="input-field col m6 s12">
+                                            <div class="input-field col m12 s12">
                                                 <select name="from_warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
@@ -70,27 +116,16 @@
                                                         <option <?=$selected?> value="<?=$warehouse->id?>"><?=$warehouse->name?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label for="recieve_warehouse_id">From Warehouse</label>
-                                            </div>
-                                            <div class="input-field col m6 s12">
-                                                <select name="checkout_by">
-                                                    <option value="">Select Technician</option>
-                                                    <?php foreach($users as $key => $user) { 
-                                                        if($user->id == set_value('checkout_by'))
-                                                            $selected = 'selected';
-                                                        else 
-                                                            $selected = '';
-                                                    ?>
-                                                        <option <?=$selected?> value="<?=$user->id?>"><?=$user->firstname.' '.$user->lastname?></option>
-                                                    <?php } ?>
-                                                </select>
-                                                <label for="checkout_by">From Technician</label>
+                                                <label for="recieve_warehouse_id">To Warehouse</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit
                                                     <i class="material-icons right">send</i>
+                                                </button>
+                                                <button class="btn cyan waves-effect waves-light right mr-2 scan" type="button" data-toggle="modal" data-target="#deletemodal">Scan
+                                                    <i class="material-icons right">camera_alt</i>
                                                 </button>
                                             </div>
                                         </div>
