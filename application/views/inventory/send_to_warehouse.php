@@ -39,18 +39,8 @@
 
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="inventory_id">
-                                                    <option value="">Select Spare Part</option>
-                                                    <?php foreach($inventories as $key => $inventory) { 
-                                                        if($inventory->id == set_value('inventory_id'))
-                                                            $selected = 'selected';
-                                                        else 
-                                                            $selected = '';
-                                                    ?>
-                                                        <option <?=$selected?> value="<?=$inventory->id?>"><?=$inventory->item_id?></option>
-                                                    <?php } ?>
-                                                </select>
-                                                <label for="inventory_id">Spare Part</label>
+                                                <input name="item_id" required type="text" value="<?=set_value('item_id')?>">
+                                                <label for="item_id">Item Id</label>
                                             </div>
                                             <div class="input-field col m6 s12">
                                                 <input name="checkin_amount" required type="text" value="<?=set_value('checkin_amount')?>">
