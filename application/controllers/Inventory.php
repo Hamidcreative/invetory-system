@@ -380,7 +380,8 @@ class Inventory extends MY_Controller {
 					    			'inventory_type_id' => $itemTypeId,
 					    			'min_level' => 1,
 					    			'quantity' => 1,
-					    			'warehouse_id' => 1
+					    			'warehouse_id' => 1,
+					    			'status' => 1,
 					    		]);
 
 					    }
