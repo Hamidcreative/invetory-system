@@ -71,24 +71,24 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" action="<?=base_url('inventory/send_to_warehouse')?>">
+                                    <form class="col s12" method="POST" action="<?=base_url('inventory/recieve_from_technician')?>">
 
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
-                                                <label for="inventory_id">Item Code</label>
+                                                <input name="item_id" required type="text" value="<?=set_value('item_id')?>">
+                                                <label for="item_id">Item Code</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                    <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
-                                                    <label for="inventory_id">Spare Part</label>
+                                                    <input name="description" required type="text" value="<?=set_value('description')?>">
+                                                    <label for="description">Spare Part</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="checkout_by">
+                                                <select name="technician_id">
                                                     <option value="">Select Technician</option>
                                                     <?php foreach($users as $key => $user) {
-                                                        if($user->id == set_value('checkout_by'))
+                                                        if($user->id == set_value('technician_id'))
                                                             $selected = 'selected';
                                                         else
                                                             $selected = '';
@@ -96,16 +96,16 @@
                                                         <option <?=$selected?> value="<?=$user->id?>"><?=$user->firstname.' '.$user->lastname?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <label for="checkout_by">From Technician</label>
+                                                <label for="technician_id">From Technician</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <input name="checkin_amount" required type="text" value="<?=set_value('checkin_amount')?>">
-                                                <label for="checkin_amount">Amount</label>
+                                                <input name="quantity" required type="text" value="<?=set_value('quantity')?>">
+                                                <label for="quantity">Amount</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m12 s12">
-                                                <select name="from_warehouse_id">
+                                                <select name="to_warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('from_warehouse_id'))

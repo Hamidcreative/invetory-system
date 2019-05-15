@@ -14,20 +14,9 @@ class Inventory extends MY_Controller {
 		        ['field' => 'min_level', 'label' => 'Minimum Level', 'rules' => 'required'],
 			];
 
-		$this->warehouseInventoryfields = [
-		        ['field' => 'inventory_id', 'label' => 'Spare Part', 'rules' => 'required'],
-		        ['field' => 'checkin_date', 'label' => 'Check In Date', 'rules' => 'required'],
-		        ['field' => 'checkin_amount', 'label' => 'Check In Amount', 'rules' => 'required'],
-		        ['field' => 'checkin_by', 'label' => 'Check In By Person', 'rules' => 'required'],
-		        ['field' => 'checkout_date', 'label' => 'Check Out Date', 'rules' => 'required'],
-		        ['field' => 'checkout_amount', 'label' => 'Check Out Amount', 'rules' => 'required'],
-		        ['field' => 'checkout_by', 'label' => 'Checkout By Person', 'rules' => 'required'],
-		        ['field' => 'warehouse_id', 'label' => 'Send To Warehouse', 'rules' => 'required'],
-		        ['field' => 'send_date', 'label' => 'Send Date', 'rules' => 'required'],
-		        ['field' => 'send_amount', 'label' => 'Send Amount', 'rules' => 'required'],
-		        ['field' => 'send_by', 'label' => 'Send By Person', 'rules' => 'required'],
-		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
-		        ['field' => 'recieve_by', 'label' => 'Receive By Person', 'rules' => 'required']
+		$this->inventorytransferfields = [
+		        ['field' => 'item_id', 'label' => 'Item Id', 'rules' => 'required'],
+		        ['field' => 'quantity', 'label' => 'Amount', 'rules' => 'required'],
 			];
     }
 	
@@ -222,37 +211,67 @@ class Inventory extends MY_Controller {
 
 	public function send_to_warehouse(){
 		if($this->input->method() == 'post'){
-			$this->form_validation->set_rules($this->warehouseInventoryfields);
+
+			array_push($this->inventorytransferfields, ['field' => 'checkout_by', 'label' => 'Checkout By Person', 'rules' => 'required'], 
+		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
+		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required']);
+
+			$this->form_validation->set_rules($this->inventorytransferfields);
 
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 				redirect('inventory/send_to_warehouse');
 			}
 			else {
+				$itemId = $this->input->post('item_id');
+				$fromWarehouseId = $this->input->post('from_warehouse_id');
+				$quantity = $this->input->post('quantity');
+				// check item code exist and get existing amount for that item against that warehouse
+				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
+				[
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+				],
+				[
+					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $fromWarehouseId,
+					'wi.status' => 1,
+				], true);
+
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/send_to_warehouse');
+				}
+
+				if($existingItem->quantity < $quantity) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Not enough amount of items exist in selected warehouse']);
+					redirect('inventory/send_to_warehouse');
+				}
+
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $fromWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity - $quantity
+				]);
+				
 				$data = [
-					'inventory_id' => $this->input->post('inventory_id'),
-					'checkin_date' => date('Y-m-d', strtotime($this->input->post('checkin_date'))),
-					'checkin_amount' => $this->input->post('checkin_amount'),
-					'checkin_by' => $this->input->post('checkin_by'),
-					'checkout_date' => date('Y-m-d', strtotime($this->input->post('checkout_date'))),
-					'checkout_amount' => $this->input->post('checkout_amount'),
-					'checkout_by' => $this->input->post('checkout_by'),
-					'warehouse_id' => $this->input->post('warehouse_id'),
-					'send_date' => date('Y-m-d', strtotime($this->input->post('send_date'))),
-					'send_amount' => $this->input->post('send_amount'),
-					'send_by' => $this->input->post('send_by'),
-					'from_warehouse_id' => $this->input->post('from_warehouse_id'),
-					'recieve_by' => $this->input->post('recieve_by'),
-					'updated_at' => date('Y-m-d h:i:s'),
+					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
+					'to_user_id' => $this->input->post('checkout_by'),
+					'quantity' => $this->input->post('quantity'),
+					'from_warehouse_id' => $fromWarehouseId,
+					'to_warehouse_id' => $this->input->post('to_warehouse_id'),
+					'from_user_id' => $this->session->userdata('user')->id,
+					'type' => 1,
 					'created_at' => date('Y-m-d h:i:s'),
 				];
-				$update = $this->Common_model->insert_record('warehouse_item', $data);
-				if($update){
+				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
+				if($insertedId){
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part send to warehouse successfully']);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
-					redirect('inventory/add');
+					redirect('inventory/send_to_warehouse');
 				}
 			}
 		}
@@ -273,6 +292,64 @@ class Inventory extends MY_Controller {
 
 	public function recieve_from_warehouse(){
 		if($this->input->method() == 'post'){
+
+			array_push($this->inventorytransferfields, ['field' => 'from_user_id', 'label' => 'From Person', 'rules' => 'required'],
+		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
+		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required']);
+
+			$this->form_validation->set_rules($this->inventorytransferfields);
+
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
+				redirect('inventory/recieve_from_warehouse');
+			}
+			else {
+				$itemId = $this->input->post('item_id');
+				$toWarehouseId = $this->input->post('to_warehouse_id');
+				$quantity = $this->input->post('quantity');
+				// check item code exist and get existing amount for that item against that warehouse
+				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
+				[
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+				],
+				[
+					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $toWarehouseId,
+					'wi.status' => 1,
+				], true);
+
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/recieve_from_warehouse');
+				}
+
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $toWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity + $quantity
+				]);
+				
+				$data = [
+					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
+					'to_user_id' => $this->session->userdata('user')->id,
+					'quantity' => $this->input->post('quantity'),
+					'from_warehouse_id' => $this->input->post('from_warehouse_id'),
+					'to_warehouse_id' => $toWarehouseId,
+					'from_user_id' => $this->input->post('from_user_id'),
+					'type' => 2,
+					'created_at' => date('Y-m-d h:i:s'),
+				];
+				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
+				if($insertedId){
+					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part received from warehouse successfully']);
+					redirect('inventory');
+				} else {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
+					redirect('inventory/recieve_from_warehouse');
+				}
+			}
 		}
 		else {
 			$where_in = '';
@@ -282,7 +359,6 @@ class Inventory extends MY_Controller {
 			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 			$data = [
 				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
-				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
 				'warehouses' => $warehouses,
 				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
 			];
@@ -292,6 +368,67 @@ class Inventory extends MY_Controller {
 
 	public function send_to_technician(){
 		if($this->input->method() == 'post'){
+
+			array_push($this->inventorytransferfields, 
+		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],['field' => 'technician_id', 'label' => 'From Person', 'rules' => 'required']);
+
+			$this->form_validation->set_rules($this->inventorytransferfields);
+
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
+				redirect('inventory/send_to_technician');
+			}
+			else {
+				$itemId = $this->input->post('item_id');
+				$fromWarehouseId = $this->input->post('from_warehouse_id');
+				$quantity = $this->input->post('quantity');
+				// check item code exist and get existing amount for that item against that warehouse
+				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
+				[
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+				],
+				[
+					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $fromWarehouseId,
+					'wi.status' => 1,
+				], true);
+
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/send_to_technician');
+				}
+
+				if($existingItem->quantity < $quantity) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Not enough amount of items exist in selected warehouse']);
+					redirect('inventory/send_to_warehouse');
+				}
+
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $fromWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity - $quantity
+				]);
+				
+				$data = [
+					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
+					'to_user_id' => $this->input->post('technician_id'),
+					'quantity' => $this->input->post('quantity'),
+					'from_warehouse_id' => $fromWarehouseId,
+					'from_user_id' =>$this->session->userdata('user')->id ,
+					'type' => 3,
+					'created_at' => date('Y-m-d h:i:s'),
+				];
+				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
+				if($insertedId){
+					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part send to technician successfully']);
+					redirect('inventory');
+				} else {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
+					redirect('inventory/send_to_technician');
+				}
+			}
 		}
 		else {
 			$where_in = '';
@@ -301,7 +438,6 @@ class Inventory extends MY_Controller {
 			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 			$data = [
 				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
-				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
 				'warehouses' => $warehouses,
 				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
 			];
@@ -311,6 +447,62 @@ class Inventory extends MY_Controller {
 
 	public function recieve_from_technician(){
 		if($this->input->method() == 'post'){
+
+			array_push($this->inventorytransferfields, 
+		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required'],['field' => 'technician_id', 'label' => 'From Person', 'rules' => 'required']);
+
+			$this->form_validation->set_rules($this->inventorytransferfields);
+
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
+				redirect('inventory/recieve_from_technician');
+			}
+			else {
+				$itemId = $this->input->post('item_id');
+				$toWarehouseId = $this->input->post('to_warehouse_id');
+				$quantity = $this->input->post('quantity');
+				// check item code exist and get existing amount for that item against that warehouse
+				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
+				[
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+				],
+				[
+					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $toWarehouseId,
+					'wi.status' => 1,
+				], true);
+
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/recieve_from_technician');
+				}
+
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $toWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity + $quantity
+				]);
+				
+				$data = [
+					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
+					'from_user_id' => $this->input->post('technician_id'),
+					'quantity' => $this->input->post('quantity'),
+					'to_warehouse_id' => $toWarehouseId,
+					'to_user_id' =>$this->session->userdata('user')->id ,
+					'type' => 4,
+					'created_at' => date('Y-m-d h:i:s'),
+				];
+				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
+				if($insertedId){
+					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part receive from technician successfully']);
+					redirect('inventory');
+				} else {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
+					redirect('inventory/recieve_from_technician');
+				}
+			}
 		}
 		else {
 			$where_in = '';
@@ -320,7 +512,6 @@ class Inventory extends MY_Controller {
 			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 			$data = [
 				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
-				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
 				'warehouses' => $warehouses,
 				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
 			];
@@ -406,7 +597,16 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/import', $data);
 		}
 	}
+
 	public function barcode(){
 		$this->load->view('barcode/index');
+	}
+
+	public function item($itemId) {
+		$item = $this->Common_model->select_fields_where('inventory', '*', ['item_id'=>$itemId], true);
+		if($item)
+			echo json_encode(['item'=>$item, 'type'=>'success']);
+		else 
+			echo json_encode(['type'=>'error','message'=>'Item not exist with entered item code']);
 	}
 }

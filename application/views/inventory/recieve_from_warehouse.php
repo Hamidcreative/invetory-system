@@ -31,7 +31,7 @@
                                         <td>User can enter Barcode manually or Automatically filled when user scan barcode</td>
                                     </tr>
                                     <tr>
-                                        <td>Spare part name:- </td>
+                                        <td>Item Description:- </td>
                                         <td>Automatically visible when user scan barcode or enter barcode (just for confirmations ) </td>
                                     </tr>
                                     <tr>
@@ -74,30 +74,30 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" action="<?=base_url('inventory/send_to_warehouse')?>">
+                                    <form class="col s12" method="POST" action="<?=base_url('inventory/recieve_from_warehouse')?>">
 
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
-                                                <label for="inventory_id">Item Code</label>
+                                                <input name="item_id" required type="text" value="<?=set_value('item_id')?>">
+                                                <label for="item_id">Item Code</label>
                                             </div>
                                             <div class="input-field col m6 s12">
 
-                                                    <input name="inventory_id" required type="text" value="<?=set_value('inventory_id')?>">
-                                                    <label for="inventory_id">Spare Part</label>
+                                                    <input name="description" required type="text" value="<?=set_value('description')?>">
+                                                    <label for="description">Item Description</label>
 
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="checkin_amount" required type="text" value="<?=set_value('checkin_amount')?>">
-                                                <label for="checkin_amount">Amount</label>
+                                                <input name="quantity" required type="text" value="<?=set_value('quantity')?>">
+                                                <label for="quantity">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="checkout_by">
+                                                <select name="from_user_id">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) {
-                                                        if($user->id == set_value('checkout_by'))
+                                                        if($user->id == set_value('from_user_id'))
                                                             $selected = 'selected';
                                                         else
                                                             $selected = '';
@@ -110,7 +110,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="from_warehouse_id">
+                                                <select name="to_warehouse_id">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) {
                                                         if($warehouse->id == set_value('from_warehouse_id'))
