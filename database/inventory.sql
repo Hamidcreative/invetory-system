@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2019 at 07:21 PM
+-- Generation Time: May 15, 2019 at 09:15 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.4
 
@@ -32,13 +32,8 @@ CREATE TABLE `inventory` (
   `id` int(11) NOT NULL,
   `item_id` varchar(100) NOT NULL,
   `description` text NOT NULL,
-  `amount` double NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `warehouse_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
   `inventory_type_id` int(11) NOT NULL,
-  `min_level` int(11) NOT NULL,
-  `status` int(2) NOT NULL,
+  `serial_number` varchar(30) NOT NULL,
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -47,94 +42,38 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `item_id`, `description`, `amount`, `quantity`, `warehouse_id`, `user_id`, `inventory_type_id`, `min_level`, `status`, `updated_at`, `created_at`) VALUES
-(1, '3GIS sim', 'SIM-kort', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 'DBI2100P18G75', 'Helios Repeater Small 18dBm/75dB 6 Carriers', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 'SFP0004', 'SFP,SM,1G,1550,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 'TELENOR sim', 'SIM-kort', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 'DRI2100P36G90', 'Helios Repeater Large 35dBm/90dB 8 Carriers', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 'TRE Sim', 'SIM-kort', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 'DRI2100P34G90', 'Helios Repeater Medium 30dBm/90dB 8 Carriers', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 'SFP0007', 'SFP,MM,1G,850nm,550m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 'XFP0003', 'XFP,MM,10G,850nm,300m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 'XFP0001', 'XFP,SM,10G,1310nm,10km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 'SFP0007 ', 'SFP,MM,1G,850nm,550m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, 'XFP0001 ', 'XFP,SM,10G,1310nm,10km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, 'XFP0003 ', 'XFP,MM,10G,850nm,300m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, 'XFP0002 ', 'XFP,SM,10G,1550nm,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, '6806-17-A', 'Dämpsats N 6db (Helios repeater)', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(16, '6810N-50-1/1-NE', 'Dämpsats N 10 db (Helios repeater)', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 'XFP0002', 'XFP,SM,10G,1550nm,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 'DRI2100P34G90', 'Helios Repeater Medium 30dBm/90dB 8 Carriers', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 'SFP0001', 'SFP,SM,1G,1310,20km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 'SFP0003', 'SFP,SM,1G,1490,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(21, 'SFP0002', 'SFP,SM,1G,1310,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(22, 'SFP0005', 'SFP,SM,1G,1550,80km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 'SFP0006', 'SFP,SM,1G,1611,40km', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 'TRE Sim', 'SIM-kort', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(25, 'TELENOR sim', 'SIM-kort', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 'T55726B0.52', 'FPMR 26 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(27, 'T55526A0.52', 'FPR 26 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(28, 'T55526A0.02', 'FPR 26 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(29, 'T55526A0', 'Not ok', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 'T55538A0.51', 'FPR 38 GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(31, 'T55538A0.01', 'FPR 38 GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(32, 'T55538A0.51', 'FPR 38 GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(33, 'T55726B0.02', 'FPMR 26 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(34, 'T55738B0.01', 'FPMR 38 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(35, '01-F18021Hx', 'RFUC 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(36, '52519', 'Adapter 15G for FH antenna', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(37, '52520', 'Adapter 18-28G for FH antenna', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(38, 'T555FME0.20', 'FirstMile 200', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(39, '01-C15003L0', 'RFUC 15GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(40, '09-A501-9', 'IP10 IDU', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(41, 'T555800GBE.00', 'FPH800 4xGBE Card', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(42, 'T555800MB.00', 'FPH800 Base Systsem', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(43, 'T55726B0.52    ', 'FPMR 26 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(44, 'T55538A0.01', 'FPR 38 GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(45, 'T55715B0.01', 'FPMR 15 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(46, 'T557ETFPR.00', 'FPMR assembled ETH cable 100m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(47, 'T557ETFPR.50', 'FPMR assembled ETH cable 50m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(48, 'T557ETFPR.75', 'FPMR assembled ETH cable 75m', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(49, 'T55515A0.51', 'FPR 15GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(50, 'T55515A0.01', 'FPR 15GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(51, 'T55518A1.52', 'FPR 18 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(52, 'T55518A1.02', 'FPR 18 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(53, 'T55715B0.51', 'FPMR 15 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(54, 'T55718B1.02', 'FPMR 18 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(55, 'T55718B1.52', 'FPMR 18 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(56, 'T55738B0.51', 'FPMR 38 GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(57, 'T555ETLE.08', 'FPR Lemo Connector', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(58, 'T55526A0.02', 'FPR 26 GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(59, '01-F26694H2', 'RFUC 26Ghz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(60, 'T555PIDO.01', 'Power Injector 1port', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(61, 'T555PIDI.04', 'Power Injector 4port', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(62, '01-F26694L2', 'RFUC 26Ghz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(63, '01-C15003H0', 'RFUC 15GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(64, '01-7021HA', 'RFUC 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(65, '01-F18021H2', 'RFUC 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(66, '01-F18021H3', 'RFUC 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(67, '01-7021LA', 'RFUC 18GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(68, '01-F18021L2', 'RFUC 18GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(69, '01-F18021L3', 'RFUC 18GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(70, '01-F18021Lx', 'RFUC 18GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(71, '01-F38716L0', 'RFUC 26Ghz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(72, '52553', 'RFUC 38GHZ Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(73, '55619', 'RFUC FH 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(74, '56618', 'RFUC FH 18GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(75, '01-T26694H0', 'RFUC FH 26GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(76, '56622', 'RFUC FH 26GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(77, '01-T26694L0', 'RFUC FH 26GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(78, '35484', 'RFUP 26GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(79, '01-8010-0', 'RFUP 38GHZ High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(80, '01-8009-0', 'RFUP 38GHZ Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(81, '56619', 'RFUC FH 18GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(82, '52554', 'RFUC 38GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(83, '57612', '38GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(84, '57613', '38GHz', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(85, 'T55726B0', 'Not ok', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(86, '52531', 'RFUC 15GHz High', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(87, '52530', 'RFUC 15GHz Low', 0, 4, 1, 0, 2, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `inventory` (`id`, `item_id`, `description`, `inventory_type_id`, `serial_number`, `updated_at`, `created_at`) VALUES
+(3, '2342344', 'Item Description1', 2, '', '2019-05-14 07:58:29', '2019-05-14 06:03:34'),
+(4, '12345', 'Item Description', 7, '', '2019-05-15 08:25:18', '2019-05-15 05:21:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory_transfer`
+--
+
+CREATE TABLE `inventory_transfer` (
+  `id` int(11) NOT NULL,
+  `warehouse_inventory_id` int(11) NOT NULL,
+  `from_warehouse_id` int(11) NOT NULL,
+  `to_warehouse_id` int(11) DEFAULT NULL,
+  `quantity` int(11) NOT NULL,
+  `from_user_id` int(11) NOT NULL,
+  `to_user_id` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `inventory_transfer`
+--
+
+INSERT INTO `inventory_transfer` (`id`, `warehouse_inventory_id`, `from_warehouse_id`, `to_warehouse_id`, `quantity`, `from_user_id`, `to_user_id`, `type`, `created_at`) VALUES
+(1, 1, 2, 3, 5, 1, 3, 1, 2019),
+(2, 1, 2, 3, 11, 1, 17, 1, 2019),
+(3, 1, 3, 2, 5, 17, 1, 2, 2019),
+(4, 1, 2, NULL, 30, 1, 17, 3, 2019),
+(5, 1, 0, 2, 8, 17, 1, 4, 2019);
 
 -- --------------------------------------------------------
 
@@ -270,6 +209,7 @@ CREATE TABLE `user_activity` (
   `model_id` int(11) NOT NULL,
   `method` varchar(100) NOT NULL,
   `model_name` varchar(100) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `detail` text NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -281,57 +221,63 @@ CREATE TABLE `user_activity` (
 -- Dumping data for table `user_activity`
 --
 
-INSERT INTO `user_activity` (`id`, `user_id`, `model_id`, `method`, `model_name`, `detail`, `updated_at`, `created_at`, `warehouse_id`, `rout`) VALUES
-(1, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-04 12:55:42', '2019-05-04 12:55:42', NULL, 'warehouse/view/2'),
-(2, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-04 12:56:40', '2019-05-04 12:56:40', NULL, 'warehouse/view/2'),
-(3, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-04 12:56:42', '2019-05-04 12:56:42', NULL, 'warehouse/view/2'),
-(4, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-04 18:09:20', '2019-05-04 18:09:20', NULL, 'warehouse/view/2'),
-(5, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 19:18:32', '2019-05-05 19:18:32', NULL, 'warehouse/view/2'),
-(6, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 19:18:48', '2019-05-05 19:18:48', NULL, 'warehouse/view/2'),
-(7, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 19:19:42', '2019-05-05 19:19:42', NULL, 'warehouse/view/2'),
-(8, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:34:38', '2019-05-05 20:34:38', NULL, 'warehouse/view/2'),
-(9, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:34:42', '2019-05-05 20:34:42', NULL, 'warehouse/view/2'),
-(10, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:34:52', '2019-05-05 20:34:52', NULL, 'warehouse/view/2'),
-(11, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:37:34', '2019-05-05 20:37:34', NULL, 'warehouse/view/2'),
-(12, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:37:51', '2019-05-05 20:37:51', NULL, 'warehouse/view/2'),
-(13, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:37:57', '2019-05-05 20:37:57', NULL, 'warehouse/view/2'),
-(14, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:38:01', '2019-05-05 20:38:01', NULL, 'warehouse/view/2'),
-(15, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:38:11', '2019-05-05 20:38:11', NULL, 'warehouse/view/2'),
-(16, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:38:16', '2019-05-05 20:38:16', NULL, 'warehouse/view/2'),
-(17, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:38:19', '2019-05-05 20:38:19', NULL, 'warehouse/view/2'),
-(18, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:40:08', '2019-05-05 20:40:08', NULL, 'warehouse/view/2'),
-(19, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:40:15', '2019-05-05 20:40:15', NULL, 'warehouse/view/2'),
-(20, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:40:29', '2019-05-05 20:40:29', NULL, 'warehouse/view/2'),
-(21, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 20:41:35', '2019-05-05 20:41:35', NULL, 'warehouse/view/2'),
-(22, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 20:41:53', '2019-05-05 20:41:53', NULL, 'warehouse/view/2'),
-(23, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:29:35', '2019-05-05 21:29:35', NULL, 'warehouse/view/2'),
-(24, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 21:29:42', '2019-05-05 21:29:42', NULL, 'warehouse/view/2'),
-(25, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:30:24', '2019-05-05 21:30:24', NULL, 'warehouse/view/2'),
-(26, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 21:30:55', '2019-05-05 21:30:55', NULL, 'warehouse/view/2'),
-(27, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:31:48', '2019-05-05 21:31:48', NULL, 'warehouse/view/2'),
-(28, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 21:33:28', '2019-05-05 21:33:28', NULL, 'warehouse/view/2'),
-(29, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:34:11', '2019-05-05 21:34:11', NULL, 'warehouse/view/2'),
-(30, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 21:34:13', '2019-05-05 21:34:13', NULL, 'warehouse/view/2'),
-(31, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:34:15', '2019-05-05 21:34:15', NULL, 'warehouse/view/2'),
-(32, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-05 21:34:17', '2019-05-05 21:34:17', NULL, 'warehouse/view/2'),
-(33, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-05 21:34:18', '2019-05-05 21:34:18', NULL, 'warehouse/view/2'),
-(34, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:04:31', '2019-05-08 20:04:31', NULL, 'warehouse/view/2'),
-(35, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:04:40', '2019-05-08 20:04:40', NULL, 'warehouse/view/2'),
-(36, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:04:43', '2019-05-08 20:04:43', NULL, 'warehouse/view/2'),
-(37, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:04:47', '2019-05-08 20:04:47', NULL, 'warehouse/view/2'),
-(38, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:05:08', '2019-05-08 20:05:08', NULL, 'warehouse/view/2'),
-(39, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:05:44', '2019-05-08 20:05:44', NULL, 'warehouse/view/2'),
-(40, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:05:46', '2019-05-08 20:05:46', NULL, 'warehouse/view/2'),
-(41, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:05:49', '2019-05-08 20:05:49', NULL, 'warehouse/view/2'),
-(42, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:05:52', '2019-05-08 20:05:52', NULL, 'warehouse/view/2'),
-(43, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:05:57', '2019-05-08 20:05:57', NULL, 'warehouse/view/2'),
-(44, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:05:59', '2019-05-08 20:05:59', NULL, 'warehouse/view/2'),
-(45, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:06:01', '2019-05-08 20:06:01', NULL, 'warehouse/view/2'),
-(46, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:06:07', '2019-05-08 20:06:07', NULL, 'warehouse/view/2'),
-(47, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:06:09', '2019-05-08 20:06:09', NULL, 'warehouse/view/2'),
-(48, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:06:12', '2019-05-08 20:06:12', NULL, 'warehouse/view/2'),
-(49, 1, 2, 'removed user', 'warehouse', 'Removed user from  Warehouse', '2019-05-08 20:06:15', '2019-05-08 20:06:15', NULL, 'warehouse/view/2'),
-(50, 1, 2, 'Added User', 'warehouse', 'Assigned user to  Warehouse', '2019-05-08 20:06:17', '2019-05-08 20:06:17', NULL, 'warehouse/view/2');
+INSERT INTO `user_activity` (`id`, `user_id`, `model_id`, `method`, `model_name`, `name`, `detail`, `updated_at`, `created_at`, `warehouse_id`, `rout`) VALUES
+(1, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-04 12:55:42', '2019-05-04 12:55:42', NULL, 'warehouse/view/2'),
+(2, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-04 12:56:40', '2019-05-04 12:56:40', NULL, 'warehouse/view/2'),
+(3, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-04 12:56:42', '2019-05-04 12:56:42', NULL, 'warehouse/view/2'),
+(4, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-04 18:09:20', '2019-05-04 18:09:20', NULL, 'warehouse/view/2'),
+(5, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 19:18:32', '2019-05-05 19:18:32', NULL, 'warehouse/view/2'),
+(6, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 19:18:48', '2019-05-05 19:18:48', NULL, 'warehouse/view/2'),
+(7, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 19:19:42', '2019-05-05 19:19:42', NULL, 'warehouse/view/2'),
+(8, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:34:38', '2019-05-05 20:34:38', NULL, 'warehouse/view/2'),
+(9, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:34:42', '2019-05-05 20:34:42', NULL, 'warehouse/view/2'),
+(10, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:34:52', '2019-05-05 20:34:52', NULL, 'warehouse/view/2'),
+(11, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:37:34', '2019-05-05 20:37:34', NULL, 'warehouse/view/2'),
+(12, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:37:51', '2019-05-05 20:37:51', NULL, 'warehouse/view/2'),
+(13, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:37:57', '2019-05-05 20:37:57', NULL, 'warehouse/view/2'),
+(14, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:38:01', '2019-05-05 20:38:01', NULL, 'warehouse/view/2'),
+(15, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:38:11', '2019-05-05 20:38:11', NULL, 'warehouse/view/2'),
+(16, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:38:16', '2019-05-05 20:38:16', NULL, 'warehouse/view/2'),
+(17, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:38:19', '2019-05-05 20:38:19', NULL, 'warehouse/view/2'),
+(18, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:40:08', '2019-05-05 20:40:08', NULL, 'warehouse/view/2'),
+(19, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:40:15', '2019-05-05 20:40:15', NULL, 'warehouse/view/2'),
+(20, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:40:29', '2019-05-05 20:40:29', NULL, 'warehouse/view/2'),
+(21, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 20:41:35', '2019-05-05 20:41:35', NULL, 'warehouse/view/2'),
+(22, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 20:41:53', '2019-05-05 20:41:53', NULL, 'warehouse/view/2'),
+(23, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:29:35', '2019-05-05 21:29:35', NULL, 'warehouse/view/2'),
+(24, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 21:29:42', '2019-05-05 21:29:42', NULL, 'warehouse/view/2'),
+(25, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:30:24', '2019-05-05 21:30:24', NULL, 'warehouse/view/2'),
+(26, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 21:30:55', '2019-05-05 21:30:55', NULL, 'warehouse/view/2'),
+(27, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:31:48', '2019-05-05 21:31:48', NULL, 'warehouse/view/2'),
+(28, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 21:33:28', '2019-05-05 21:33:28', NULL, 'warehouse/view/2'),
+(29, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:34:11', '2019-05-05 21:34:11', NULL, 'warehouse/view/2'),
+(30, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 21:34:13', '2019-05-05 21:34:13', NULL, 'warehouse/view/2'),
+(31, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:34:15', '2019-05-05 21:34:15', NULL, 'warehouse/view/2'),
+(32, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-05 21:34:17', '2019-05-05 21:34:17', NULL, 'warehouse/view/2'),
+(33, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-05 21:34:18', '2019-05-05 21:34:18', NULL, 'warehouse/view/2'),
+(34, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:04:31', '2019-05-08 20:04:31', NULL, 'warehouse/view/2'),
+(35, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:04:40', '2019-05-08 20:04:40', NULL, 'warehouse/view/2'),
+(36, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:04:43', '2019-05-08 20:04:43', NULL, 'warehouse/view/2'),
+(37, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:04:47', '2019-05-08 20:04:47', NULL, 'warehouse/view/2'),
+(38, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:05:08', '2019-05-08 20:05:08', NULL, 'warehouse/view/2'),
+(39, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:05:44', '2019-05-08 20:05:44', NULL, 'warehouse/view/2'),
+(40, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:05:46', '2019-05-08 20:05:46', NULL, 'warehouse/view/2'),
+(41, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:05:49', '2019-05-08 20:05:49', NULL, 'warehouse/view/2'),
+(42, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:05:52', '2019-05-08 20:05:52', NULL, 'warehouse/view/2'),
+(43, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:05:57', '2019-05-08 20:05:57', NULL, 'warehouse/view/2'),
+(44, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:05:59', '2019-05-08 20:05:59', NULL, 'warehouse/view/2'),
+(45, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:06:01', '2019-05-08 20:06:01', NULL, 'warehouse/view/2'),
+(46, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:06:07', '2019-05-08 20:06:07', NULL, 'warehouse/view/2'),
+(47, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:06:09', '2019-05-08 20:06:09', NULL, 'warehouse/view/2'),
+(48, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:06:12', '2019-05-08 20:06:12', NULL, 'warehouse/view/2'),
+(49, 1, 2, 'removed user', 'warehouse', '', 'Removed user from  Warehouse', '2019-05-08 20:06:15', '2019-05-08 20:06:15', NULL, 'warehouse/view/2'),
+(50, 1, 2, 'Added User', 'warehouse', '', 'Assigned user to  Warehouse', '2019-05-08 20:06:17', '2019-05-08 20:06:17', NULL, 'warehouse/view/2'),
+(51, 1, 3, 'Status Upated', 'spares', '', 'Spare part status updated', '2019-05-14 22:36:49', '2019-05-14 22:36:49', NULL, 'inventory/3'),
+(52, 1, 3, 'Status Upated', 'spares', '', 'Spare part status updated', '2019-05-14 22:36:51', '2019-05-14 22:36:51', NULL, 'inventory/3'),
+(53, 1, 3, 'Status Upated', 'spares', '', 'Spare part status updated', '2019-05-14 22:57:15', '2019-05-14 22:57:15', NULL, 'inventory/3'),
+(54, 1, 3, 'Status Upated', 'spares', '', 'Spare part status updated', '2019-05-14 22:57:18', '2019-05-14 22:57:18', NULL, 'inventory/3'),
+(55, 1, 0, 'Logged in', 'User', 'admin', 'User logged in', '2019-05-15 20:18:56', '2019-05-15 20:18:56', 0, 'users/1'),
+(56, 1, 1, 'Status Upated', 'spares', '', 'Spare part status updated', '2019-05-15 23:21:15', '2019-05-15 23:21:15', NULL, 'inventory/1');
 
 -- --------------------------------------------------------
 
@@ -414,37 +360,26 @@ INSERT INTO `warehouse` (`id`, `name`, `descrption`, `warehouse_type_id`, `statu
 -- --------------------------------------------------------
 
 --
--- Table structure for table `warehouse_item`
+-- Table structure for table `warehouse_inventory`
 --
 
-CREATE TABLE `warehouse_item` (
+CREATE TABLE `warehouse_inventory` (
   `id` int(11) NOT NULL,
   `inventory_id` int(11) NOT NULL,
-  `item_id` varchar(100) NOT NULL,
-  `checkin_date` date NOT NULL,
-  `checkin_by` int(11) NOT NULL,
-  `checkin_amount` double NOT NULL,
-  `checkout_date` date NOT NULL,
-  `checkout_by` int(11) NOT NULL,
-  `checkout_amount` double NOT NULL,
   `warehouse_id` int(11) NOT NULL,
-  `send_date` date NOT NULL,
-  `send_amount` double NOT NULL,
-  `send_by` int(11) NOT NULL,
-  `parcel_id` varchar(100) NOT NULL,
-  `from_warehouse_id` int(11) NOT NULL,
-  `recieve_by` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `min_level` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `warehouse_item`
+-- Dumping data for table `warehouse_inventory`
 --
 
-INSERT INTO `warehouse_item` (`id`, `inventory_id`, `item_id`, `checkin_date`, `checkin_by`, `checkin_amount`, `checkout_date`, `checkout_by`, `checkout_amount`, `warehouse_id`, `send_date`, `send_amount`, `send_by`, `parcel_id`, `from_warehouse_id`, `recieve_by`, `status`, `updated_at`, `created_at`) VALUES
-(2, 2, 'DBI2100P18G75', '2019-05-21', 1, 15, '2019-05-27', 1, 3, 2, '2019-05-31', 233, 16, '', 2, 17, 0, '2019-05-10 06:30:46', '2019-05-10 06:30:46');
+INSERT INTO `warehouse_inventory` (`id`, `inventory_id`, `warehouse_id`, `quantity`, `min_level`, `status`, `updated_at`, `created_at`) VALUES
+(1, 4, 2, 12, 32, 1, '2019-05-15 08:25:19', '2019-05-15 05:21:25');
 
 -- --------------------------------------------------------
 
@@ -475,6 +410,12 @@ INSERT INTO `warehouse_type` (`id`, `name`, `status`, `updated_at`, `created_at`
 -- Indexes for table `inventory`
 --
 ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `inventory_transfer`
+--
+ALTER TABLE `inventory_transfer`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -526,9 +467,9 @@ ALTER TABLE `warehouse`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `warehouse_item`
+-- Indexes for table `warehouse_inventory`
 --
-ALTER TABLE `warehouse_item`
+ALTER TABLE `warehouse_inventory`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -545,7 +486,13 @@ ALTER TABLE `warehouse_type`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `inventory_transfer`
+--
+ALTER TABLE `inventory_transfer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `inventory_type`
@@ -575,7 +522,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_activity`
 --
 ALTER TABLE `user_activity`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `user_permissions`
@@ -596,10 +543,10 @@ ALTER TABLE `warehouse`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `warehouse_item`
+-- AUTO_INCREMENT for table `warehouse_inventory`
 --
-ALTER TABLE `warehouse_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `warehouse_inventory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `warehouse_type`
