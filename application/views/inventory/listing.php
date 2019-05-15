@@ -29,7 +29,6 @@
                       <th>Item No.</th>
                       <th>Description</th>
                       <th>Type</th>
-                      <th>Amount</th>
                       <th>Quantity</th>
                       <th>Min Level</th>
                       <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
@@ -84,9 +83,6 @@
             },
             {
                 "mData" : "inventory_type"
-            },
-            {
-                "mData" : "amount"
             },
             {
                 "mData" : "quantity"

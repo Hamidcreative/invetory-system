@@ -36,10 +36,11 @@ class Inventory extends MY_Controller {
 		$this->show('inventory/listing');
 	}
 
-	public function listing(){
-		$select_data = ['i.id as ID ,i.item_id, i.description, it.name as inventory_type, i.amount, i.quantity, i.min_level, i.status', false];
+	public function listing($warehouse_id=''){
+		$select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.quantity, wi.min_level, wi.status', false];
 		$joins = [
 			['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
+			['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner'],
 		];
 		$warehouseIds = '';
 		$warehouseId = '';
@@ -50,7 +51,11 @@ class Inventory extends MY_Controller {
         $addColumns = array(
             'actionButtons' => array('<a href="'.base_url().'inventory/$1"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
         );
-        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,'',$warehouseId, $warehouseIds, '', $addColumns);
+        $where = '';
+       	if($warehouse_id != '')
+       		$where = ['wi.warehouse_id' => $warehouse_id];
+       	
+        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,$where,$warehouseId, $warehouseIds, '', $addColumns);
         print $list;
 	}
 
@@ -60,13 +65,15 @@ class Inventory extends MY_Controller {
         print $list;
 	}
 
-	public function edit($inventoryId){
+	public function edit($warehouseInventoryId){
+		$inventoryId = $this->input->post('inventory_id');
+
         if(isEndUser($this->session->userdata('user')->id)) 
             return redirect('inventory');
 
         if(!isAdministrator($this->session->userdata('user')->id)){
 			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
-			$inventory = $this->Common_model->select_fields_where('inventory','warehouse_id',['id'=>$inventoryId], true);
+			$inventory = $this->Common_model->select_fields_where('inventory','warehouse_id',['id'=>$warehouseInventoryId], true);
 			// stop user editing spare part of other ware house
 			if(!in_array($inventory->warehouse_id, $warehouseIds))
 				return redirect('inventory');
@@ -89,24 +96,30 @@ class Inventory extends MY_Controller {
 			else {
 				$data = [
 					'item_id' => $this->input->post('item_id'),
-					'warehouse_id' => $this->input->post('warehouse_id'),
 					'description' => $this->input->post('description'),
-					// 'user_id' => $this->input->post('user_id'),
+					'serial_number' => $this->input->post('serial_number'),
 					'inventory_type_id' => $this->input->post('inventory_type_id'),
-					'min_level' => $this->input->post('min_level'),
 					'updated_at' => date('Y-m-d h:i:s'),
 				];
 				$update = $this->Common_model->update('inventory',['id'=>$inventoryId], $data);
 				if($update){
+					$data = [
+						'warehouse_id' => $this->input->post('warehouse_id'),
+						'min_level' => $this->input->post('min_level'),
+						'quantity' => $this->input->post('amount'),
+						'updated_at' => date('Y-m-d h:i:s'),
+					];
+					// insert into main inventory 
+					$this->Common_model->update('warehouse_inventory',['id'=>$warehouseInventoryId], $data);
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory info updated successfully']);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
-					redirect('inventory/'.$inventoryId);
+					redirect('inventory/'.$warehouseInventoryId);
 				}
 			}
 		} else if($this->input->method() == 'delete') { 
-			$deleted = $this->Common_model->delete('inventory',['id'=>$inventoryId]);
+			$deleted = $this->Common_model->delete('warehouse_inventory',['id'=>$warehouseInventoryId]);
 			if($deleted)
 				echo json_encode(['type'=>'success','message'=>'One item has been deleted successfully']);
 			else 
@@ -114,8 +127,8 @@ class Inventory extends MY_Controller {
 			exit;
 		} else if($this->input->method() == 'patch') {
 			$data = $this->input->input_stream();
-			$updated = $this->Common_model->update('inventory', ['id'=>$inventoryId], $data);
-			$activity = array('model_id' => $inventoryId,'action_on'=>$inventoryId,'method' => 'Status Upated', 'model_name' => 'spares','detail'=> 'Spare part status updated','rout'=>'inventory/'.$inventoryId);
+			$updated = $this->Common_model->update('warehouse_inventory', ['id'=>$warehouseInventoryId], $data);
+			$activity = array('model_id' => $warehouseInventoryId,'method' => 'Status Upated', 'model_name' => 'spares','detail'=> 'Spare part status updated','rout'=>'inventory/'.$warehouseInventoryId);
 			logs($activity);
 			if($updated)
 				echo json_encode(['type'=>'success','message'=>'Item status updated successfully']);
@@ -130,10 +143,17 @@ class Inventory extends MY_Controller {
 		}
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 
+		$joins = [
+			['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+		];
+
+		$inventories = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, i.description, i.serial_number, i.inventory_type_id, wi.*', $joins, ['wi.id'=>$warehouseInventoryId], true );
+
+
 		$data = [
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
-			'inventory' => $this->Common_model->select_fields_where('inventory', '*', ['id'=>$inventoryId],true)
+			'inventory' => $inventories
 		];
 		$this->show('inventory/edit', $data);
 	}
@@ -154,17 +174,26 @@ class Inventory extends MY_Controller {
 			else {
 				$data = [
 					'item_id' => $this->input->post('item_id'),
-					'warehouse_id' => $this->input->post('warehouse_id'),
 					'description' => $this->input->post('description'),
-					'amount' => $this->input->post('amount'),
-					// 'user_id' => $this->input->post('user_id'),
+					'serial_number' => $this->input->post('serial_number'),
 					'inventory_type_id' => $this->input->post('inventory_type_id'),
-					'min_level' => $this->input->post('min_level'),
 					'updated_at' => date('Y-m-d h:i:s'),
 					'created_at' => date('Y-m-d h:i:s'),
 				];
-				$update = $this->Common_model->insert_record('inventory', $data);
-				if($update){
+				// insert into main inventory table
+				$insertedId = $this->Common_model->insert_record('inventory', $data);
+				if($insertedId){
+					// insert into warehouse item
+					$data = [
+						'inventory_id' => $insertedId,
+						'warehouse_id' => $this->input->post('warehouse_id'),
+						'min_level' => $this->input->post('min_level'),
+						'quantity' => $this->input->post('amount'),
+						'updated_at' => date('Y-m-d h:i:s'),
+						'created_at' => date('Y-m-d h:i:s'),
+					];
+					// insert into main inventory table
+					$this->Common_model->insert_record('warehouse_inventory', $data);
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory item added successfully']);
 					redirect('inventory');
 				} else {
@@ -235,7 +264,6 @@ class Inventory extends MY_Controller {
 			$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
 			$data = [
 				'users' => $this->Common_model->select_fields_where('user', '*', ['status'=>1]),
-				'inventories' => $this->Common_model->select_fields_where('inventory', '*', ['status'=>1]),
 				'warehouses' => $warehouses,
 				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1])
 			];

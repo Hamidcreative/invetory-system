@@ -54,7 +54,7 @@
         oTable ="";
         //Initialize Select2 Elements
         var usersTableSelector = $(".inventoryList");
-        var url_DT = "<?=base_url();?>warehouse/<?= $warehouse->id ?>/inventory/listing";
+        var url_DT = "<?=base_url();?>inventory/listing/<?= $warehouse->id ?>";
         var aoColumns_DT = [
             /* User ID */ {
                 "mData": "ID",
@@ -99,13 +99,52 @@
         var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         <?php } ?>
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
-
         //Code for search box
         $(".dataTables_filter input").on("keyup",function (e) {
           e.preventDefault();
             oTable.fnFilter( $(this).val());
         });
-
     });
+  // confirm modal trigger
+  $(document).on('click', '.confirm-modal-trigger', function(e) {
+      $('#confirm-modal').find('input[name="inventory_id"]').val($(this).attr('data-id'));
+      var current_status = $(this).attr('data-status');
+      if(current_status != null){ // status change case
+        if(current_status == 1){
+          current_status = 'Active';
+          new_status = 'Inactive';
+          $('#confirm-modal').find('input[name="new_status"]').val(0);
+        } else {
+          current_status = 'Inactive';
+          new_status = 'Active';
+          $('#confirm-modal').find('input[name="new_status"]').val(1);
+        }
+        $('#confirm-modal').find('input[name="method"]').val('PATCH');
+        $('#confirm-modal').find('.header-content').html('Change User Status');
+        $('#confirm-modal').find('.body-content').html('This will change the item status from '+current_status+' to '+new_status+'. Are you really want to do this ?');
+      } else { // delete case
+          $('#confirm-modal').find('.header-content').html('Delete User');
+        $('#confirm-modal').find('input[name="method"]').val('DELETE');
+          $('#confirm-modal').find('.body-content').html('This will completely remove the item from the system. Are you really want to do this ?');
+      }
+      var Modalelem = document.querySelector('#confirm-modal');
+      var instance = M.Modal.init(Modalelem);
+      instance.open();
+  });
 
+  $(document).on('click', '#confirm-modal .agree', function(e){
+    var inventoryId = $(this).parents('#confirm-modal').find('input[name="inventory_id"]').val();
+    var method = $(this).parents('#confirm-modal').find('input[name="method"]').val();
+    var status = $(this).parents('#confirm-modal').find('input[name="new_status"]').val();
+      $.ajax({
+        url:"<?=base_url('inventory')?>/"+inventoryId,
+        type:method,
+        data:{status:status},
+        success:function(data){
+          data = JSON.parse(data);
+          showToast(data['type'], data['message'], data['type']);
+          oTable.fnDraw();
+        }
+      });
+  })
 </script>

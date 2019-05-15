@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <input name="amount" required type="text" value="<?=$inventory->amount?>">
+                                                <input name="amount" required type="text" value="<?=$inventory->quantity?>">
                                                 <label for="description">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
@@ -89,6 +89,7 @@
                                                 <label for="min_level">Minimum Level</label>
                                             </div>
                                         </div>
+                                        <input type="hidden" name="inventory_id" value="<?=$inventory->inventory_id?>" />
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit

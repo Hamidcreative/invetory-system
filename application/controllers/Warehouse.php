@@ -326,20 +326,7 @@ class Warehouse extends MY_Controller {
             ];
             $this->show('warehousetypes/edit', $data);
         }        
-    }     
-
-    public function inventorylisting($warehouseId) {
-        $select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.send_amount as quantity, i.min_level, wi.status', false];
-        $joins = [
-            ['table'=>'warehouse_item wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner'],
-            ['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
-        ];
-        $addColumns = array(
-            'actionButtons' => array('<a href="'.base_url().'warehouse/'.$warehouseId.'/inventory/$1"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
-        );
-        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,['wi.warehouse_id'=>$warehouseId],'', '', '', $addColumns);
-        print $list;
-    }
+    }  
 
     public function inventory($warehouseId, $warehouseitemId){
         if($this->input->method() == 'post'){
