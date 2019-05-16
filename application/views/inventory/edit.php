@@ -89,6 +89,12 @@
                                                 <label for="min_level">Minimum Level</label>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="input-field col m6 s12">
+                                                <input name="serial_number" required type="text" value="<?=$inventory->serial_number?>">
+                                                <label for="serial_number">Serial Number</label>
+                                            </div>
+                                        </div>
                                         <input type="hidden" name="inventory_id" value="<?=$inventory->inventory_id?>" />
                                         <div class="row">
                                             <div class="input-field col s12">

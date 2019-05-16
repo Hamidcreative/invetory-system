@@ -140,11 +140,11 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn cyan waves-effect waves-light right " type="submit" name="action"> Submit
+                                            <div class="input-field col s12" style="padding:0">
+                                                <button class="btn btn-small cyan waves-effect waves-light right " type="submit" name="action"> Submit
                                                     <i class="material-icons right">send</i>
                                                 </button>
-                                                <button class="btn cyan waves-effect waves-light right mr-2 scan" type="button" data-toggle="modal" data-target="#deletemodal">Scan
+                                                <button class="btn btn-small cyan waves-effect waves-light right mr-2 scan" type="button" data-toggle="modal" data-target="#deletemodal">Scan
                                                     <i class="material-icons right">camera_alt</i>
                                                 </button>
                                             </div>
@@ -160,22 +160,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).on('change','input[name="item_id"]', function(e){
-        var itemId = $(this).val();
-        if(itemId != ''){
-            $.ajax({
-                url:"<?=base_url('inventory/item/')?>"+itemId,
-                success:function(data){
-                    data = JSON.parse(data);
-                    if(data['type'] == 'success')
-                        $('input[name="description"]').val(data['item'].description);
-                    else 
-                        showToast(data['type'], data['message'], data['type']);
-                    M.updateTextFields();
-                }
-            });
-        }
-    })
-</script>

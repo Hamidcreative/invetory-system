@@ -153,37 +153,59 @@ class Inventory extends MY_Controller {
 
 		if($this->input->method() == 'post'){
 
-			array_push($this->inventoryfields, ['field' => 'item_id', 'label' => 'Item No.', 'rules' => 'required|is_unique[inventory.item_id]']);
-
 			$this->form_validation->set_rules($this->inventoryfields);
 
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 			}
 			else {
-				$data = [
-					'item_id' => $this->input->post('item_id'),
-					'description' => $this->input->post('description'),
-					'serial_number' => $this->input->post('serial_number'),
-					'inventory_type_id' => $this->input->post('inventory_type_id'),
-					'updated_at' => date('Y-m-d h:i:s'),
-					'created_at' => date('Y-m-d h:i:s'),
-				];
-				// insert into main inventory table
-				$insertedId = $this->Common_model->insert_record('inventory', $data);
-				if($insertedId){
-					// insert into warehouse item
+				// check item exist already then get its id
+				$itemId = $this->input->post('item_id');
+				$inventory = $this->Common_model->select_fields_where('inventory','id',['item_id'=>$itemId], true);
+				if($inventory)
+					$inventoryId = $inventory->id;
+				else { // else add new inventory
 					$data = [
-						'inventory_id' => $insertedId,
-						'warehouse_id' => $this->input->post('warehouse_id'),
-						'min_level' => $this->input->post('min_level'),
-						'quantity' => $this->input->post('amount'),
+						'item_id' => $itemId,
+						'description' => $this->input->post('description'),
+						'serial_number' => $this->input->post('serial_number'),
+						'inventory_type_id' => $this->input->post('inventory_type_id'),
 						'updated_at' => date('Y-m-d h:i:s'),
 						'created_at' => date('Y-m-d h:i:s'),
 					];
 					// insert into main inventory table
-					$this->Common_model->insert_record('warehouse_inventory', $data);
-					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory item added successfully']);
+					$inventoryId = $this->Common_model->insert_record('inventory', $data);
+				}
+				if($inventoryId){
+					// check if exist alrady then add amount
+					$warehouseId = $this->input->post('warehouse_id');
+					$warehouseInventory = $this->Common_model->select_fields_where('warehouse_inventory','id, quantity',
+						['inventory_id'=>$inventoryId, 'warehouse_id'=>$warehouseId], true);
+
+					if($warehouseInventory){
+						// update item amount
+						$data = [
+							'min_level' => $this->input->post('min_level'),
+							'quantity' => $warehouseInventory->quantity + $this->input->post('amount'),
+							'updated_at' => date('Y-m-d h:i:s'),
+						];
+						$this->Common_model->update('warehouse_inventory',['id'=>$warehouseInventory->id] ,$data);
+						$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory item quantity added successfully']);
+					}
+					else {
+						// insert into warehouse item
+						$data = [
+							'inventory_id' => $inventoryId,
+							'warehouse_id' => $warehouseId,
+							'min_level' => $this->input->post('min_level'),
+							'quantity' => $this->input->post('amount'),
+							'updated_at' => date('Y-m-d h:i:s'),
+							'created_at' => date('Y-m-d h:i:s'),
+						];
+						// insert into main inventory table
+						$this->Common_model->insert_record('warehouse_inventory', $data);
+						$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory item added successfully']);
+					}
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
