@@ -84,7 +84,7 @@ ul#sortList{
     position: relative;
     padding: 2px 0 0 7px;
     margin-bottom: 0;
-    border-radius: 0;
+    border-radius: 0;  
     font-size: 15px;
     border: 1px solid rgba(0,0,0,.1);
     list-style: none;
