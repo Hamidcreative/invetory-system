@@ -139,11 +139,11 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="input-field col s12">
+                                            <div class="input-field col s12" style="padding:0">
                                                 <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit
                                                     <i class="material-icons right">send</i>
                                                 </button>
-                                                <button class="btn cyan waves-effect waves-light right mr-2 scan" type="button" data-toggle="modal" data-target="#deletemodal">Scan
+                                                <button class="btn btn-small cyan waves-effect waves-light right mr-2 scan livestream_scanner_trigger" type="button">Scan
                                                     <i class="material-icons right">camera_alt</i>
                                                 </button>
                                             </div>

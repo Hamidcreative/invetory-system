@@ -332,33 +332,26 @@ class Inventory extends MY_Controller {
 				// check item code exist and get existing amount for that item against that warehouse
 				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
 				[
-					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id and wi.warehouse_id = '.$toWarehouseId, 'type'=>'left']
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
 				],
 				[
 					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $toWarehouseId,
+					'wi.status' => 1,
 				], true);
 
-				// check if not item not exist in that warehouse than insert
-				if($existingItem->warehouseInventoryId != NULL)
-
-					$this->Common_model->update('warehouse_inventory',[
-						'warehouse_id' => $toWarehouseId,
-						'status' => 1,
-						'inventory_id' => $existingItem->id
-					],[
-						'quantity' => $existingItem->quantity + $quantity,
-						'updated_at' => date('Y-m-d h:i:s'),
-					]);
-				else { // insert item
-					$existingItem->warehouseInventoryId = $this->Common_model->insert_record('warehouse_inventory',[
-						'warehouse_id' => $toWarehouseId,
-						'status' => 1,
-						'inventory_id' => $existingItem->id,
-						'quantity' => $quantity,
-						'updated_at' => date('Y-m-d h:i:s'),
-						'created_at' => date('Y-m-d h:i:s'),
-					]);
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/recieve_from_warehouse');
 				}
+
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $toWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity + $quantity
+				]);
 				
 				$data = [
 					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
@@ -493,32 +486,27 @@ class Inventory extends MY_Controller {
 				// check item code exist and get existing amount for that item against that warehouse
 				$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.id, wi.quantity, wi.id as warehouseInventoryId',
 				[
-					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id and wi.warehouse_id = '.$toWarehouseId, 'type'=>'left']
+					['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
 				],
 				[
 					'i.item_id' => $itemId,
+					'wi.warehouse_id' => $toWarehouseId,
+					'wi.status' => 1,
 				], true);
 
-				if($existingItem->warehouseInventoryId !=NULL)
-					$this->Common_model->update('warehouse_inventory',[
-						'warehouse_id' => $toWarehouseId,
-						'status' => 1,
-						'inventory_id' => $existingItem->id
-					],[
-						'quantity' => $existingItem->quantity + $quantity,
-						'updated_at' => date('Y-m-d h:i:s')
-					]);
-				else { // insert item
-					$existingItem->warehouseInventoryId = $this->Common_model->insert_record('warehouse_inventory',[
-						'warehouse_id' => $toWarehouseId,
-						'status' => 1,
-						'inventory_id' => $existingItem->id,
-						'quantity' => $quantity,
-						'updated_at' => date('Y-m-d h:i:s'),
-						'created_at' => date('Y-m-d h:i:s'),
-					]);
+				if(!$existingItem) {
+					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
+					redirect('inventory/recieve_from_technician');
 				}
 
+				$this->Common_model->update('warehouse_inventory',[
+					'warehouse_id' => $toWarehouseId,
+					'status' => 1,
+					'inventory_id' => $existingItem->id
+				],[
+					'quantity' => $existingItem->quantity + $quantity
+				]);
+				
 				$data = [
 					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
 					'from_user_id' => $this->input->post('technician_id'),
@@ -553,7 +541,8 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-	public function minlevel() {
+	public function minlevel()
+	{
         if(isAdministrator($this->session->userdata('user')->id)) 
 			$this->show('inventory/minlevelstock_listing');
 	}
@@ -563,30 +552,20 @@ class Inventory extends MY_Controller {
             return redirect('inventory');
 
 		if($this->input->method() == 'post'){
-			$repeatingItem = [];
 			$itemTypeId = $this->input->post('inventory_type_id');
-			$warehouseId = $this->input->post('warehouse_id');
 			$file = $_FILES['excel_file']['tmp_name'];
 			$handle = fopen($file, "r");
 		    if ($file == NULL)
 		    	$message = json_encode(['type' => 'error', 'message' => 'Input File is not Valid']);
 		    else {
 		    	try{
-			    	$whItemDataToInsert = $whItemDateToUpdate = $inventorydataToInsert = $inventorydataToUpdate = [];
-
-			    	$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, wi.quantity, wi.id, i.id as inventory_id', [
-			    		['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id and wi.warehouse_id = '.$warehouseId, 'type'=>'left']
-			    	]);
+			    	$dataToInsert = [];
+			    	$dataToUpdate = [];
+			    	$existingItem = $this->Common_model->select_fields('inventory', 'item_id, quantity');
 
 			    	$existingItemIds = [];
-			    	if(is_array($existingItem)) {
-				    	foreach ($existingItem as $key => $value) {
-				    		$existingItemIds[strval($value->item_id)] = [
-				    			'quantity'=>$value->quantity,
-				    			'whInventoryId'=>$value->id,
-				    			'inventoryId'=>$value->inventory_id,
-				    		];
-				    	}
+			    	foreach ($existingItem as $key => $value) {
+			    		$existingItemIds[strval($value->item_id)] = $value->quantity;
 			    	}
 
 	            	$this->load->library('excel');
@@ -596,113 +575,35 @@ class Inventory extends MY_Controller {
 					    $highestColumn = $worksheet->getHighestColumn();
 					    for($row=2; $row<=$highestRow; $row++) {
 					    	$itemId = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-
+					    	$itemType = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
 					    	// item id is unique in our system , check if exist already than do plus One in the item quantity
 					    	if(array_key_exists(strval($itemId), $existingItemIds)){
-
-					    		array_push($inventorydataToUpdate, [
+					    		$existingItemIds[strval($itemId)] += 1;
+					    		array_push($dataToUpdate, [
 					    			'item_id' => $itemId,
 					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
 					    			'inventory_type_id' => $itemTypeId,
-					    			'serial_number' => $worksheet->getCellByColumnAndRow(2, $row)->getValue(),
-					    			'updated_at' => date('Y-m-d h:i:s'),
+					    			'quantity' => $existingItemIds[strval($itemId)],
 					    		]);
-
-					    		$whInventoryId = $existingItemIds[strval($itemId)]['whInventoryId'];
-					    		if($whInventoryId != NULL) {
-					    			$existingItemIds[strval($itemId)]['quantity'] += 1;
-						    		array_push($whItemDateToUpdate, [
-						    			'id' => $whInventoryId,
-						    			'quantity' =>$existingItemIds[strval($itemId)]['quantity'],
-						    			'updated_at' => date('Y-m-d h:i:s'),
-						    		]);
-					    		} else {
-						    		array_push($whItemDataToInsert, [
-						    			'inventory_id' => $existingItemIds[strval($itemId)]['inventoryId'],
-						    			'quantity' => 1,
-						    			'updated_at' => date('Y-m-d h:i:s'),
-					    				'min_level' => 1,
-					    				'warehouse_id' => $warehouseId,
-						    			'updated_at' => date('Y-m-d h:i:s'),
-						    			'created_at' => date('Y-m-d h:i:s'),
-						    		]);
-
-					    		}
 					    	}
-					    	else {
-
-						    	if(array_key_exists(strval($itemId), $repeatingItem)) 
-						    		$repeatingItem[strval($itemId)] += 1;
-						    	else {
-						    		array_push($inventorydataToInsert, [
-						    			'item_id' => $itemId,
-						    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
-						    			'inventory_type_id' => $itemTypeId,
-						    			'serial_number' => $worksheet->getCellByColumnAndRow(2, $row)->getValue(),
-						    			'updated_at' => date('Y-m-d h:i:s'),
-						    			'created_at' => date('Y-m-d h:i:s'),
-						    		]);
-						    		
-						    		array_push($whItemDataToInsert, [
-						    			'item_id' => $itemId,
-						    			'quantity' => 1,
-					    				'min_level' => 1,
-					    				'warehouse_id' => $warehouseId,
-						    			'updated_at' => date('Y-m-d h:i:s'),
-						    			'created_at' => date('Y-m-d h:i:s'),
-						    		]);
-						    		$repeatingItem[strval($itemId)] = 1;
-						    	}
-					    	}
+					    	else 
+					    		array_push($dataToInsert, [
+					    			'item_id' => $itemId,
+					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
+					    			'inventory_type_id' => $itemTypeId,
+					    			'min_level' => 1,
+					    			'quantity' => 1,
+					    			'warehouse_id' => 1,
+					    			'status' => 1,
+					    		]);
 
 					    }
 					}
-					
-					// insert new inventory items in bulk
-					if(!empty($inventorydataToInsert)){
-						$this->Common_model->insert_multiple('inventory', $inventorydataToInsert);
 
-						$newItemIds = array_column($inventorydataToInsert, 'item_id');
-						
-						$newItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>$newItemIds]);
-
-						foreach($newItems as $item) {
-							foreach ($whItemDataToInsert as $key => $value) {
-								if(isset($value['item_id'])){
-									if($item->item_id == $value['item_id']){
-										$whItemDataToInsert[$key]['inventory_id'] = $item->id;
-										unset($whItemDataToInsert[$key]['item_id']);
-									}
-								}
-							}
-						}
-					}
-					// insert new inventory warehouse items in bulk
-					if(!empty($whItemDataToInsert))
-						$this->Common_model->insert_multiple('warehouse_inventory', $whItemDataToInsert);
-
-					// udpate existing inventory items in bulk
-					if(!empty($inventorydataToUpdate))
-						$this->Common_model->update_multiple('inventory', $inventorydataToUpdate, 'item_id');
-
-					// insert repeating items in bulk 
-					if(!empty($repeatingItem)){
-						foreach ($repeatingItem as $key => $value) {
-							if($value == 1)
-								unset($repeatingItem[$key]);
-						}
-						$repeatingItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
-						foreach($repeatingItems as $item) {
-							array_push($whItemDateToUpdate, [
-				    			'id' => $item->id,
-				    			'quantity' =>$repeatingItem[$item->item_id],
-						    	'updated_at' => date('Y-m-d h:i:s'),
-				    		]);
-						}
-					}
-					// update existing warehouse inventory items in bulk
-					if(!empty($whItemDateToUpdate))
-						$this->Common_model->update_multiple('warehouse_inventory', $whItemDateToUpdate, 'id');
+					if(!empty($dataToInsert))
+						$this->Common_model->insert_multiple('inventory', $dataToInsert);
+					if(!empty($dataToUpdate))
+						$this->Common_model->update_multiple('inventory', $dataToUpdate, 'item_id');
 			      
 			      	$message = json_encode(['type' => 'success', 'message' => 'File has been imported successfully']);
 
@@ -714,7 +615,6 @@ class Inventory extends MY_Controller {
 		} else {
 			$data = [
 				'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
-				'warehouses' => $this->Common_model->select_fields_where('warehouse', '*', ['status'=>1]),
 			];
 			$this->show('inventory/import', $data);
 		}
@@ -724,8 +624,7 @@ class Inventory extends MY_Controller {
 		$this->load->view('barcode/index');
 	}
 
-	public function item() {
-		$itemId = $this->input->post('itemId');
+	public function item($itemId) {
 		$item = $this->Common_model->select_fields_where('inventory', '*', ['item_id'=>$itemId], true);
 		if($item)
 			echo json_encode(['item'=>$item, 'type'=>'success']);

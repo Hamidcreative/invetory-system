@@ -17,6 +17,23 @@
     </div>
 </footer>
 
+<div class="modal" id="livestream_scanner">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Barcode Scanner</h6>
+            </div>
+            <div class="modal-body" style="position: static">
+                <div id="interactive" class="viewport"></div>
+                <div class="error"></div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-red btn-flat">Close</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
 <script>
 	TOKEN_VAL = '<?=$csrf['hash'];?>';
 	TOKEN_NAME = '<?=$csrf['name'];?>';
@@ -49,7 +66,7 @@
 <!-- BEGIN PAGE LEVEL JS-->
 <script src="<?=base_url()?>assets/js/scripts/data-tables.js" type="text/javascript"></script>
 
-
+<script type="text/javascript" src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
 <!-- END PAGE LEVEL JS-->
   <script>
     <?php if($this->session->flashdata('alert')){ ?>
@@ -60,9 +77,12 @@
 
     $(document).on('change','input[name="item_id"]', function(e){
         var itemId = $(this).val();
+        console.log(itemId);
         if(itemId != ''){
             $.ajax({
-                url:"<?=base_url('inventory/item/')?>"+itemId,
+                url:"<?=base_url('inventory/item/')?>",
+                data:{itemId:itemId},
+                type:'POST',
                 success:function(data){
                     data = JSON.parse(data);
                     if(data['type'] == 'success')
@@ -76,6 +96,7 @@
     })
     
     $(function() {
+        var instance;
         // Create the QuaggaJS config object for the live stream
         var liveStreamConfig = {
             inputStream: {
@@ -111,18 +132,26 @@
             }
         );
         // Start the live stream scanner when the modal opens
-        $('#livestream_scanner').on('shown.bs.modal', function (e) {
-            Quagga.init(
-                liveStreamConfig,
-                function(err) {
-                    if (err) {
-                        console.log(err);
-                        $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger"><strong><i class="fa fa-exclamation-triangle"></i> '+err.name+'</strong>: '+err.message+'</div>');
-                        Quagga.stop();
-                        return;
-                    }
-                    Quagga.start();
+        $(document).on('click','.livestream_scanner_trigger', function(e){
+            var Modalelem = document.querySelector('#livestream_scanner');
+            instance = M.Modal.init(Modalelem, {
+                'onCloseStart': function(){
+                     if (Quagga)
+                        Quagga.stop(); 
                 }
+            });
+            instance.open();
+            Quagga.init(
+            liveStreamConfig,
+            function(err) {
+            if (err) {
+            console.log(err);
+            $('#livestream_scanner .modal-body .error').html('<div class="alert alert-danger"><strong><i class="fa fa-exclamation-triangle"></i> '+err.name+'</strong>: '+err.message+'</div>');
+            Quagga.stop();
+            return;
+            }
+            Quagga.start();
+            }
             );
         });
 
@@ -157,16 +186,11 @@
         // the barcode had actually been found.
         Quagga.onDetected(function(result) {
             if (result.codeResult.code){
-                $('#scanner_input').val(result.codeResult.code);
+                $('input[name="item_id"]').val(result.codeResult.code);
                 Quagga.stop();
-                setTimeout(function(){ $('#livestream_scanner').modal('hide'); }, 1000);
-            }
-        });
-
-        // Stop quagga in any case, when the modal is closed
-        $('#livestream_scanner').on('hide.bs.modal', function(){
-            if (Quagga){
-                Quagga.stop();
+                setTimeout(function(){ instance.close(); }, 1000);
+                M.updateTextFields();
+                $('input[name="item_id"]').trigger('change');
             }
         });
 
