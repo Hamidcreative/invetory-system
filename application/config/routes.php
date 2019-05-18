@@ -99,6 +99,7 @@ $route['inventory/barcode'] = 'inventory/barcode';
 // Dashboas
 
 $route['dashboard/activity_listing/(:any)'] = 'Dashboard/activity_listing/$1'; // activity listing
+$route['dashboard/spares_listing/(:any)'] = 'Dashboard/spares_listing/$1'; // activity listing
 
 
 // reports

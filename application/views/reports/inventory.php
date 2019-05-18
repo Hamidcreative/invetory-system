@@ -6,13 +6,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <h5 class="breadcrumbs-title mt-0 mb-0">Activity logs Report</h5>
+                        <h5 class="breadcrumbs-title mt-0 mb-0">Spare logs Report</h5>
                     </div>
                     <div class="col s12 m6 l6 right-align-md">
                         <ol class="breadcrumbs mb-0">
                             <li class="breadcrumb-item"><a href="<?= base_url()?>">Home</a></li>
                             <li class="breadcrumb-item"><a href="#">Activity logs</a></li>
-
                         </ol>
                     </div>
                 </div>
@@ -25,8 +24,6 @@
                         <div class="col s12 m12 l12">
                             <div id="revenue-chart" class="card animate fadeUp">
                                 <div class="card-content">
-
-
                                     <div class="row">
                                         <div class="col s12 m12 l12">
                                             <div id="swipeable-tabs" class="card card card-default scrollspy">
@@ -34,31 +31,30 @@
                                                     <div class="row">
                                                         <div class="col s12">
                                                             <ul class="tabs">
-                                                                <li class="tab col m3"><a class="active" href="#test2">Bulk ReportS</a></li>
+                                                                <li class="tab col m3 bulkreports"><a class="active" href="#test2">Bulk Reports</a></li>
                                                                 <li class="tab col m3"><a href="#test4">Report by Warehouse </a></li>
                                                             </ul>
                                                         </div>
-
                                                         <div id="test2" class="col s12"><!--Test 2--></div>
                                                         <div id="test4" class="col s12">
                                                             <div class="row">
                                                                 <div class="input-field col m6 s12">
                                                                     <select name="warehouse" required>
-                                                                        <?php foreach($warehouse as $key => $wh) { ?>
-                                                                            <option value="<?=$wh->id?>"><?=$wh->name?></option>
-                                                                        <?php } ?>
+                                                                        <option value="">Select Warehouse</option>
+                                                                        <?php if($warehouse){
+                                                                            foreach($warehouse as $key => $wh) { ?>
+                                                                                <option value="<?=$wh->id?>"><?=$wh->name?></option>
+                                                                            <?php }} ?>
                                                                     </select>
                                                                     <label>Select Warehouse</label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col s12">
                                             <table id="warehousetypes" class="display warehousetypes">
@@ -66,11 +62,9 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th>User Name</th>
-                                                    <th>For User</th>
+                                                    <th> Item id </th>
                                                     <th>Modal</th>
-                                                    <th>Modal id</th>
                                                     <th>Activity</th>
-                                                    <!--                                       <th>Effected</th> <!--     Modal ID -->
                                                     <th>Date</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -89,12 +83,8 @@
         </div>
     </div>
 </div>
-
-
 <script>
     $(function () {
-
-
         oTable = "";
         var regTableSelector = $("#warehousetypes");
         var url_DT = "<?=base_url();?>dashboard/spares_listing/listing";
@@ -114,9 +104,7 @@
             {
                 "mData": "Modal"
             },
-            {
-                "mData": "Modalid"
-            },
+
             {
                 "mData": "Activity"
             },
@@ -134,23 +122,46 @@
                 },
             }
         ];
-
-        var buttonss = ['csv', 'excel',  'print'];
         var HiddenColumnID_DT = "ID";
         var sortBy = {
             'ColumnID' : 0,
             'SortType' : 'desc'
         };
-        var sDom_DT = '<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
+        var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         commonDataTables(regTableSelector, url_DT, aoColumns_DT, sDom_DT, HiddenColumnID_DT,RowCallBack=null,DrawCallBack=null,filters=null,sortBy );
 
-
-
-
-
-
-
-
+        $('select[name="warehouse"]').change(function(e) {
+            e.preventDefault();
+            var id = $(this).val();
+            var oSettings = regTableSelector.dataTable().fnSettings();
+            var oSettingsTemp = oSettings;
+            if(oSettings != null) {
+                oSettings.aoServerParams.splice("fn",1);
+                oSettings.aoServerParams.push({"fn": function (aoData) {
+                    aoData.push({
+                        "name": "whID",
+                        "value": id
+                    });
+                }});
+                regTableSelector.dataTable().fnDraw();
+                oSettings = oSettingsTemp
+            }
+        });//End of on Change Function.
+        $(document).on('click','.bulkreports',function(){
+            var oSettings = regTableSelector.dataTable().fnSettings();
+            var oSettingsTemp = oSettings;
+            if(oSettings != null) {
+                oSettings.aoServerParams.splice("fn",1);
+                oSettings.aoServerParams.push({"fn": function (aoData) {
+                    aoData.push({
+                        "name": "whID",
+                        "value": ''
+                    });
+                }});
+                regTableSelector.dataTable().fnDraw();
+                oSettings = oSettingsTemp
+            }
+        });
         $(document).on('click','.deletemodal',function(e){
             $('#deletemodal').modal('open');
             var id = $(this).parents("tr").attr("data-id");
@@ -172,28 +183,5 @@
                 }
             });
         });
-//        $('select[name="warehouse"]').change(function(e) {
-//            e.preventDefault();
-//
-//            var whID = $(this).val();
-//            console.log(whID);
-//            var postData = {
-//                'id': whID,"<?//=$csrf['name']?>//":"<?//=$csrf['hash']?>//",
-//            };
-//            $.ajax({
-//                url:"<?//=base_url();?>//dashboard/activity_listing/filter",
-//                data: postData,
-//                type:"POST",
-//                success: function (data) {
-//                    data = JSON.parse(data);
-//                    showToast('success', 'Record Filter successfully', 'success');
-//                    //oTable.fnDraw();
-//                }
-//            });
-//        });
     });
-
-
-
-
 </script>
