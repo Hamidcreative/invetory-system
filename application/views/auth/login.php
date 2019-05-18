@@ -86,10 +86,9 @@
     <?php if($this->session->flashdata('alert')){ ?>
       var type = '<?=$this->session->flashdata('alert')['type']?>';
       var message = "<?=$this->session->flashdata('alert')['message']?>";
-      console.log(message);
       showToast('Failed', message, type);
     <?php } ?>
     </script>
-    ?>
+   
   </body>
 </html>

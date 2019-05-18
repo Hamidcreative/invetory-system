@@ -62,7 +62,7 @@ if(!function_exists('getEmailConfig')) {
 		$config['newline']   = "rn";
 		$config['wordwrap']  = TRUE;
 		$config['isLive']    = TRUE;
-		$config['smtp_user'] = "hamid.creative@3gns.com";
+		$config['smtp_user'] = "hamid.creativetech@inventory.3gns.com";
 		$config['smtp_pass'] = "Creative84";
 		return $config;
 	}
@@ -74,9 +74,8 @@ if(!function_exists('sendEmail')) {
 		$ci = & get_instance();
 		$ci->load->library('email');
 
-		$siteEmail  =  'mudasirhamidraza@gmail.com';
+		$siteEmail  =  'hamid.creativetech@inventory.3gns.com';
 		$config     = getEmailConfig();
-		//if($config['isLive'] == TRUE && $_SERVER['HTTP_HOST'] != 'localhost'){
 		if($config['isLive'] == TRUE ){
 			$ci->email->initialize($config);
 			$ci->email->from($siteEmail, 'From: Inventory management System');
@@ -99,7 +98,6 @@ if(!function_exists('update_user_pasword')) {
 		$result = $ci->Common_model->select_fields_where('user', 'email,username', ['email' => $email], true);
 		if ($result) {
 			$ci->Common_model->update('user', ['email' => $result->email], ['password' => md5($password)]);
-
 			return $result->username;
 		} else {
 			return false;

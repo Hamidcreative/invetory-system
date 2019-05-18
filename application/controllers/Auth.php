@@ -68,7 +68,6 @@ class Auth extends CI_Controller {
 						$subject = "Reset Password Inventory Management";
 						$message = 'Inventory management System'.'<br><br>';
 						$message .= "Hi: "."           ". $username ."<br><br>";
-
 						$message .= "Your User Name: "."           ". $username ."<br>";
 						$message .= "Your Password: "."            ". $password.'<br><br>';
 						$message .= "<a href='".base_url()."login'>Click Here To Login</a><br>";

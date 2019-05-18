@@ -22,7 +22,7 @@
                       <th>Id</th>
                       <th>Item No.</th>
                       <th>Description</th>
-                      <th>Amount</th>
+                      <th>Warehouse</th>
                       <th>Quantity</th>
                       <th>Min Level</th>
                     </tr>
@@ -65,9 +65,9 @@
                 "mRender": function(data, type, row){
                   return '<a href="<?=base_url()?>/inventory/'+row.ID+'">'+data+'</a>';
                 }
-            },
+            },           
             {
-                "mData" : "amount"
+                "mData" : "WHname"
             },
             {
                 "mData" : "quantity"

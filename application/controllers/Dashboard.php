@@ -35,7 +35,6 @@ class Dashboard extends MY_Controller {
 			$where = '';
 			if(!empty($this->input->post('whID'))){
 				$where = array(
-					"model_name" => 'Warehouse',
 					"warehouse_id"  => $this->input->post('whID')
 				);
 			}

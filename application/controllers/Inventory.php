@@ -49,9 +49,23 @@ class Inventory extends MY_Controller {
 	}
 
 	public function minlevellisting(){
-		$select_data = ['id as ID ,item_id, description, amount, quantity, min_level', false];
-        $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory');
-        print $list;
+		$select_data = ['WHI.id as ID ,i.item_id, i.description,WH.name as WHname, WHI.quantity, WHI.min_level', false];
+		$where = '';
+		$joins = array(
+			array(
+				'table'     => 'warehouse_inventory WHI',
+				'condition' => 'WHI.inventory_id = i.id',
+				'type'      => 'Right'
+			),array(
+				'table'     => 'warehouse WH',
+				'condition' => 'WH.id = WHI.warehouse_id',
+				'type'      => 'Right'
+			)
+		);
+		$where = 'WHI.min_level = WHI.quantity';
+		$returnedData = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,$where,'','','','');
+		print_r($returnedData);
+		return NULL;
 	}
 
 	public function edit($warehouseInventoryId){
@@ -308,6 +322,10 @@ class Inventory extends MY_Controller {
 				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
 				if($insertedId){
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part send to warehouse successfully']);
+					$fromWH = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$fromWarehouseId], true);
+					$toWH   = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$this->input->post('to_warehouse_id')], true);
+					$activity = array('warehouse_id' =>$fromWarehouseId,'model_id' => $fromWarehouseId,'method' => ''.$quantity.' Spare part sent from Warehouse'.$fromWH->name.' to '.$toWH->name.'', 'model_name' => 'Spare','name'=> $itemId,'detail'=> 'Spare part sent to warehouse','rout'=>'inventory/'.$existingItem->warehouseInventoryId);
+					logs($activity);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
@@ -391,6 +409,10 @@ class Inventory extends MY_Controller {
 				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
 				if($insertedId){
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part received from warehouse successfully']);
+					$fromWH = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$this->input->post('from_warehouse_id')], true);
+					$toWH   = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$toWarehouseId], true);
+					$activity = array('warehouse_id' =>$toWarehouseId,'model_id' => $toWarehouseId,'method' => ''.$quantity.' Spare part received from Warehouse'.$fromWH->name.' to '.$toWH->name.'', 'model_name' => 'Spare','name'=> $itemId,'detail'=> 'Spare part sent to warehouse','rout'=>'inventory/'.$existingItem->warehouseInventoryId);
+					logs($activity);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
@@ -470,6 +492,10 @@ class Inventory extends MY_Controller {
 				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
 				if($insertedId){
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part send to technician successfully']);
+					$fromWH = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$fromWarehouseId], true);
+					$technician   = $this->Common_model->select_fields_where('user','username', ['id'=>$this->input->post('technician_id')], true);
+					$activity = array('warehouse_id' =>$fromWarehouseId,'model_id' => $fromWarehouseId,'method' => ''.$quantity.' Spare part issued by '.$fromWH->name. ' to Technician '.$technician->username.'', 'model_name' => 'Spare','name'=> $itemId,'detail'=> 'Spare part sent to warehouse','rout'=>'inventory/'.$existingItem->warehouseInventoryId);
+                    logs($activity);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
@@ -549,6 +575,10 @@ class Inventory extends MY_Controller {
 				$insertedId = $this->Common_model->insert_record('inventory_transfer', $data);
 				if($insertedId){
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Spare part receive from technician successfully']);
+					$fromWH = $this->Common_model->select_fields_where('warehouse','name', ['id'=>$toWarehouseId], true);
+					$technician   = $this->Common_model->select_fields_where('user','username', ['id'=>$this->input->post('technician_id')], true);
+					$activity = array('warehouse_id' =>$toWarehouseId,'model_id' => $toWarehouseId,'method' => ''.$quantity.' Spare part received from Technician '.$technician->username.' to '.$fromWH->name.'', 'model_name' => 'Spare','name'=> $itemId,'detail'=> 'Spare part sent to warehouse','rout'=>'inventory/'.$existingItem->warehouseInventoryId);
+					logs($activity);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error adding']);
