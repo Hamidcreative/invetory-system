@@ -92,8 +92,9 @@ class Inventory extends MY_Controller {
 				];
 				$update = $this->Common_model->update('inventory',['id'=>$inventoryId], $data);
 				if($update){
+					$whID = $this->input->post('warehouse_id');
 					$data = [
-						'warehouse_id' => $this->input->post('warehouse_id'),
+						'warehouse_id' => $whID,
 						'min_level' => $this->input->post('min_level'),
 						'quantity' => $this->input->post('amount'),
 						'updated_at' => date('Y-m-d h:i:s'),
@@ -101,31 +102,45 @@ class Inventory extends MY_Controller {
 					// insert into main inventory 
 					$this->Common_model->update('warehouse_inventory',['id'=>$warehouseInventoryId], $data);
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory info updated successfully']);
+					$activity = array('warehouse_id' =>$whID,'model_id' => $whID,'method' => 'Updated', 'model_name' => 'Spare','name'=> $this->input->post('item_id'),'detail'=> 'Updated Spare Part','rout'=>'inventory/'.$warehouseInventoryId);
+					logs($activity);
 					redirect('inventory');
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
 					redirect('inventory/'.$warehouseInventoryId);
 				}
 			}
-		} else if($this->input->method() == 'delete') { 
+		} else if($this->input->method() == 'delete') {
+			$joins = [
+				['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+			];
+			$inventory = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, wi.warehouse_id', $joins, ['wi.id'=>$warehouseInventoryId], true );
 			$deleted = $this->Common_model->delete('warehouse_inventory',['id'=>$warehouseInventoryId]);
-			if($deleted)
+			if($deleted){
 				echo json_encode(['type'=>'success','message'=>'One item has been deleted successfully']);
-			else 
+				$activity = array('warehouse_id' =>$inventory->warehouse_id,'model_id' => $inventory->warehouse_id,'method' => 'Deleted', 'model_name' => 'Spare','name'=> $inventory->item_id,'detail'=> 'Spare Part Deleted','rout'=>'');
+				logs($activity);
+			}
+			else{
 				echo json_encode(['type'=>'error','message'=>'Item not deleted']);
+			}
 			exit;
 		} else if($this->input->method() == 'patch') {
 			$data = $this->input->input_stream();
+			$joins = [
+				['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
+			];
+			$inventory = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, wi.warehouse_id', $joins, ['wi.id'=>$warehouseInventoryId], true );
 			$updated = $this->Common_model->update('warehouse_inventory', ['id'=>$warehouseInventoryId], $data);
-			$activity = array('model_id' => $warehouseInventoryId,'method' => 'Status Upated', 'model_name' => 'spares','detail'=> 'Spare part status updated','rout'=>'inventory/'.$warehouseInventoryId);
-			logs($activity);
-			if($updated)
+			if($updated){
 				echo json_encode(['type'=>'success','message'=>'Item status updated successfully']);
+				$activity = array('warehouse_id' =>$inventory->warehouse_id,'model_id' => $inventory->warehouse_id,'method' => 'Status Updated', 'model_name' => 'Spare','name'=> $inventory->item_id,'detail'=> 'Status Updated','rout'=>'inventory/'.$warehouseInventoryId);
+				logs($activity);
+			}
 			else 
 				echo json_encode(['type'=>'error','message'=>'Error updating item status']);
 			exit;
 		}
-
 		$where_in = '';
 		if(!isAdministrator($this->session->userdata('user')->id)){
 			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
@@ -204,7 +219,10 @@ class Inventory extends MY_Controller {
 						];
 						// insert into main inventory table
 						$this->Common_model->insert_record('warehouse_inventory', $data);
+						$last_insertedid = $this->db->insert_id();
 						$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory item added successfully']);
+						$activity = array('warehouse_id' =>$warehouseId,'model_id' => $warehouseId,'method' => 'Added', 'model_name' => 'Spare','name'=> $itemId,'detail'=> 'Spare Added','rout'=>'inventory/'.$last_insertedid);
+						logs($activity);
 					}
 					redirect('inventory');
 				} else {

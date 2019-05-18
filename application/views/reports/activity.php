@@ -40,9 +40,11 @@
                                                             <div class="row">
                                                                 <div class="input-field col m6 s12">
                                                                     <select name="warehouse" required>
-                                                                        <?php foreach($warehouse as $key => $wh) { ?>
+                                                                        <option value="">Select Warehouse</option>
+                                                                        <?php if($warehouse){
+                                                                         foreach($warehouse as $key => $wh) { ?>
                                                                             <option value="<?=$wh->id?>"><?=$wh->name?></option>
-                                                                        <?php } ?>
+                                                                        <?php }} ?>
                                                                     </select>
                                                                     <label>Select Warehouse</label>
                                                                 </div>
