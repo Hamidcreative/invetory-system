@@ -62,7 +62,7 @@ class Inventory extends MY_Controller {
 				'type'      => 'Right'
 			)
 		);
-		$where = 'WHI.min_level = WHI.quantity';
+		$where = 'WHI.min_level >= WHI.quantity';
 		$returnedData = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,$where,'','','','');
 		print_r($returnedData);
 		return NULL;
