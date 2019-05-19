@@ -51,7 +51,9 @@ class MY_Controller extends CI_Controller{
     }
 
     public function checkMinimumStock(){
-        $stock = $this->Common_model->select_fields_where('inventory','id, item_id',['quantity <= min_level'],  TRUE, '', '', '', '', ['updated_at','desc']);
+        $stock = $this->Common_model->select_fields_where_like_join('inventory i','i.id, i.item_id',
+            [['table'=>'warehouse_inventory wi','condition'=>'wi.inventory_id = i.id and wi.quantity <= wi.min_level', 'type'=>'inner']],
+        '',  TRUE, '', '', '', ['wi.updated_at','desc']);
         if($stock) return true;
         return false;
     }
