@@ -55,7 +55,7 @@
                                                 <label for="description">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="warehouse_id">
+                                                <select name="warehouse_id" class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == $inventory->warehouse_id)
@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="inventory_type_id">
+                                                <select name="inventory_type_id" class="js-example-basic-single">
                                                     <option value="">Select Spare part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                         if($inventory_type->id == $inventory->inventory_type_id)

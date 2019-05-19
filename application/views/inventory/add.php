@@ -54,7 +54,7 @@
                                                 <label for="description">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="warehouse_id" required>
+                                                <select name="warehouse_id" required class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('warehouse_id'))
@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="inventory_type_id" required>
+                                                <select name="inventory_type_id" required class="js-example-basic-single">
                                                     <option value="">Select Spare Part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                         if($inventory_type->id == set_value('inventory_type_id'))

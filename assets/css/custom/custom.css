@@ -118,3 +118,26 @@ a.list-group-item:nth-child(3n+0){
 canvas.drawing, canvas.drawingBuffer {position: absolute; left: 0; top: 0;}
 
 .cyan{padding:0 10px;}
+
+
+form .select-wrapper input.select-dropdown {
+    display: none !important;
+}
+form .select2-container {
+    padding-top: 18px !important;
+    width: 100% !important;
+}
+form .select2-selection__arrow {
+    top: 18px !important;
+}
+
+.select2lib .select-wrapper input.select-dropdown {
+    display: none !important;
+}
+.select2lib .select2-container {
+    padding-top: 18px !important;
+    width: 100% !important;
+}
+.select2lib .select2-selection__arrow {
+    top: 18px !important;
+}

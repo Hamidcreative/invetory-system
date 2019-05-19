@@ -64,7 +64,7 @@
                                                 <label for="password">Password (Leave empty if don't want to change)</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="roles" required>
+                                                <select name="roles" required class="js-example-basic-single">
                                                 <?php foreach($roles as $key => $role) { 
                                                         if($role->id == set_value('roles'))
                                                             $selected = 'selected';

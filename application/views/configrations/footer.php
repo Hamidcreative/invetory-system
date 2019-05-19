@@ -67,6 +67,8 @@
 <script src="<?=base_url()?>assets/js/scripts/data-tables.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 <!-- END PAGE LEVEL JS-->
   <script>
     <?php if($this->session->flashdata('alert')){ ?>
@@ -201,6 +203,10 @@
                 Quagga.decodeSingle($.extend({}, fileConfig, {src: URL.createObjectURL(e.target.files[0])}), function(result) {alert(result.codeResult.code);});
             }
         });
+    });
+
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
     });
 </script>
 </body>

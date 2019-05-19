@@ -75,7 +75,7 @@
                                             </div>
                                             <?php if(isAdministrator($this->session->userdata('user')->id)) { ?>
                                             <div class="input-field col m6 s12">
-                                                <select name="roles" required>
+                                                <select name="roles" required class="js-example-basic-single">
                                                 <?php foreach($roles as $key => $role) {
                                                         if($role->id == $user->roles)
                                                             $selected = 'selected';

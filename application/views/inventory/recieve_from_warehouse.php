@@ -94,7 +94,7 @@
                                                 <label for="quantity">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="from_user_id">
+                                                <select name="from_user_id" class="js-example-basic-single">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) {
                                                         if($user->id == set_value('from_user_id'))
@@ -110,7 +110,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="to_warehouse_id">
+                                                <select name="to_warehouse_id" class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) {
                                                         if($warehouse->id == set_value('from_warehouse_id'))
@@ -124,7 +124,7 @@
                                                 <label for="recieve_warehouse_id">To Warehouse</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="from_warehouse_id">
+                                                <select name="from_warehouse_id" class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) {
                                                         if($warehouse->id == set_value('from_warehouse_id'))

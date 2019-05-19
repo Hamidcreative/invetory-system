@@ -38,8 +38,8 @@
                                                         <div id="test2" class="col s12"><!--Test 2--></div>
                                                         <div id="test4" class="col s12">
                                                             <div class="row">
-                                                                <div class="input-field col m6 s12">
-                                                                    <select name="warehouse" required>
+                                                                <div class="input-field col m6 s12 select2lib ">
+                                                                    <select name="warehouse" required class="js-example-basic-single">
                                                                         <option value="">Select Warehouse</option>
                                                                         <?php if($warehouse){
                                                                             foreach($warehouse as $key => $wh) { ?>

@@ -31,7 +31,7 @@
                                                 <label for="first_name01">Name</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="types">
+                                                <select name="types" class="js-example-basic-single">
                                                     <?php foreach($types as $key => $type) { ?>
                                                         <option value="<?=$type->id?>"
                                                             <?= $warehouse->warehouse_type_id == $type->id ? 'selected': '' ?>>

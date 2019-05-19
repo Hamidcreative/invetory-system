@@ -27,6 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/themes/vertical-dark-menu-template/style.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/pages/data-tables.css">
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/jquery.toast.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
     <!-- END: Page Level CSS-->
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/css/custom/custom.css">

@@ -38,7 +38,7 @@
                                     <form class="col s12 csv_import" method="POST" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="input-field col s6">
-                                                <select name="inventory_type_id" required>
+                                                <select name="inventory_type_id" required class="js-example-basic-single">
                                                     <option value="">Select Spare Part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                     ?>
@@ -48,7 +48,7 @@
                                                 <label>Spare Part Type</label>
                                             </div>
                                             <div class="input-field col s6">
-                                                <select name="warehouse_id" required>
+                                                <select name="warehouse_id" required class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                     ?>

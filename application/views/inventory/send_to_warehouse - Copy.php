@@ -40,7 +40,7 @@
 
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <select name="inventory_id">
+                                                <select name="inventory_id" class="js-example-basic-single">
                                                     <option value="">Select Spare Part</option>
                                                     <?php foreach($inventories as $key => $inventory) { 
                                                         if($inventory->id == set_value('inventory_id'))
@@ -61,7 +61,7 @@
                                                 <label for="checkin_date">Date.</label>
                                             </div>
                                             <div class="input-field col m4 s12">
-                                                <select name="checkin_by">
+                                                <select name="checkin_by" class="js-example-basic-single">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('checkin_by'))
@@ -86,7 +86,7 @@
                                                 <label for="checkout_date">Date.</label>
                                             </div>
                                             <div class="input-field col m4 s12">
-                                                <select name="checkout_by">
+                                                <select name="checkout_by" class="js-example-basic-single">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('checkout_by'))
@@ -107,7 +107,7 @@
                                         <div class="row field-group-heading"> <h6>From Warehouse Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <select name="from_warehouse_id">
+                                                <select name="from_warehouse_id" class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('from_warehouse_id'))
@@ -124,7 +124,7 @@
                                         <div class="row field-group-heading"> <h6>Send To Warehouse Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">
-                                                <select name="warehouse_id">
+                                                <select name="warehouse_id" class="js-example-basic-single">
                                                     <option value="">Select Warehouse</option>
                                                     <?php foreach($warehouses as $key => $warehouse) { 
                                                         if($warehouse->id == set_value('warehouse_id'))
@@ -146,7 +146,7 @@
                                                 <label for="send_amount">Amount</label>
                                             </div>
                                             <div class="input-field col m6 s12">
-                                                <select name="send_by">
+                                                <select name="send_by" class="js-example-basic-single">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('send_by'))
@@ -163,7 +163,7 @@
                                         <div class="row field-group-heading"> <h6>Recieve By</h6> </div>
                                         <div class="row">
                                             <div class="input-field col s12">
-                                                <select name="recieve_by">
+                                                <select name="recieve_by" class="js-example-basic-single">
                                                     <option value="">Select Person</option>
                                                     <?php foreach($users as $key => $user) { 
                                                         if($user->id == set_value('recieve_by'))
