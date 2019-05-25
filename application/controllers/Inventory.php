@@ -644,6 +644,8 @@ class Inventory extends MY_Controller {
 					    $highestColumn = $worksheet->getHighestColumn();
 					    for($row=2; $row<=$highestRow; $row++) {
 					    	$itemId = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+					    	$minlevel = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+					    	$qty = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
 
 					    	// item id is unique in our system , check if exist already than do plus One in the item quantity
 					    	if(array_key_exists(strval($itemId), $existingItemIds)){
@@ -667,9 +669,9 @@ class Inventory extends MY_Controller {
 					    		} else {
 						    		array_push($whItemDataToInsert, [
 						    			'inventory_id' => $existingItemIds[strval($itemId)]['inventoryId'],
-						    			'quantity' => 1,
+						    			'quantity' => $qty,
 						    			'updated_at' => date('Y-m-d h:i:s'),
-					    				'min_level' => 1,
+					    				'min_level' => $minlevel,
 					    				'warehouse_id' => $warehouseId,
 						    			'updated_at' => date('Y-m-d h:i:s'),
 						    			'created_at' => date('Y-m-d h:i:s'),
@@ -693,8 +695,8 @@ class Inventory extends MY_Controller {
 						    		
 						    		array_push($whItemDataToInsert, [
 						    			'item_id' => $itemId,
-						    			'quantity' => 1,
-					    				'min_level' => 1,
+						    			'quantity' => $qty,
+					    				'min_level' => $minlevel,
 					    				'warehouse_id' => $warehouseId,
 						    			'updated_at' => date('Y-m-d h:i:s'),
 						    			'created_at' => date('Y-m-d h:i:s'),
