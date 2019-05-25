@@ -30,9 +30,11 @@
                                             <option value="0">Users</option>
                                             <option value="1">Warehouse</option>
                                             <option value="2">Warehouse Types</option>
-                                            <option value="3">Inventory</option>
-                                            <option value="4">Inventory Types</option>
-                                            <option value="5">Activities</option>
+                                            <option value="3">Items</option>
+                                            <option value="4">Warehouse Items</option>
+                                            <option value="5">Inventory Types</option>
+                                            <option value="6">Check In/Out</option>
+                                            <option value="7">Activities</option>
                                         </select>
                                         <label>Select Module To Export</label>
                                     </div>

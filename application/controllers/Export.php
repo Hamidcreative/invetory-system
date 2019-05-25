@@ -16,7 +16,7 @@ class Export extends MY_Controller {
 
 	public function database(){
 		if($this->input->method() == 'post'){
-			$tables = ['user','warehouse','warehouse_type','inventory','inventory_type','user_activity'];
+			$tables = ['user','warehouse','warehouse_type','inventory','warehouse_inventory','inventory_type','inventory_transfer','user_activity'];
 			$module = $this->input->post('module');
 			$tablesToExport = [];
 			if(isset($tables[$module])){
