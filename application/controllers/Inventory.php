@@ -663,7 +663,7 @@ class Inventory extends MY_Controller {
 					    			$existingItemIds[strval($itemId)]['quantity'] += 1;
 						    		array_push($whItemDateToUpdate, [
 						    			'id' => $whInventoryId,
-						    			'quantity' =>$existingItemIds[strval($itemId)]['quantity'],
+						    			'quantity' =>$existingItemIds[strval($itemId)]['quantity']+$qty,
 						    			'updated_at' => date('Y-m-d h:i:s'),
 						    		]);
 					    		} else {
