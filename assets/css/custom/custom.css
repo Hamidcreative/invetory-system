@@ -141,3 +141,10 @@ form .select2-selection__arrow {
 .select2lib .select2-selection__arrow {
     top: 18px !important;
 }
+@media(max-width:500px){
+    .dt-buttons button.btn.btn-default {
+        width: 80% !important;
+        margin: 5px auto !important;
+        display: block !important;
+}
+}

@@ -63,7 +63,7 @@ if(!function_exists('getEmailConfig')) {
 		$config['wordwrap']  = TRUE;
 		$config['isLive']    = TRUE;
 		$config['smtp_user'] = "hamid.creativetech@inventory.3gns.com";
-		$config['smtp_pass'] = "Creative84";
+		$config['smtp_pass'] = "Iuwewa12UU2323sdqo";
 		return $config;
 	}
 }

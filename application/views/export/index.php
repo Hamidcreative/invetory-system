@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-</div>>
+</div>
 <script>
     $(document).on('click','.cyan', function(e){
         showToast('Exporting...', 'Please wait - this may take time', 'information');
