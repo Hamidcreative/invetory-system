@@ -639,6 +639,13 @@ class Inventory extends MY_Controller {
 
 	            	$this->load->library('excel');
 			        $object = PHPExcel_IOFactory::load($file);
+			        $highestColumn = $object->setActiveSheetIndex(0)->getHighestColumn();
+
+			        if($highestColumn != 'E') {
+			        	echo json_encode(['type' => 'error', 'message' => 'Invalid file data']);
+			        	exit;
+			        }
+
 					foreach($object->getWorksheetIterator() as $worksheet) {
 					    $highestRow = $worksheet->getHighestRow();
 					    $highestColumn = $worksheet->getHighestColumn();
