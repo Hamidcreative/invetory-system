@@ -76,7 +76,7 @@ class Inventory extends MY_Controller {
 
         if(!isAdministrator($this->session->userdata('user')->id)){
 			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
-			$inventory = $this->Common_model->select_fields_where('inventory','warehouse_id',['id'=>$warehouseInventoryId], true);
+			$inventory = $this->Common_model->select_fields_where('warehouse_inventory','warehouse_id',['id'=>$warehouseInventoryId], true);
 			// stop user editing spare part of other ware house
 			if(!in_array($inventory->warehouse_id, $warehouseIds))
 				return redirect('inventory');
