@@ -26,7 +26,7 @@ class Inventory extends MY_Controller {
 	}
 
 	public function listing($warehouse_id=''){
-		$select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.quantity, wi.min_level, wi.status', false];
+		$select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.quantity,i.serial_number, wi.min_level, wi.status', false];
 		$joins = [
 			['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
 			['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner'],
@@ -639,18 +639,21 @@ class Inventory extends MY_Controller {
 
 	            	$this->load->library('excel');
 			        $object = PHPExcel_IOFactory::load($file);
-			        $highestColumn = $object->setActiveSheetIndex(0)->getHighestColumn();
+			        /*$highestColumn = $object->setActiveSheetIndex(0)->getHighestColumn();
 
 			        if($highestColumn != 'E') {
 			        	echo json_encode(['type' => 'error', 'message' => 'Invalid file data']);
 			        	exit;
-			        }
+			        }*/
 
 					foreach($object->getWorksheetIterator() as $worksheet) {
 					    $highestRow = $worksheet->getHighestRow();
 					    $highestColumn = $worksheet->getHighestColumn();
 					    for($row=2; $row<=$highestRow; $row++) {
 					    	$itemId = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+					    	if(empty($itemId) or $itemId == '')
+					    		continue;
+
 					    	$minlevel = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
 					    	$qty = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
 
@@ -748,13 +751,16 @@ class Inventory extends MY_Controller {
 							if($value == 1)
 								unset($repeatingItem[$key]);
 						}
-						$repeatingItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
-						foreach($repeatingItems as $item) {
-							array_push($whItemDateToUpdate, [
-				    			'id' => $item->id,
-				    			'quantity' =>$repeatingItem[$item->item_id],
-						    	'updated_at' => date('Y-m-d h:i:s'),
-				    		]);
+
+						if(!empty(array_keys($repeatingItem))){
+							$repeatingItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
+							foreach($repeatingItems as $item) {
+								array_push($whItemDateToUpdate, [
+					    			'id' => $item->id,
+					    			'quantity' =>$repeatingItem[$item->item_id],
+							    	'updated_at' => date('Y-m-d h:i:s'),
+					    		]);
+							}
 						}
 					}
 					// update existing warehouse inventory items in bulk
