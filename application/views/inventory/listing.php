@@ -22,7 +22,47 @@
       </div>
       <div class="col s12">
         <div class="card">
-          <div class="card-content">
+          <div class="card-content"><!-- Select -->
+            <div class="row">
+              <div class="col s12">
+                <div class="card-title">
+                  <div class="row">
+                    <div class="col s12 m6 l10">
+                      <h4 class="card-title">Filter By:</h4>
+                    </div>
+                  </div>
+                </div>
+                <div id="view-select">
+                  <div class="row filters">
+                    <div class="input-field col s12 m4">
+                      <select name="warehouse">
+                        <option value="">All</option>
+                        <?php foreach($warehouses as $warehouse) { ?>
+                        <option value="<?=$warehouse->id?>"><?=$warehouse->name?></option>
+                        <?php } ?>
+                      </select>
+                      <label>Warehouse</label>
+                    </div>
+                    <div class="input-field col s12 m4">
+                      <input type="text" name="serial_no" />
+                      <label>Serial Number</label>
+                    </div>
+                    <div class="input-field col s12 m4">
+                      <p>
+                        <label>
+                          <input type="checkbox" name="min_level"  />
+                          <span>Minimum Level Reached</span>
+                        </label>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content"><!-- Select -->
             <div class="row">
               <div class="col s12">
                 <table class="display inventoryList">
@@ -159,15 +199,25 @@
         <?php } else { ?>
         var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         <?php } ?>
+        additional_data = [
+          {'name':'warehouse', 'value': function() { return $('.filters select[name="warehouse"]').val()}},
+          {'name':'serial_no', 'value': function() { return $('.filters input[name="serial_no"]').val() }},
+          {'name':'min_level', 'value': function() { 
+            if($('.filters input[name="min_level"]').is(':checked'))
+              return true
+            else return false
+          }}
+        ]
         commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT,undefined,undefined,undefined,undefined ,{
             'ColumnID' : 1,
             'SortType' : 'asc'
-        });
-
-
-
+        },undefined , additional_data);
     });
 
+
+  $(document).on('change','.filters select, input', function(e){
+    oTable.fnDraw();
+  })
   // confirm modal trigger
   $(document).on('click', '.confirm-modal-trigger', function(e) {
       $('#confirm-modal').find('input[name="inventory_id"]').val($(this).attr('data-id'));
@@ -235,5 +285,13 @@
           oTable.fnDraw();
       }
     });
+  })
+
+    $(document).on('click','.filters input[name="min_level"]', function () {
+    if ($(this).attr("checked")) {
+      $(this).attr('checked', false);
+    } else {
+      $(this).attr('checked', true);
+    }
   })
 </script>

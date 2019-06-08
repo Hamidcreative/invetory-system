@@ -101,8 +101,8 @@ function commonDataTablesPage(selector,url,aoColumns,sDom,HiddenColumnID,start,R
         }
     });
 }
-function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters ,sortBy, iDisplayLength=''){
-    // console.log(HiddenColumnID);
+function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters ,sortBy, iDisplayLength='', add_data=''){
+    console.log(add_data);
     //Little Code For Sorting.
     if(typeof sortBy === "undefined"){
         sortBy = {
@@ -147,7 +147,14 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "dom": 'Bfrtip',   // added by hamid when added it for buttons that hide the show enteries
         "buttons": expbuttons, // added by hamid
         'fnServerData' : function(sSource, aoData, fnCallback){
+            if(add_data != ''){
+                for(dt in add_data){
+                    aoData.push(add_data[dt]);
+                }
+            }
+
             aoData.push({'name':TOKEN_NAME, 'value':TOKEN_VAL});
+
             $.ajax({
                 'dataType': 'json', 
                 'type': 'POST',

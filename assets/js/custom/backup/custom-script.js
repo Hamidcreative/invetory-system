@@ -21,9 +21,6 @@ function showToast(heading, text, type, position = 'top-right'){
 	})
 }
 
-/**
- * Created by Syed Haider Hassan. on 21/9/2015.
- */
 function commonDataTablesPage(selector,url,aoColumns,sDom,HiddenColumnID,start,RowCallBack,DrawCallBack,filters,sortBy){
     // console.log(HiddenColumnID);
     //Little Code For Sorting.
@@ -104,7 +101,7 @@ function commonDataTablesPage(selector,url,aoColumns,sDom,HiddenColumnID,start,R
         }
     });
 }
-function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters ,sortBy){
+function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack,DrawCallBack,filters ,sortBy, iDisplayLength=''){
     // console.log(HiddenColumnID);
     //Little Code For Sorting.
     if(typeof sortBy === "undefined"){
@@ -130,7 +127,9 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         }
     ];
    
-
+    if(iDisplayLength == '')
+        iDisplayLength = -1;
+    
     oTable = selector.dataTable({
         "bServerSide": true,
         "bProcessing": true,
@@ -142,7 +141,8 @@ function commonDataTables(selector,url,aoColumns,sDom,HiddenColumnID,RowCallBack
         "sDom" : sDom,
         "aoColumns":aoColumns,
         "sAjaxSource": url,
-        "iDisplayLength": 10,
+        "iDisplayLength": iDisplayLength,
+        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
         "responsive":true,
         "dom": 'Bfrtip',   // added by hamid when added it for buttons that hide the show enteries
         "buttons": expbuttons, // added by hamid

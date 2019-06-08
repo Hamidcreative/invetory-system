@@ -22,7 +22,16 @@ class Inventory extends MY_Controller {
 	
 	public function index()
 	{
-		$this->show('inventory/listing');
+		$where_in = '';
+        if(isEndUser($this->session->userdata('user')->id)){
+            $warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
+            $where_in = ['col'=>'id', 'val'=>$warehouseIds];
+        }
+
+        $data = [
+        	'warehouses'=>$this->Common_model->select_fields_where('warehouse','*', '', FALSE, '', '', '', '', '', false, $where_in)
+        ];
+		$this->show('inventory/listing', $data);
 	}
 
 	public function listing($warehouse_id=''){
@@ -33,16 +42,28 @@ class Inventory extends MY_Controller {
 		];
 		$warehouseIds = '';
 		$warehouseId = '';
-		if(!isAdministrator($this->session->userdata('user')->id)){
+		if(isEndUser($this->session->userdata('user')->id)){
 			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
 			$warehouseId = 'warehouse_id';
 		}
         $addColumns = array(
             'actionButtons' => array('<a href="'.base_url().'inventory/$1/'.$warehouse_id.'"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
         );
-        $where = '';
+        $where = [];
+        // filter code 
+        if($warehouse_id == ''){
+        	$warehouse_id = $this->input->post('warehouse');
+	       	if(!empty($this->input->post('serial_no')))
+	       		$where['i.serial_number'] = $this->input->post('serial_no');
+	       
+	       	if($this->input->post('min_level') != 'false')
+	       		$where['wi.min_level <='] = 'wi.quantity';
+        }
+
        	if($warehouse_id != '')
-       		$where = ['wi.warehouse_id' => $warehouse_id];
+       		$where['wi.warehouse_id'] = $warehouse_id;
+
+       	if(empty($where)) $where = '';
        	
         $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,$where,$warehouseId, $warehouseIds, '', $addColumns);
         print $list;
@@ -679,29 +700,39 @@ class Inventory extends MY_Controller {
 
 					    		$whInventoryId = $existingItemIds[strval($itemId)]['whInventoryId'];
 					    		if($whInventoryId != NULL) {
-					    			$existingItemIds[strval($itemId)]['quantity'] += 1;
+					    			$existingItemIds[strval($itemId)]['quantity'] += $qty;
 						    		array_push($whItemDateToUpdate, [
 						    			'id' => $whInventoryId,
-						    			'quantity' =>$existingItemIds[strval($itemId)]['quantity']+$qty,
+						    			'warehouse_id' => $warehouseId,
+						    			'quantity' =>$existingItemIds[strval($itemId)]['quantity'],
 						    			'updated_at' => date('Y-m-d h:i:s'),
 						    		]);
 					    		} else {
-						    		array_push($whItemDataToInsert, [
-						    			'inventory_id' => $existingItemIds[strval($itemId)]['inventoryId'],
-						    			'quantity' => $qty,
-						    			'updated_at' => date('Y-m-d h:i:s'),
-					    				'min_level' => $minlevel,
-					    				'warehouse_id' => $warehouseId,
-						    			'updated_at' => date('Y-m-d h:i:s'),
-						    			'created_at' => date('Y-m-d h:i:s'),
-						    		]);
+							    	if(array_key_exists(strval($itemId), $repeatingItem)) 
+							    		$repeatingItem[strval($itemId)]['quantity'] += $qty;
+							    	else {
+							    		array_push($whItemDataToInsert, [
+							    			'inventory_id' => $existingItemIds[strval($itemId)]['inventoryId'],
+							    			'quantity' => $qty,
+							    			'updated_at' => date('Y-m-d h:i:s'),
+						    				'min_level' => $minlevel,
+						    				'warehouse_id' => $warehouseId,
+							    			'updated_at' => date('Y-m-d h:i:s'),
+							    			'created_at' => date('Y-m-d h:i:s'),
+							    		]);
+							    		$repeatingItem[strval($itemId)] = [
+							    			'quantity' => 0,
+							    			'initial' => $qty,
+							    			'warehouse_id' => $warehouseId
+							    		];
+							    	}
 
 					    		}
 					    	}
 					    	else {
 
 						    	if(array_key_exists(strval($itemId), $repeatingItem)) 
-						    		$repeatingItem[strval($itemId)] += 1;
+						    		$repeatingItem[strval($itemId)]['quantity'] += $qty;
 						    	else {
 						    		array_push($inventorydataToInsert, [
 						    			'item_id' => $itemId,
@@ -720,13 +751,28 @@ class Inventory extends MY_Controller {
 						    			'updated_at' => date('Y-m-d h:i:s'),
 						    			'created_at' => date('Y-m-d h:i:s'),
 						    		]);
-						    		$repeatingItem[strval($itemId)] = 1;
+						    		$repeatingItem[strval($itemId)] = [
+						    			'quantity' => 0,
+						    			'initial' => $qty,
+						    			'warehouse_id' => $warehouseId
+						    		];
 						    	}
 					    	}
 
 					    }
 					}
+
 					
+					// remove repeating
+					if(!empty($whItemDateToUpdate)){
+						$repeatingItemIds = [];
+						foreach($whItemDateToUpdate as $key => $whItemToUpdate) {
+							if(array_key_exists($whItemToUpdate['id'], $repeatingItemIds))
+								unset($whItemDateToUpdate[$repeatingItemIds[$whItemToUpdate['id']]]);
+							
+							$repeatingItemIds[$whItemToUpdate['id']] = $key;
+						}
+					}
 					// insert new inventory items in bulk
 					if(!empty($inventorydataToInsert)){
 						$this->Common_model->insert_multiple('inventory', $inventorydataToInsert);
@@ -757,16 +803,22 @@ class Inventory extends MY_Controller {
 					// insert repeating items in bulk 
 					if(!empty($repeatingItem)){
 						foreach ($repeatingItem as $key => $value) {
-							if($value == 1)
+							if($value['quantity'] == 0)
 								unset($repeatingItem[$key]);
 						}
 
 						if(!empty(array_keys($repeatingItem))){
-							$repeatingItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
+							$joins = [
+								['table'=>'warehouse_inventory wi', 
+								'condition'=>'wi.inventory_id = i.id', 
+								'type' => 'inner']
+							];
+							$repeatingItems = $this->Common_model->select_fields_where_like_join('inventory i', 'wi.id, i.item_id',$joins, '', FALSE, '', '','','','',false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
 							foreach($repeatingItems as $item) {
 								array_push($whItemDateToUpdate, [
 					    			'id' => $item->id,
-					    			'quantity' =>$repeatingItem[$item->item_id],
+					    			'warehouse_id' => $repeatingItem[$item->item_id]['warehouse_id'],
+					    			'quantity' => $repeatingItem[$item->item_id]['quantity'] + $repeatingItem[$item->item_id]['initial'],
 							    	'updated_at' => date('Y-m-d h:i:s'),
 					    		]);
 							}
