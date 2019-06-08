@@ -1,7 +1,4 @@
 <div id="spareparts">
-   <style type="text/css">
-    table th{padding: 8px 10px!important;}
-  </style>
   <!-- Page Length Options -->
   <div class="row">
       <div class="col s12">
@@ -12,16 +9,9 @@
                 <table class="display inventoryList">
                   <thead>
                     <tr>
-                      <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
-                      <th>
-                        <label>
-                          <input type="checkbox" class="select-all" />
-                          <span></span>
-                        </label>
-                      </th>
-                      <?php } ?>
                       <th>Id</th>
                       <th>Item No.</th>
+                      <th> Serial No.</th>
                       <th>Description</th>
                       <th>Type</th>
                       <th>Quantity</th>
@@ -29,7 +19,7 @@
                       <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
                       <th>Status</th>
                       <th>Action</th>
-                      <?php }  ?>
+                      <?php } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -37,35 +27,6 @@
                 </table>
               </div>
             </div>
-            <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
-              <!-- Select -->
-            <div class="row">
-              <div class="col s12">
-                    <div class="card-title">
-                      <div class="row">
-                        <div class="col s12 m6 l10">
-                          <h4 class="card-title">Bulk Action for selected items</h4>
-                        </div>
-                      </div>
-                    </div>
-                    <div id="view-select">
-                      <div class="row bulk-action">
-                        <div class="input-field col s6">
-                          <select name="action">
-                            <option value="1" selected>Activate</option>
-                            <option value="2" >Deativate</option>
-                          </select>
-                          <label>Actions</label>
-                        </div>
-
-                        <div class="input-field col s6">
-                          <a class="btn btn-default submit-action">Submit</a>                          
-                        </div>
-                      </div>
-                    </div>
-              </div>
-            </div>
-            <?php } ?>
           </div>
         </div>
       </div>
@@ -96,17 +57,7 @@
         var usersTableSelector = $(".inventoryList");
         var url_DT = "<?=base_url();?>inventory/listing/<?= $warehouse->id ?>";
         var aoColumns_DT = [
-            <?php if(!isEndUser($this->session->userdata('user')->id)) { ?>
-            {
-                "mData": "ID",
-                "bSortable": false,
-                "bSearchable": false,
-                "mRender": function(data, type, row){
-                    return '<label> <input value="'+data+'" class="select-check" name="selected_checks[]" type="checkbox" /> <span></span> </label>';
-                }
-            },
-            <?php } ?>
-            {
+            /* User ID */ {
                 "mData": "ID",
                 "bVisible": true,
                 "bSortable": true,
@@ -114,6 +65,9 @@
             },
             {
                 "mData" : "item_id"
+            },
+            {
+                "mData" : "serial_number"
             },
             {
                 "mData" : "description"
@@ -148,16 +102,8 @@
         <?php } else { ?>
         var sDom_DT = 'lf<"H"r>t<"F"<"row"<"col-lg-6 col-xs-12" i> <"col-lg-6 col-xs-12" p>>>';
         <?php } ?>
-        commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT,undefined,undefined,undefined,undefined ,{
-            'ColumnID' : 1,
-            'SortType' : 'asc'
-        });
-        //Code for search box
-        $(".dataTables_filter input").on("keyup",function (e) {
-          e.preventDefault();
-            oTable.fnFilter( $(this).val());
-        });
-    });
+        commonDataTables(usersTableSelector,url_DT,aoColumns_DT,sDom_DT);
+   });
   // confirm modal trigger
   $(document).on('click', '.confirm-modal-trigger', function(e) {
       $('#confirm-modal').find('input[name="inventory_id"]').val($(this).attr('data-id'));
@@ -199,26 +145,5 @@
           oTable.fnDraw();
         }
       });
-  })
-  $(document).on('click','.bulk-action .submit-action', function(e){
-    var action_id = $(this).parents('.bulk-action').find('select[name="action"]').val();
-    console.log(action_id);    
-    var selected_checks = $('.select-check:checked').map(function() {
-        return this.value;
-      }).get();
-    $.ajax({
-      url:"<?=base_url('inventory/bulk_action')?>/"+action_id,
-      data:{selected_checks:JSON.stringify(selected_checks)},
-      type:"POST",
-      beforeSend:function(e){
-          showToast('Updating', 'Please wait - this may take while', 'information');
-      },
-      success:function(data){
-          data = JSON.parse(data);
-          $.toast().reset('all');
-          showToast(data['type'], data['message'], data['type']);
-          oTable.fnDraw();
-      }
-    });
   })
 </script>

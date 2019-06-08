@@ -37,7 +37,7 @@
                         <div class="col s12 m12 l12">
                             <div id="Form-advance" class="card card card-default scrollspy">
                                 <div class="card-content">
-                                    <form class="col s12" method="POST" enctype="multipart/form-data" action="<?=base_url('inventory/'.$inventory->id.'/'.$warehouseId)?>">
+                                    <form class="col s12" method="POST" enctype="multipart/form-data" action="<?=base_url('inventory/'.$inventory->id)?>">
                                         <div class="row field-group-heading"> <h6>Basic Info</h6> </div>
                                         <div class="row">
                                             <div class="input-field col m6 s12">

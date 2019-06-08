@@ -26,7 +26,7 @@ class Inventory extends MY_Controller {
 	}
 
 	public function listing($warehouse_id=''){
-		$select_data = ['wi.id as ID ,i.item_id, i.description, it.name as inventory_type, wi.quantity,i.serial_number, wi.min_level, wi.status', false];
+		$select_data = ['wi.id as ID ,i.item_id as item_id, i.description as description, it.name as inventory_type, wi.quantity as quantity,i.serial_number as serial_number, wi.min_level as min_level, wi.status as status', false];
 		$joins = [
 			['table'=>'inventory_type it', 'condition'=>'i.inventory_type_id = it.id', 'type'=>'left'],
 			['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner'],
@@ -38,7 +38,7 @@ class Inventory extends MY_Controller {
 			$warehouseId = 'warehouse_id';
 		}
         $addColumns = array(
-            'actionButtons' => array('<a href="'.base_url().'inventory/$1"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
+            'actionButtons' => array('<a href="'.base_url().'inventory/$1/'.$warehouse_id.'"><i class="material-icons">edit</i></a><a href="#" class="confirm-modal-trigger" data-id="$1"><i class="material-icons">delete</i></a>','ID')
         );
         $where = '';
        	if($warehouse_id != '')
@@ -68,18 +68,23 @@ class Inventory extends MY_Controller {
 		return NULL;
 	}
 
-	public function edit($warehouseInventoryId){
+	public function edit($warehouseInventoryId, $warehouseId=''){
+		if(!empty($warehouseId))
+			$url = 'warehouse/view/'.$warehouseId;
+		else
+			$url = 'inventory';
+
 		$inventoryId = $this->input->post('inventory_id');
 
         if(isEndUser($this->session->userdata('user')->id)) 
-            return redirect('inventory');
+            return redirect($url);
 
         if(!isAdministrator($this->session->userdata('user')->id)){
 			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
 			$inventory = $this->Common_model->select_fields_where('warehouse_inventory','warehouse_id',['id'=>$warehouseInventoryId], true);
 			// stop user editing spare part of other ware house
 			if(!in_array($inventory->warehouse_id, $warehouseIds))
-				return redirect('inventory');
+				return redirect($url);
 		}
 
 		if($this->input->method() == 'post'){
@@ -118,10 +123,13 @@ class Inventory extends MY_Controller {
 					$this->session->set_flashdata('alert', ['type'=>'success', 'message'=>'Inventory info updated successfully']);
 					$activity = array('warehouse_id' =>$whID,'model_id' => $whID,'method' => 'Updated', 'model_name' => 'Spare','name'=> $this->input->post('item_id'),'detail'=> 'Updated Spare Part','rout'=>'inventory/'.$warehouseInventoryId);
 					logs($activity);
-					redirect('inventory');
+					redirect($url);
 				} else {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Error updating']);
-					redirect('inventory/'.$warehouseInventoryId);
+					if(!empty($warehouseId))
+						redirect('inventory/'.$warehouseInventoryId.'/'.$warehouseId);
+					else
+						redirect('inventory/'.$warehouseInventoryId);
 				}
 			}
 		} else if($this->input->method() == 'delete') {
@@ -171,7 +179,8 @@ class Inventory extends MY_Controller {
 		$data = [
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
-			'inventory' => $inventories
+			'inventory' => $inventories,
+			'warehouseId' => $warehouseId
 		];
 		$this->show('inventory/edit', $data);
 	}
@@ -794,5 +803,26 @@ class Inventory extends MY_Controller {
 			echo json_encode(['item'=>$item, 'type'=>'success']);
 		else 
 			echo json_encode(['type'=>'error','message'=>'Item not exist with entered item code']);
+	}
+
+	public function bulk_action($actionId){
+		$selected = json_decode($this->input->post('selected_checks'));
+		if(!empty($selected)){
+			switch ($actionId) {
+				case '1':
+					$this->Common_model->update('warehouse_inventory', '', ['status'=>1], ['col'=>'id', 'val'=>$selected]);
+					break;
+				case '2':
+					$this->Common_model->update('warehouse_inventory', '', ['status'=>0], ['col'=>'id', 'val'=>$selected]);
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+			echo json_encode(['type' => 'success', 'message' => 'Selected items updated successfully']);
+		} else {
+			echo json_encode(['type' => 'error', 'message' => 'Please select item']);
+		}
 	}
 }

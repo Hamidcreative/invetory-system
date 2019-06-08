@@ -28,9 +28,7 @@
 									<th>Id</th>
 									<th>Name</th>
 									<th>Type</th>
-									<?php if(isAdministrator($this->session->userdata('user')->id)){ ?>
 									<th>Status</th>
-									<?php } ?>
 									<th>Action</th>
 								</tr>
 								</thead>
@@ -62,11 +60,9 @@
 			{
 				"mData": "Type"
 			},
-			<?php if(isAdministrator($this->session->userdata('user')->id)){ ?>
 			{
 				"mData": "Status"
 			},
-			<?php } ?>
 			{
 				"mData": "ViewEditActionButtons"
 			}

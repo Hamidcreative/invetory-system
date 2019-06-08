@@ -103,17 +103,13 @@ $(window).on('load', function () {
   });
 });
 
-var checkbox = $('#multi-select tbody tr th input')
-var selectAll = $('#multi-select .select-all')
+var selectAll = $('table .select-all')
 
 // Select A Row Function
 
-$(document).ready(function () {
-  checkbox.on('click', function () {
+  $(document).on('click','table tbody tr td input', function () {
     $(this).parent().parent().parent().toggleClass('selected');
-  })
-
-  checkbox.on('click', function () {
+    
     if ($(this).attr("checked")) {
       $(this).attr('checked', false);
     } else {
@@ -121,23 +117,21 @@ $(document).ready(function () {
     }
   })
 
-
   // Select Every Row 
 
   selectAll.on('click', function () {
     $(this).toggleClass('clicked');
     if (selectAll.hasClass('clicked')) {
-      $('#multi-select tbody tr').addClass('selected');
+      $('table tbody tr').addClass('selected');
     } else {
-      $('#multi-select tbody tr').removeClass('selected');
+      $('table tbody tr').removeClass('selected');
     }
 
-    if ($('#multi-select tbody tr').hasClass('selected')) {
-      checkbox.prop('checked', true);
+    if ($('table tbody tr').hasClass('selected')) {
+      $('table tbody tr td input').prop('checked', true);
 
     } else {
-      checkbox.prop('checked', false);
+      $('table tbody tr td input').prop('checked', false);
 
     }
   })
-})

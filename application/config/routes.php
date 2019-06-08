@@ -79,10 +79,8 @@ $route['warehouse/(:num)/inventory/(:num)'] = 'Warehouse/inventory/$1/$2';
 
 //Inventory 
 $route['inventory/(:num)'] = 'inventory/edit/$1';
+$route['inventory/(:num)/(:num)'] = 'inventory/edit/$1/$2';
  
-
-
-
 //Inventory hosue Types
 
 $route['inventory/types'] = 'Inventorytypes/index';

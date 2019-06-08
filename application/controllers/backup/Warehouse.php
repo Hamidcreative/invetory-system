@@ -4,15 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Warehouse extends MY_Controller {
     function __construct(){
         parent::__construct();
+        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
     }
 
     public function index($param = NULL){// whare house  listing
         if($param === 'listing'){
-            $warehouseIds = $warehouseId = '';
-            if(isEndUser($this->session->userdata('user')->id)){
-                $warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
-                $warehouseId = 'WH.id';
-            }
             $selectData = array('
             WH.id AS ID,
             WH.name AS Name,
@@ -20,16 +16,9 @@ class Warehouse extends MY_Controller {
 		    warehouse_type.name As Type,
 		    CASE WHEN WH.status = 1 THEN CONCAT("<span  data-id=\'0\' class=\'badge green statusmodal\'> Published </span>") WHEN WH.status = 0 THEN CONCAT ("<span data-id=\'1\' class=\'badge red statusmodal\'>Pending    </span>") ELSE CONCAT ("<span  data-id=\'1\' class=\' badge red statusmodal\'> ", WH.status, " </span>") END AS Status
 		    ',false);
-
-            if(isAdministrator($this->session->userdata('user')->id))
-                $addColumns = array(
-                    'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/view/$1" id="view"><i class="material-icons">remove_red_eye</i></a><a href="'.base_url().'warehouse/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
-                );
-            else 
-                $addColumns = array(
-                    'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/view/$1" id="view"><i class="material-icons">remove_red_eye</i></a>','ID')
-                );
-            
+            $addColumns = array(
+                'ViewEditActionButtons' => array('<a href="'.base_url().'warehouse/view/$1" id="view"><i class="material-icons">remove_red_eye</i></a><a href="'.base_url().'warehouse/edit/$1" id="edit"><i class="material-icons">edit</i></a><a class=""><i class="material-icons deletemodal">delete</i></a>','ID')
+            );
             $where = '';
             $joins = array(
                 array(
@@ -38,13 +27,11 @@ class Warehouse extends MY_Controller {
                     'type'      => 'Right'
                 )
             );
-            $returnedData = $this->Common_model->select_fields_joined_DT($selectData,'warehouse_type',$joins,'',$warehouseId, $warehouseIds,'',$addColumns);
+            $returnedData = $this->Common_model->select_fields_joined_DT($selectData,'warehouse_type',$joins,'','','','',$addColumns);
             print_r($returnedData);
             return NULL;
         }
         elseif($param === 'delete'){
-            if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
             if($this->input->post()) {
                 $id = $this->input->post('id');
                  $name = $this->Common_model->select_fields_where('warehouse','name', ['id' => $id],true);
@@ -66,8 +53,6 @@ class Warehouse extends MY_Controller {
             }
         }
         elseif($param === 'status'){
-            if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
             $id = $this->input->post('id');
             $status = $this->input->post('status');
             $whereUpdate = array('id' => $id);
@@ -90,8 +75,6 @@ class Warehouse extends MY_Controller {
     }
 
     public function add(){ // add warehouse
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -130,8 +113,6 @@ class Warehouse extends MY_Controller {
     }
 
     public function edit($id){ // Edit warehouse
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -195,8 +176,6 @@ class Warehouse extends MY_Controller {
 }
 
     public function assignusers(){  // Assigned permissions to view warehouse
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         $userID = $this->input->post('userID');
         $task    = $this->input->post('div');
         $whID   = $this->input->post('whID');
@@ -241,8 +220,6 @@ class Warehouse extends MY_Controller {
     }
 
     public function types($param = NULL){// whare house types listing
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         if($param === 'listing'){
             $selectData = array('
             id AS ID,
@@ -295,8 +272,6 @@ class Warehouse extends MY_Controller {
     }
 
     public function add_type(){ // add warehouse type
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -324,8 +299,6 @@ class Warehouse extends MY_Controller {
     }   
 
     public function edit_type($id){ // edit warehouse
-        if(!isAdministrator($this->session->userdata('user')->id)) return redirect('inventory');
-
         if($this->input->method() == 'post'){
             $this->form_validation->set_rules('name', 'Name', 'required');
             if ($this->form_validation->run() == FALSE) {
@@ -356,7 +329,6 @@ class Warehouse extends MY_Controller {
     }  
 
     public function inventory($warehouseId, $warehouseitemId){
-
         if($this->input->method() == 'post'){
             $data = [
                 'send_amount' => $this->input->post('send_amount'),

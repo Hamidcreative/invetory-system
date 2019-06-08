@@ -391,9 +391,13 @@ class Common_model extends CI_Model
     }
     //------------------------End of insert record queries -----------------------------------
 // Common Update Queries
-    function update($tbl, $where, $data)
+    function update($tbl, $where='', $data, $where_in='')
     {
-        $this->db->where($where);
+        if($where != '')
+            $this->db->where($where);
+        if($where_in != '')
+            $this->db->where_in($where_in['col'], $where_in['val']);
+            
         $this->db->update($tbl, $data);
         $affectedRows = $this->db->affected_rows();
         if ($affectedRows) {
