@@ -37,8 +37,8 @@
                                 <div class="card-content">
                                     <form class="col s12 csv_import" method="POST" enctype="multipart/form-data">
                                         <div class="row">
-                                            <div class="input-field col s12">
-                                                <select name="inventory_type_id" required>
+                                            <div class="input-field col s6">
+                                                <select name="inventory_type_id" required class="js-example-basic-single">
                                                     <option value="">Select Spare Part Type</option>
                                                     <?php foreach($inventory_types as $key => $inventory_type) { 
                                                     ?>
@@ -47,8 +47,18 @@
                                                 </select>
                                                 <label>Spare Part Type</label>
                                             </div>
+                                            <div class="input-field col s6">
+                                                <select name="warehouse_id" required class="js-example-basic-single">
+                                                    <option value="">Select Warehouse</option>
+                                                    <?php foreach($warehouses as $key => $warehouse) { 
+                                                    ?>
+                                                        <option value="<?=$warehouse->id?>"><?=$warehouse->name?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <label>Warehouse</label>
+                                            </div>
                                         </div>
-                                        <input type="file" class="hidden" name="excel_file" accept=".csv, .xlsx" />
+                                            <input type="file" class="hidden" name="excel_file" accept=".csv, .xlsx" />
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <a class="btn cyan import-btn waves-effect waves-light right" name="action">Import Now
@@ -89,7 +99,9 @@
     var formData = new FormData();
     formData.append('excel_file', $('input[name="excel_file"]')[0].files[0]);
     var inventory_type_id = $('select[name="inventory_type_id"]').val();
+    var warehouse_id = $('select[name="warehouse_id"]').val();
     formData.append('inventory_type_id', inventory_type_id);
+    formData.append('warehouse_id', warehouse_id);
 
     $.ajax({
         url:"<?=base_url('inventory/import')?>",

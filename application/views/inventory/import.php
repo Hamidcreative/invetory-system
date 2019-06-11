@@ -82,7 +82,10 @@
 
   $(document).on('click', '.import-btn', function(e){
     var inventory_type_id = $('select[name="inventory_type_id"]').val();
+    var warehouse_id = $('select[name="warehouse_id"]').val();
     if(inventory_type_id == '')
+        showToast('Error', 'Please select spare part type', 'error');
+    else if(warehouse_id == '')
         showToast('Error', 'Please select warehouse', 'error');
     else
         $('input[name="excel_file"]').trigger('click');

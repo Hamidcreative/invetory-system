@@ -180,7 +180,7 @@ class Common_model extends CI_Model
             return FALSE;
         }
     }
-    function select_fields_where_like_join($tbl = '', $data, $joins = '', $where = '', $single = FALSE, $field = '', $value = '',$group_by='',$order_by = '',$limit = '',$array = false)
+    function select_fields_where_like_join($tbl = '', $data, $joins = '', $where = '', $single = FALSE, $field = '', $value = '',$group_by='',$order_by = '',$limit = '',$array = false, $where_in='')
     {
         if (is_array($data) and isset($data[1])){
             $this->db->select($data[0],$data[1]);
@@ -200,6 +200,9 @@ class Common_model extends CI_Model
         if ($where != '') {
             $this->db->where($where);
         }
+        if($where_in != '')
+            $this->db->where_in($where_in['col'], $where_in['val']);
+        
         if($group_by != ''){
             $this->db->group_by($group_by);
         }

@@ -1,9 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Inventory extends MY_Controller {
 	public $inventoryfields;
-
     public function __construct(){
         parent::__construct();
     	$this->inventoryfields = [
@@ -13,7 +11,6 @@ class Inventory extends MY_Controller {
 		        ['field' => 'inventory_type_id', 'label' => 'Inventory Type', 'rules' => 'required'],
 		        ['field' => 'min_level', 'label' => 'Minimum Level', 'rules' => 'required'],
 			];
-
 		$this->inventorytransferfields = [
 		        ['field' => 'item_id', 'label' => 'Item Id', 'rules' => 'required'],
 		        ['field' => 'quantity', 'label' => 'Amount', 'rules' => 'required'],
@@ -27,13 +24,11 @@ class Inventory extends MY_Controller {
             $warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
             $where_in = ['col'=>'id', 'val'=>$warehouseIds];
         }
-
         $data = [
         	'warehouses'=>$this->Common_model->select_fields_where('warehouse','*', '', FALSE, '', '', '', '', '', false, $where_in)
         ];
 		$this->show('inventory/listing', $data);
 	}
-
 	public function listing($warehouse_id=''){
 		$select_data = ['wi.id as ID ,i.item_id as item_id, i.description as description, it.name as inventory_type, wi.quantity as quantity,i.serial_number as serial_number, wi.min_level as min_level, wi.status as status', false];
 		$joins = [
@@ -59,16 +54,13 @@ class Inventory extends MY_Controller {
 	       	if($this->input->post('min_level') != 'false')
 	       		$where['wi.min_level <='] = 'wi.quantity';
         }
-
        	if($warehouse_id != '')
        		$where['wi.warehouse_id'] = $warehouse_id;
-
        	if(empty($where)) $where = '';
        	
         $list = $this->Common_model->select_fields_joined_DT($select_data,'inventory i',$joins,$where,$warehouseId, $warehouseIds, '', $addColumns);
         print $list;
 	}
-
 	public function minlevellisting(){
 		$select_data = ['WHI.id as ID ,i.item_id, i.description,WH.name as WHname, WHI.quantity, WHI.min_level', false];
 		$where = '';
@@ -88,18 +80,14 @@ class Inventory extends MY_Controller {
 		print_r($returnedData);
 		return NULL;
 	}
-
 	public function edit($warehouseInventoryId, $warehouseId=''){
 		if(!empty($warehouseId))
 			$url = 'warehouse/view/'.$warehouseId;
 		else
 			$url = 'inventory';
-
 		$inventoryId = $this->input->post('inventory_id');
-
         if(isEndUser($this->session->userdata('user')->id)) 
             return redirect($url);
-
         if(!isAdministrator($this->session->userdata('user')->id)){
 			$warehouseIds = getUserWareHouseIds($this->session->userdata('user')->id);
 			$inventory = $this->Common_model->select_fields_where('warehouse_inventory','warehouse_id',['id'=>$warehouseInventoryId], true);
@@ -107,18 +95,14 @@ class Inventory extends MY_Controller {
 			if(!in_array($inventory->warehouse_id, $warehouseIds))
 				return redirect($url);
 		}
-
 		if($this->input->method() == 'post'){
 			$existingInventory = $this->Common_model->select_fields_where('inventory','item_id',['id'=>$inventoryId], true);
 			if($this->input->post('item_id') != $existingInventory->item_id)
 		       $is_unique_item_id =  '|is_unique[inventory.item_id]';
 		    else 
 		       $is_unique_item_id =  '';
-
 			array_push($this->inventoryfields, ['field' => 'item_id', 'label' => 'Item No.', 'rules' => 'required'.$is_unique_item_id]);
-
 			$this->form_validation->set_rules($this->inventoryfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid data']);
 			}
@@ -189,14 +173,10 @@ class Inventory extends MY_Controller {
 			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];
 		}
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
-
 		$joins = [
 			['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id', 'type'=>'inner']
 		];
-
 		$inventories = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, i.description, i.serial_number, i.inventory_type_id, wi.*', $joins, ['wi.id'=>$warehouseInventoryId], true );
-
-
 		$data = [
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
@@ -205,15 +185,11 @@ class Inventory extends MY_Controller {
 		];
 		$this->show('inventory/edit', $data);
 	}
-
 	public function add(){
         if(isEndUser($this->session->userdata('user')->id)) 
             return redirect('inventory');
-
 		if($this->input->method() == 'post'){
-
 			$this->form_validation->set_rules($this->inventoryfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 			}
@@ -240,7 +216,6 @@ class Inventory extends MY_Controller {
 					$warehouseId = $this->input->post('warehouse_id');
 					$warehouseInventory = $this->Common_model->select_fields_where('warehouse_inventory','id, quantity',
 						['inventory_id'=>$inventoryId, 'warehouse_id'=>$warehouseId], true);
-
 					if($warehouseInventory){
 						// update item amount
 						$data = [
@@ -275,33 +250,26 @@ class Inventory extends MY_Controller {
 				}
 			}
 		}
-
 		$where_in = '';
 		if(!isAdministrator($this->session->userdata('user')->id))
 			$where_in = ['col'=>'id', 'val'=>getUserWareHouseIds($this->session->userdata('user')->id)];	 
-
 		if(empty($where_in['val']) && !isAdministrator($this->session->userdata('user')->id)){
 			echo json_encode(['type'=>'error','message'=>'Contact admin']);
 			return redirect('users/'.$this->session->userdata('user')->id);// we will redirect it to message page 
 		}
 		$warehouses = $this->Common_model->select_fields_where('warehouse','*',['status'=>1], FALSE, '', '', '','','',false, $where_in);
-
 		$data = [
 			'warehouses' => $warehouses,
 			'inventory_types' => $this->Common_model->select_fields_where('inventory_type', '*', ['status'=>1]),
 		];
 		$this->show('inventory/add', $data);
 	}
-
 	public function send_to_warehouse(){
 		if($this->input->method() == 'post'){
-
 			array_push($this->inventorytransferfields, ['field' => 'checkout_by', 'label' => 'Checkout By Person', 'rules' => 'required'], 
 		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
 		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required']);
-
 			$this->form_validation->set_rules($this->inventorytransferfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 				redirect('inventory/send_to_warehouse');
@@ -320,17 +288,14 @@ class Inventory extends MY_Controller {
 					'wi.warehouse_id' => $fromWarehouseId,
 					'wi.status' => 1,
 				], true);
-
 				if(!$existingItem) {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
 					redirect('inventory/send_to_warehouse');
 				}
-
 				if($existingItem->quantity < $quantity) {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Not enough amount of items exist in selected warehouse']);
 					redirect('inventory/send_to_warehouse');
 				}
-
 				$this->Common_model->update('warehouse_inventory',[
 					'warehouse_id' => $fromWarehouseId,
 					'status' => 1,
@@ -377,16 +342,12 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/send_to_warehouse', $data);
 		}
 	}
-
 	public function recieve_from_warehouse(){
 		if($this->input->method() == 'post'){
-
 			array_push($this->inventorytransferfields, ['field' => 'from_user_id', 'label' => 'From Person', 'rules' => 'required'],
 		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],
 		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required']);
-
 			$this->form_validation->set_rules($this->inventorytransferfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 				redirect('inventory/recieve_from_warehouse');
@@ -403,10 +364,8 @@ class Inventory extends MY_Controller {
 				[
 					'i.item_id' => $itemId,
 				], true);
-
 				// check if not item not exist in that warehouse than insert
 				if($existingItem->warehouseInventoryId != NULL)
-
 					$this->Common_model->update('warehouse_inventory',[
 						'warehouse_id' => $toWarehouseId,
 						'status' => 1,
@@ -464,15 +423,11 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/recieve_from_warehouse', $data);
 		}
 	}
-
 	public function send_to_technician(){
 		if($this->input->method() == 'post'){
-
 			array_push($this->inventorytransferfields, 
 		        ['field' => 'from_warehouse_id', 'label' => 'From Warehouse', 'rules' => 'required'],['field' => 'technician_id', 'label' => 'From Person', 'rules' => 'required']);
-
 			$this->form_validation->set_rules($this->inventorytransferfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 				redirect('inventory/send_to_technician');
@@ -491,17 +446,14 @@ class Inventory extends MY_Controller {
 					'wi.warehouse_id' => $fromWarehouseId,
 					'wi.status' => 1,
 				], true);
-
 				if(!$existingItem) {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Item not exist in selected warehouse']);
 					redirect('inventory/send_to_technician');
 				}
-
 				if($existingItem->quantity < $quantity) {
 					$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Not enough amount of items exist in selected warehouse']);
 					redirect('inventory/send_to_warehouse');
 				}
-
 				$this->Common_model->update('warehouse_inventory',[
 					'warehouse_id' => $fromWarehouseId,
 					'status' => 1,
@@ -547,15 +499,11 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/send_to_technician', $data);
 		}
 	}
-
 	public function recieve_from_technician(){
 		if($this->input->method() == 'post'){
-
 			array_push($this->inventorytransferfields, 
 		        ['field' => 'to_warehouse_id', 'label' => 'To Warehouse', 'rules' => 'required'],['field' => 'technician_id', 'label' => 'From Person', 'rules' => 'required']);
-
 			$this->form_validation->set_rules($this->inventorytransferfields);
-
 			if ($this->form_validation->run() == FALSE) {
 				$this->session->set_flashdata('alert', ['type'=>'error', 'message'=>'Invalid Input Data']);
 				redirect('inventory/recieve_from_technician');
@@ -572,7 +520,6 @@ class Inventory extends MY_Controller {
 				[
 					'i.item_id' => $itemId,
 				], true);
-
 				if($existingItem->warehouseInventoryId !=NULL)
 					$this->Common_model->update('warehouse_inventory',[
 						'warehouse_id' => $toWarehouseId,
@@ -592,7 +539,6 @@ class Inventory extends MY_Controller {
 						'created_at' => date('Y-m-d h:i:s'),
 					]);
 				}
-
 				$data = [
 					'warehouse_inventory_id' => $existingItem->warehouseInventoryId,
 					'from_user_id' => $this->input->post('technician_id'),
@@ -630,20 +576,26 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/recieve_from_technician', $data);
 		}
 	}
-
 	public function minlevel() {
         if(isAdministrator($this->session->userdata('user')->id)) 
 			$this->show('inventory/minlevelstock_listing');
 	}
-
 	public function import(){
         if(isEndUser($this->session->userdata('user')->id)) 
             return redirect('inventory');
-
 		if($this->input->method() == 'post'){
 			$repeatingItem = [];
 			$itemTypeId = $this->input->post('inventory_type_id');
+			if($itemTypeId == '' or empty($itemTypeId)){
+				echo  json_encode(['type' => 'error', 'message' => 'Please select inventory type']);
+				exit;
+			}
 			$warehouseId = $this->input->post('warehouse_id');
+			if($warehouseId == '' or empty($warehouseId)) {
+				echo json_encode(['type' => 'error', 'message' => 'Please select warehouse']);
+				exit;
+			}
+			
 			$file = $_FILES['excel_file']['tmp_name'];
 			$handle = fopen($file, "r");
 		    if ($file == NULL)
@@ -651,11 +603,9 @@ class Inventory extends MY_Controller {
 		    else {
 		    	try{
 			    	$whItemDataToInsert = $whItemDateToUpdate = $inventorydataToInsert = $inventorydataToUpdate = [];
-
 			    	$existingItem = $this->Common_model->select_fields_where_like_join('inventory i', 'i.item_id, wi.quantity, wi.id, i.id as inventory_id', [
 			    		['table'=>'warehouse_inventory wi', 'condition'=>'wi.inventory_id = i.id and wi.warehouse_id = '.$warehouseId, 'type'=>'left']
 			    	]);
-
 			    	$existingItemIds = [];
 			    	if(is_array($existingItem)) {
 				    	foreach ($existingItem as $key => $value) {
@@ -666,16 +616,15 @@ class Inventory extends MY_Controller {
 				    		];
 				    	}
 			    	}
-
 	            	$this->load->library('excel');
 			        $object = PHPExcel_IOFactory::load($file);
 			        /*$highestColumn = $object->setActiveSheetIndex(0)->getHighestColumn();
-
 			        if($highestColumn != 'E') {
 			        	echo json_encode(['type' => 'error', 'message' => 'Invalid file data']);
 			        	exit;
 			        }*/
 
+			        $item_serial_numbers = [];
 					foreach($object->getWorksheetIterator() as $worksheet) {
 					    $highestRow = $worksheet->getHighestRow();
 					    $highestColumn = $worksheet->getHighestColumn();
@@ -684,12 +633,20 @@ class Inventory extends MY_Controller {
 					    	if(empty($itemId) or $itemId == '')
 					    		continue;
 
+					    	$serial_number = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+					    	// check serial number not empty
+					    	if(!empty($serial_number)){
+					    		if(isset($item_serial_numbers[strval($itemId)])){
+					    			if(!in_array($serial_number, $item_serial_numbers[strval($itemId)]))
+					    				array_push($item_serial_numbers[strval($itemId)], $serial_number);
+					    		} else 
+					    			$item_serial_numbers[strval($itemId)] = [$serial_number];
+					    	}
+
 					    	$minlevel = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
 					    	$qty = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
-
 					    	// item id is unique in our system , check if exist already than do plus One in the item quantity
 					    	if(array_key_exists(strval($itemId), $existingItemIds)){
-
 					    		array_push($inventorydataToUpdate, [
 					    			'item_id' => $itemId,
 					    			'description' => $worksheet->getCellByColumnAndRow(1, $row)->getValue(),
@@ -697,7 +654,6 @@ class Inventory extends MY_Controller {
 					    			'serial_number' => $worksheet->getCellByColumnAndRow(2, $row)->getValue(),
 					    			'updated_at' => date('Y-m-d h:i:s'),
 					    		]);
-
 					    		$whInventoryId = $existingItemIds[strval($itemId)]['whInventoryId'];
 					    		if($whInventoryId != NULL) {
 					    			$existingItemIds[strval($itemId)]['quantity'] += $qty;
@@ -726,11 +682,9 @@ class Inventory extends MY_Controller {
 							    			'warehouse_id' => $warehouseId
 							    		];
 							    	}
-
 					    		}
 					    	}
 					    	else {
-
 						    	if(array_key_exists(strval($itemId), $repeatingItem)) 
 						    		$repeatingItem[strval($itemId)]['quantity'] += $qty;
 						    	else {
@@ -758,11 +712,8 @@ class Inventory extends MY_Controller {
 						    		];
 						    	}
 					    	}
-
 					    }
 					}
-
-					
 					// remove repeating
 					if(!empty($whItemDateToUpdate)){
 						$repeatingItemIds = [];
@@ -776,11 +727,9 @@ class Inventory extends MY_Controller {
 					// insert new inventory items in bulk
 					if(!empty($inventorydataToInsert)){
 						$this->Common_model->insert_multiple('inventory', $inventorydataToInsert);
-
 						$newItemIds = array_column($inventorydataToInsert, 'item_id');
 						
 						$newItems = $this->Common_model->select_fields_where('inventory', 'id, item_id','',FALSE,'','', '','','', false, ['col'=>'item_id', 'val'=>$newItemIds]);
-
 						foreach($newItems as $item) {
 							foreach ($whItemDataToInsert as $key => $value) {
 								if(isset($value['item_id'])){
@@ -795,41 +744,61 @@ class Inventory extends MY_Controller {
 					// insert new inventory warehouse items in bulk
 					if(!empty($whItemDataToInsert))
 						$this->Common_model->insert_multiple('warehouse_inventory', $whItemDataToInsert);
-
 					// udpate existing inventory items in bulk
 					if(!empty($inventorydataToUpdate))
 						$this->Common_model->update_multiple('inventory', $inventorydataToUpdate, 'item_id');
-
 					// insert repeating items in bulk 
 					if(!empty($repeatingItem)){
 						foreach ($repeatingItem as $key => $value) {
 							if($value['quantity'] == 0)
 								unset($repeatingItem[$key]);
 						}
-
 						if(!empty(array_keys($repeatingItem))){
 							$joins = [
 								['table'=>'warehouse_inventory wi', 
 								'condition'=>'wi.inventory_id = i.id', 
 								'type' => 'inner']
 							];
-							$repeatingItems = $this->Common_model->select_fields_where_like_join('inventory i', 'wi.id, i.item_id',$joins, '', FALSE, '', '','','','',false, ['col'=>'item_id', 'val'=>array_keys($repeatingItem)]);
+							$repeatingItems = $this->Common_model->select_fields_where_like_join('inventory i', 'wi.id, i.item_id',$joins, ['wi.warehouse_id'=>$warehouseId], FALSE, '', '','','','',false, ['col'=>'i.item_id', 'val'=>array_keys($repeatingItem)]);
 							foreach($repeatingItems as $item) {
-								array_push($whItemDateToUpdate, [
-					    			'id' => $item->id,
-					    			'warehouse_id' => $repeatingItem[$item->item_id]['warehouse_id'],
-					    			'quantity' => $repeatingItem[$item->item_id]['quantity'] + $repeatingItem[$item->item_id]['initial'],
-							    	'updated_at' => date('Y-m-d h:i:s'),
-					    		]);
+								if(!empty($repeatingItem[strval($item->item_id)])) {
+									array_push($whItemDateToUpdate, [
+										'id' => $item->id,
+										'warehouse_id' => $repeatingItem[strval($item->item_id)]['warehouse_id'],
+										'quantity' => $repeatingItem[strval($item->item_id)]['quantity'] + $repeatingItem[strval($item->item_id)]['initial'],
+										'updated_at' => date('Y-m-d h:i:s'),
+									]);
+								}
 							}
 						}
 					}
 					// update existing warehouse inventory items in bulk
 					if(!empty($whItemDateToUpdate))
 						$this->Common_model->update_multiple('warehouse_inventory', $whItemDateToUpdate, 'id');
-			      
-			      	$message = json_encode(['type' => 'success', 'message' => 'File has been imported successfully']);
 
+					// update serial number
+			      	if(!empty($item_serial_numbers)){
+			      		$items = $this->Common_model->select_fields_where('inventory','id,item_id,serial_number', '', FALSE, '', '', '','','',true, ['col'=>'item_id','val'=>array_keys($item_serial_numbers)]);
+	
+			      		if(is_array($items) and !empty($items)){
+			      			foreach($items as $key => $item){
+			      				if(array_key_exists(strval($item['item_id']), $item_serial_numbers)){
+			      					$existing_serials = explode(',', $item['serial_number']);
+			      					$new_serials = $item_serial_numbers[strval($item['item_id'])];
+			      					$final_serial = array_unique(array_merge($existing_serials,$new_serials), SORT_REGULAR);
+			      					$items[$key]['serial_number'] = implode(',', $final_serial);
+			      				
+			      				}
+
+			      			}
+							// udpate existing inventory items serial numbers in bulk
+							$this->Common_model->update_multiple('inventory', $items, 'id');
+			      		}
+
+			      	}
+
+
+			      	$message = json_encode(['type' => 'success', 'message' => 'File has been imported successfully']);
 			    } catch(Exception $e){
 			    	$message = json_encode(['type' => 'error', 'message' => 'Error Importing']);
 			    }
@@ -843,11 +812,9 @@ class Inventory extends MY_Controller {
 			$this->show('inventory/import', $data);
 		}
 	}
-
 	public function barcode(){
 		$this->load->view('barcode/index');
 	}
-
 	public function item() {
 		$itemId = $this->input->post('itemId');
 		$item = $this->Common_model->select_fields_where('inventory', '*', ['item_id'=>$itemId], true);
@@ -856,7 +823,6 @@ class Inventory extends MY_Controller {
 		else 
 			echo json_encode(['type'=>'error','message'=>'Item not exist with entered item code']);
 	}
-
 	public function bulk_action($actionId){
 		$selected = json_decode($this->input->post('selected_checks'));
 		if(!empty($selected)){
